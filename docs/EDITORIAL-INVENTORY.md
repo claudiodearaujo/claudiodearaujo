@@ -2,7 +2,7 @@
 
 ## Status consolidado
 
-A fundação editorial, a arquitetura técnica v1 e a especificação de UX/wireframes do MVP estão definidas. O projeto está pronto para avançar para Visual Design / Design System Foundation antes da implementação.
+A fundação editorial, a arquitetura técnica v1, a especificação de UX/wireframes e a fundação de Visual Design / Design System estão definidas. O projeto está pronto para iniciar a Implementation Foundation.
 
 ## Product Foundation
 
@@ -10,6 +10,7 @@ A fundação editorial, a arquitetura técnica v1 e a especificação de UX/wire
 - Content Architecture + Sitemap — ✅ Concluído
 - Technical Architecture — ✅ Concluído — [TAD-001](./technical/TAD-001-SITE-ARCHITECTURE.md)
 - UX / Wireframes — ✅ Concluído — [UX Wireframes](./ux/UX-WIREFRAMES.md)
+- Visual Design / Design System Foundation — ✅ Concluído — [Visual Design](./design/VISUAL-DESIGN-SYSTEM.md)
 
 ## Conteúdo principal
 
@@ -78,52 +79,85 @@ Apresentará os três artigos iniciais, categorias e espaço para crescimento ed
 
 ## Baseline técnica aprovada
 
-O TAD-001 definiu:
-
-- Angular 22 como baseline greenfield;
-- Node.js 22.22.3+ como baseline mínima reproduzível;
+- Angular 22 greenfield;
+- Node.js 22.22.3+;
 - standalone + strict mode;
-- prerender/SSG como renderização padrão;
-- hydration apenas para interatividade necessária;
-- conteúdo público em Markdown com front matter;
-- validação de conteúdo em build time;
+- prerender/SSG padrão;
+- conteúdo Markdown + front matter validado no build;
 - `src/content` como fonte de verdade de publicação;
-- rotas preparadas para `pt` e `en`;
+- estrutura pronta para `pt` e `en`;
 - Signals sem store global dedicada;
-- design system próprio com SCSS + CSS Custom Properties;
-- SEO, sitemap, canonical, hreflang e JSON-LD gerados pelo build;
-- Vitest para unit/component tests;
-- Playwright para E2E e acessibilidade;
-- Cloudflare Pages como hosting inicial;
-- Cloudflare Web Analytics como analytics privacy-first;
-- GitHub Actions não obrigatório para o MVP;
-- nenhum backend, banco, autenticação, CMS, PWA ou service worker sem requisito real.
+- Vitest + Playwright;
+- Cloudflare Pages;
+- Cloudflare Web Analytics;
+- sem backend, banco, autenticação, CMS, PWA ou service worker sem requisito real.
 
 ## UX baseline aprovada
 
-A especificação de UX definiu:
-
-- Home como mapa narrativo do site;
-- landings como pontos de descoberta;
-- cases, artigos, ADRs e Labs como deep dives;
-- três níveis de leitura: Scan → Understand → Deep Dive;
-- navegação desktop e mobile;
-- templates para Home, Work, Case Study, Engineering, Principles, ADRs, Writing, Articles, Labs, About, Now e Contact;
-- mobile first-class, sem dependência de hover;
+- Home como mapa narrativo;
+- landings como descoberta;
+- deep dives em cases, artigos, ADRs e Labs;
+- Scan → Understand → Deep Dive;
+- navegação desktop/mobile;
 - content graph com Related Content;
-- TOC lateral apenas quando largura permitir;
-- foco, teclado, reduced motion e semântica incorporados desde o wireframe;
-- ausência deliberada de formulário de contato, filtros complexos, skeletons e loaders artificiais no MVP;
-- 404 e estados essenciais definidos;
-- conteúdo estático tratado como build-time concern, não runtime fetching.
+- TOC responsivo;
+- foco, teclado, semântica e reduced motion incorporados;
+- sem formulário de contato e sem loaders artificiais no MVP.
 
-Princípio central de UX:
+Princípio de UX:
 
 > **Make depth available without making complexity mandatory.**
 
+## Visual Design baseline aprovada
+
+### Direção
+
+**Editorial-tech sofisticada**, com engenharia e arquitetura como linguagem visual.
+
+### Theme
+
+- dark-first, não dark-only;
+- respeito a `prefers-color-scheme`;
+- toggle manual com persistência local;
+- light e dark equivalentes em legibilidade e função.
+
+### Identidade
+
+- monograma `CA` simples e geométrico;
+- motivo gráfico baseado em boundaries, linhas e conexões;
+- sem cérebro digital, terminal fake, matrix ou estética hacker.
+
+### Tipografia
+
+- Manrope Variable — headings/display;
+- Inter Variable — body/UI;
+- JetBrains Mono Variable — code/metadata.
+
+### Cor
+
+- superfícies neutras profundas no dark;
+- branco/off-white no light;
+- azul controlado como accent;
+- cores semânticas discretas;
+- contraste WCAG 2.2 AA.
+
+### Componentes e linguagem
+
+- boundaries e borders mais importantes que sombras;
+- cards apenas quando houver agrupamento real;
+- diagramas como componentes de primeira classe;
+- code blocks editoriais, não terminais decorativos;
+- status com texto + sinal visual;
+- motion mínimo e funcional;
+- Open Graph coerente com a marca.
+
+Assinatura:
+
+> **Deep neutral surfaces + precise typography + structural lines + controlled blue accent + architecture as visual language.**
+
 ## Conteúdo opcional para lançamento
 
-Não bloqueadores do MVP:
+Não bloqueadores:
 
 - case completo Argos;
 - case Enterprise AI;
@@ -136,21 +170,6 @@ Não bloqueadores do MVP:
 - newsletter;
 - speaking;
 - open-source page.
-
-## Confidentiality Review
-
-Antes da publicação, revisar conteúdos ligados a projetos corporativos e pessoais para evitar exposição de nomes internos, URLs privadas, endpoints, nomes de tabelas, infraestrutura, credenciais, screenshots, nomes de pessoas, políticas internas e informações operacionais confidenciais.
-
-## Editorial Consistency Review
-
-Antes da implementação definitiva:
-
-- remover repetições excessivas;
-- manter terminologia consistente;
-- decidir equilíbrio PT-BR / inglês técnico;
-- uniformizar títulos;
-- reduzir textos onde UX exigir;
-- preservar versões completas para deep dives.
 
 ## Sequência atualizada
 
@@ -180,7 +199,8 @@ Labs Index                 🟡
 Writing Index              🟡
 Technical Architecture     ✅
 UX / Wireframes            ✅
-Visual Design              🔴
+Visual Design              ✅
+Implementation Foundation  🔴
 Implementation             🔴
 Quality Gate               🔴
 Launch                     🔴
@@ -198,29 +218,28 @@ Framework, renderização, pipeline de conteúdo, organização do código, inte
 
 ### UX / Wireframes v1 — ✅
 
-Hierarquia, templates, navegação, responsividade, fluxos e padrões de interação definidos sem congelar a identidade visual.
+Hierarquia, templates, navegação, responsividade, fluxos e padrões de interação definidos.
+
+### Visual Design / Design System Foundation v1 — ✅
+
+Direção estética, tema, identidade, tipografia, paleta, spacing, grid, tokens, componentes editoriais, diagramas e motion definidos.
 
 ## Próxima etapa recomendada
 
-Produzir a especificação de **Visual Design / Design System Foundation**.
+Iniciar **Implementation Foundation**:
 
-A etapa deve fechar pelo menos:
-
-1. direção estética;
-2. estratégia light/dark;
-3. identidade visual e marca CA;
-4. tipografia;
-5. paleta e semântica de cores;
-6. spacing e grid;
-7. tokens;
-8. botões e links;
-9. cards;
-10. headers e navegação;
-11. estilos editoriais;
-12. code blocks;
-13. diagramas;
-14. status e metadata;
-15. motion;
-16. protótipo visual da Home;
-17. protótipo de Case Study;
-18. protótipo de Article/Lab/ADR.
+1. inicializar Angular 22;
+2. fixar Node/pnpm e strict mode;
+3. configurar prerender/SSG;
+4. criar estrutura `core`, `shared`, `features`, `content`, `generated`;
+5. implementar design tokens dark/light;
+6. criar application shell, header, footer e mobile nav;
+7. criar theme service sem FOUC;
+8. implementar content pipeline Markdown/front matter;
+9. gerar content manifest e rotas;
+10. criar primitives editoriais;
+11. migrar Home para `src/content`/templates;
+12. adicionar Vitest, Playwright, lint, format e typecheck;
+13. preparar scripts de validação local;
+14. preparar Cloudflare Pages;
+15. só então iniciar implementação das páginas do MVP.
