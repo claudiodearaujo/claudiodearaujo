@@ -1,0 +1,16 @@
+.engineering-hero {
+  padding-bottom: 2rem;
+}
+.engineering-hero .button {
+  margin-top: 1.5rem;
+}
+.decision-grid {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 1rem;
+}
+@media (max-width: 900px) {
+  .decision-grid {
+    grid-template-columns: 1fr;
+  }
+}

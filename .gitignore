@@ -49,3 +49,6 @@ Thumbs.db
 
 # Generated content manifest
 /src/app/generated/
+
+# Environment-generated SEO
+/public/sitemap.xml

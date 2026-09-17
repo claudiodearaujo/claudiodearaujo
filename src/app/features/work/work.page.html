@@ -1,0 +1,25 @@
+<section class="page-shell index-hero">
+  <p class="eyebrow">Work</p>
+  <h1>Selected Work</h1>
+  <p class="lead">
+    Projetos e sistemas que representam como penso produto, arquitetura, IA e confiabilidade.
+  </p>
+</section>
+<section class="page-shell work-grid">
+  @for (project of projects; track project.route) {
+    <app-content-card [entry]="project" />
+  }
+</section>
+<section class="page-shell experience">
+  <p class="eyebrow">Selected Experience</p>
+  <h2>Outros sistemas que moldaram meu trabalho</h2>
+  <div class="experience-grid">
+    @for (item of experience; track item[0]) {
+      <article>
+        <p class="eyebrow">{{ item[1] }}</p>
+        <h3>{{ item[0] }}</h3>
+        <p>{{ item[2] }}</p>
+      </article>
+    }
+  </div>
+</section>

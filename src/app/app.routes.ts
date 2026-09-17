@@ -1,97 +1,41 @@
 import { Routes } from '@angular/router';
-
-const section = (title: string, eyebrow: string, description: string) => ({
-  title,
-  eyebrow,
-  description,
-});
+import { contentRoutes } from './generated/content-routes.generated';
 
 export const routes: Routes = [
   { path: '', pathMatch: 'full', redirectTo: 'pt' },
-  {
-    path: 'pt',
-    loadComponent: () => import('./features/home/home.page').then((m) => m.HomePage),
-  },
+  { path: 'pt', loadComponent: () => import('./features/home/home.page').then((m) => m.HomePage) },
   {
     path: 'pt/work',
-    data: section(
-      'Selected Work',
-      'Work',
-      'Projetos e sistemas que representam minha trajetória em engenharia.',
-    ),
-    loadComponent: () =>
-      import('./features/section-placeholder/section-placeholder').then(
-        (m) => m.SectionPlaceholder,
-      ),
+    loadComponent: () => import('./features/work/work.page').then((m) => m.WorkPage),
   },
   {
     path: 'pt/engineering',
-    data: section(
-      'How I Engineer',
-      'Engineering',
-      'Princípios, decisões e práticas que orientam meu trabalho.',
-    ),
     loadComponent: () =>
-      import('./features/section-placeholder/section-placeholder').then(
-        (m) => m.SectionPlaceholder,
-      ),
-  },
-  {
-    path: 'pt/labs',
-    data: section('Labs', 'Research', 'Experimentos e pesquisas em sistemas inteligentes.'),
-    loadComponent: () =>
-      import('./features/section-placeholder/section-placeholder').then(
-        (m) => m.SectionPlaceholder,
-      ),
+      import('./features/engineering/engineering.page').then((m) => m.EngineeringPage),
   },
   {
     path: 'pt/writing',
-    data: section(
-      'Writing',
-      'Writing',
-      'Notas e ensaios sobre engenharia, arquitetura e inteligência artificial.',
-    ),
+    data: {
+      title: 'Writing',
+      eyebrow: 'Writing',
+      description: 'Ensaios sobre engenharia, arquitetura e inteligência artificial.',
+      contentType: 'article',
+    },
     loadComponent: () =>
-      import('./features/section-placeholder/section-placeholder').then(
-        (m) => m.SectionPlaceholder,
-      ),
+      import('./features/content-index/content-index.page').then((m) => m.ContentIndexPage),
   },
   {
-    path: 'pt/about',
-    data: section(
-      'Engineering, intelligence and curiosity',
-      'About',
-      'Minha trajetória entre software, arquitetura, IA e liderança técnica.',
-    ),
+    path: 'pt/labs',
+    data: {
+      title: 'Labs',
+      eyebrow: 'Research',
+      description: 'Experimentos e pesquisas em sistemas inteligentes.',
+      contentType: 'lab',
+    },
     loadComponent: () =>
-      import('./features/section-placeholder/section-placeholder').then(
-        (m) => m.SectionPlaceholder,
-      ),
+      import('./features/content-index/content-index.page').then((m) => m.ContentIndexPage),
   },
-  {
-    path: 'pt/now',
-    data: section(
-      'Now',
-      'Current Focus',
-      'Projetos, pesquisas e temas que concentram minha atenção agora.',
-    ),
-    loadComponent: () =>
-      import('./features/section-placeholder/section-placeholder').then(
-        (m) => m.SectionPlaceholder,
-      ),
-  },
-  {
-    path: 'pt/contact',
-    data: section(
-      "Let's talk",
-      'Contact',
-      'Conversas sobre engenharia, IA, arquitetura e liderança técnica.',
-    ),
-    loadComponent: () =>
-      import('./features/section-placeholder/section-placeholder').then(
-        (m) => m.SectionPlaceholder,
-      ),
-  },
+  ...contentRoutes,
   {
     path: '**',
     loadComponent: () => import('./features/not-found/not-found.page').then((m) => m.NotFoundPage),

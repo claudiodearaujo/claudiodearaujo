@@ -1,5 +1,6 @@
-import { Component } from '@angular/core';
+import { Component, inject } from '@angular/core';
 import { RouterLink } from '@angular/router';
+import { SeoService } from '../../core/seo/seo.service';
 
 @Component({
   selector: 'app-home-page',
@@ -8,6 +9,8 @@ import { RouterLink } from '@angular/router';
   templateUrl: './home.page.html',
 })
 export class HomePage {
+  private readonly seo = inject(SeoService);
+
   protected readonly journey = [
     'Web',
     'Enterprise',
@@ -16,28 +19,34 @@ export class HomePage {
     'Agents',
     'Autonomous Systems',
   ];
+
   protected readonly projects = [
     [
       'LucyOS',
       'Personal Agentic AI Platform',
       'Agentes, memória, conhecimento, ferramentas e MCP.',
+      '/pt/work/lucyos',
     ],
     [
       'Invest Lucy',
       'Evidence-Driven Autonomous Research',
       'Autonomia progressiva sustentada por evidência, risco e governança.',
+      '/pt/work/invest-lucy',
     ],
     [
       'Livrya',
       'AI-Powered Publishing Platform',
       'Produto editorial com IA, colaboração, publicação e áudio.',
+      '/pt/work/livrya',
     ],
     [
       'Enterprise AI',
       'Knowledge & Retrieval Systems',
       'RAG, embeddings e integração de conhecimento corporativo.',
+      '/pt/work',
     ],
   ] as const;
+
   protected readonly principles = [
     'Evidence Before Autonomy',
     'AI is a System, Not a Prompt',
@@ -46,4 +55,8 @@ export class HomePage {
     'Replaceable Boundaries',
     'Documentation is Engineering',
   ] as const;
+
+  constructor() {
+    this.seo.setHome();
+  }
 }

@@ -1,0 +1,13 @@
+import { Component, input } from '@angular/core';
+import { RouterLink } from '@angular/router';
+import { ContentSummary } from '../../core/content/content.models';
+
+@Component({
+  selector: 'app-content-card',
+  imports: [RouterLink],
+  templateUrl: './content-card.html',
+  styleUrl: './content-card.scss',
+})
+export class ContentCard {
+  readonly entry = input.required<ContentSummary>();
+}
