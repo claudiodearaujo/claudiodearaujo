@@ -1,0 +1,29 @@
+<!doctype html>
+<html lang="pt-BR">
+  <head>
+    <meta charset="utf-8" />
+    <title>ClÃ¡udio AraÃºjo â€” Software Engineering, AI Engineering & Technical Leadership</title>
+    <base href="/" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <meta
+      name="description"
+      content="Engenharia de software, arquitetura, inteligÃªncia artificial, sistemas de agentes e lideranÃ§a tÃ©cnica."
+    />
+    <meta name="color-scheme" content="dark light" />
+    <script>
+      (() => {
+        try {
+          const saved = localStorage.getItem('theme');
+          const preferred = matchMedia('(prefers-color-scheme: light)').matches ? 'light' : 'dark';
+          document.documentElement.dataset.theme =
+            saved === 'light' || saved === 'dark' ? saved : preferred;
+        } catch {
+          /* use CSS prefers-color-scheme fallback */
+        }
+      })();
+    </script>
+  </head>
+  <body>
+    <app-root></app-root>
+  </body>
+</html>

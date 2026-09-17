@@ -200,8 +200,8 @@ Writing Index              🟡
 Technical Architecture     ✅
 UX / Wireframes            ✅
 Visual Design              ✅
-Implementation Foundation  🔴
-Implementation             🔴
+Implementation Foundation  ✅
+Implementation             🟡
 Quality Gate               🔴
 Launch                     🔴
 ```
@@ -224,22 +224,23 @@ Hierarquia, templates, navegação, responsividade, fluxos e padrões de intera�
 
 Direção estética, tema, identidade, tipografia, paleta, spacing, grid, tokens, componentes editoriais, diagramas e motion definidos.
 
+## Implementation Foundation v1 — ✅
+
+A base Angular 22, SSG, shell, tema, content pipeline e quality gates locais estão implementados e validados.
+
+Fonte: [Implementation Foundation v1](./technical/IMPLEMENTATION-FOUNDATION.md).
+
 ## Próxima etapa recomendada
 
-Iniciar **Implementation Foundation**:
+Iniciar a **implementação incremental do MVP** sobre a baseline validada:
 
-1. inicializar Angular 22;
-2. fixar Node/pnpm e strict mode;
-3. configurar prerender/SSG;
-4. criar estrutura `core`, `shared`, `features`, `content`, `generated`;
-5. implementar design tokens dark/light;
-6. criar application shell, header, footer e mobile nav;
-7. criar theme service sem FOUC;
-8. implementar content pipeline Markdown/front matter;
-9. gerar content manifest e rotas;
-10. criar primitives editoriais;
-11. migrar Home para `src/content`/templates;
-12. adicionar Vitest, Playwright, lint, format e typecheck;
-13. preparar scripts de validação local;
-14. preparar Cloudflare Pages;
-15. só então iniciar implementação das páginas do MVP.
+1. renderer de conteúdo tipado;
+2. Work landing e Case Study template;
+3. Engineering, ADRs, Writing e Labs;
+4. About, Now e Contact;
+5. SEO técnico e structured data;
+6. accessibility/performance gates;
+7. preview em Cloudflare Pages;
+8. launch readiness.
+
+Toda tarefa de implementação deve passar por `npm run validate:full` antes de ser considerada concluída.

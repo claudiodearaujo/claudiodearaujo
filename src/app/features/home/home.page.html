@@ -1,0 +1,108 @@
+<section class="hero page-shell">
+  <div class="hero__copy">
+    <p class="eyebrow">Cláudio Araújo</p>
+    <h1>Software Engineer · AI Engineering · Technical Leadership</h1>
+    <p class="lead">
+      Construo software há mais de duas décadas. Hoje trabalho na interseção entre arquitetura,
+      inteligência artificial, sistemas de agentes e liderança técnica.
+    </p>
+    <div class="action-row">
+      <a class="button button--primary" routerLink="/pt/work">Conheça meu trabalho</a>
+      <a class="button button--secondary" routerLink="/pt/engineering">Como eu penso engenharia</a>
+    </div>
+  </div>
+  <div
+    class="system-motif"
+    aria-label="Software evoluindo para arquitetura, inteligência artificial e agentes"
+  >
+    <span>Software</span><i></i><span>Architecture</span><i></i><span>AI</span><i></i
+    ><span>Agents</span>
+  </div>
+</section>
+
+<section class="page-shell section-block">
+  <p class="eyebrow">Engineering Journey</p>
+  <h2>Mais de 20 anos construindo software</h2>
+  <div class="journey" aria-label="Evolução profissional">
+    @for (step of journey; track step; let last = $last) {
+      <span>{{ step }}</span>
+      @if (!last) {
+        <i aria-hidden="true"></i>
+      }
+    }
+  </div>
+</section>
+
+<section class="page-shell section-block">
+  <div class="section-heading">
+    <div>
+      <p class="eyebrow">Selected Work</p>
+      <h2>Sistemas, produtos e experimentos</h2>
+    </div>
+    <a class="text-link" routerLink="/pt/work">Ver todos</a>
+  </div>
+  <div class="project-grid">
+    @for (project of projects; track project[0]) {
+      <article class="project-card">
+        <p class="eyebrow">{{ project[1] }}</p>
+        <h3>{{ project[0] }}</h3>
+        <p>{{ project[2] }}</p>
+        <a class="text-link" routerLink="/pt/work">Explorar projeto</a>
+      </article>
+    }
+  </div>
+</section>
+<section class="page-shell section-block">
+  <div class="section-heading">
+    <div>
+      <p class="eyebrow">How I Engineer</p>
+      <h2>Princípios antes de ferramentas</h2>
+    </div>
+    <a class="text-link" routerLink="/pt/engineering">Ver princípios</a>
+  </div>
+  <div class="principle-grid">
+    @for (principle of principles; track principle; let index = $index) {
+      <article class="principle-card">
+        <span class="principle-card__number">0{{ index + 1 }}</span>
+        <h3>{{ principle }}</h3>
+      </article>
+    }
+  </div>
+</section>
+
+<section class="featured-case">
+  <div class="page-shell featured-case__inner">
+    <div>
+      <p class="eyebrow">Featured Case · Invest Lucy</p>
+      <h2>Engineering Autonomy Through Evidence</h2>
+      <p class="lead">
+        Autonomia não começa quando o código funciona. Ela começa quando evidência suficiente
+        demonstra que o sistema merece confiança.
+      </p>
+      <a class="button button--secondary" routerLink="/pt/work">Conhecer o case</a>
+    </div>
+    <ol class="evidence-flow" aria-label="Fluxo de evidência para autonomia">
+      <li>Scientific Evidence</li>
+      <li>Shadow Outcomes</li>
+      <li>Calibration</li>
+      <li>Experiments</li>
+      <li>Walk-forward</li>
+      <li>OOS</li>
+      <li>Monte Carlo</li>
+      <li>Human Review</li>
+    </ol>
+  </div>
+</section>
+
+<section class="page-shell section-block closing-block">
+  <p class="eyebrow">Technical Leadership</p>
+  <h2>Engineering is also direction.</h2>
+  <p class="lead">
+    Liderança técnica é transformar complexidade em direção compreensível — através de arquitetura,
+    contexto, padrões, documentação e decisões melhores.
+  </p>
+  <div class="action-row">
+    <a class="button button--primary" routerLink="/pt/about">Conheça minha trajetória</a>
+    <a class="button button--secondary" routerLink="/pt/contact">Entre em contato</a>
+  </div>
+</section>
