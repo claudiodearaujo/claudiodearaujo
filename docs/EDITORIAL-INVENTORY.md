@@ -2,12 +2,13 @@
 
 ## Status consolidado
 
-A fundação editorial do site já possui material suficiente para avançar da estratégia de conteúdo para arquitetura técnica e UX.
+A fundação editorial e a arquitetura técnica v1 do site estão definidas. O projeto está pronto para avançar para UX/wireframes antes do visual design e da implementação.
 
 ## Product Foundation
 
 - PRD — ✅ Concluído
 - Content Architecture + Sitemap — ✅ Concluído
+- Technical Architecture — ✅ Concluído — [TAD-001](./technical/TAD-001-SITE-ARCHITECTURE.md)
 
 ## Conteúdo principal
 
@@ -82,6 +83,29 @@ Apresentará Long-Term Memory for Agents e Evaluating Agentic Systems, preparand
 
 Apresentará os três artigos iniciais, categorias e espaço para crescimento editorial.
 
+## Baseline técnica aprovada
+
+O TAD-001 definiu:
+
+- Angular 22 como baseline greenfield;
+- Node.js 22.22.3+ como baseline mínima reproduzível;
+- standalone + strict mode;
+- prerender/SSG como renderização padrão;
+- hydration apenas para interatividade necessária;
+- conteúdo público em Markdown com front matter;
+- validação de conteúdo em build time;
+- `src/content` como fonte de verdade de publicação;
+- rotas preparadas para `pt` e `en`;
+- Signals sem store global dedicada;
+- design system próprio com SCSS + CSS Custom Properties;
+- SEO, sitemap, canonical, hreflang e JSON-LD gerados pelo build;
+- Vitest para unit/component tests;
+- Playwright para E2E e acessibilidade;
+- Cloudflare Pages como hosting inicial;
+- Cloudflare Web Analytics como analytics privacy-first;
+- GitHub Actions não obrigatório para o MVP;
+- nenhum backend, banco, autenticação, CMS, PWA ou service worker sem requisito real.
+
 ## Conteúdo opcional para lançamento
 
 Não bloqueadores do MVP:
@@ -93,7 +117,7 @@ Não bloqueadores do MVP:
 - mais artigos;
 - mais Labs;
 - currículo;
-- versão em inglês;
+- versão completa em inglês;
 - newsletter;
 - speaking;
 - open-source page.
@@ -127,28 +151,6 @@ Introduções e seções resumidas. Leitura em minutos.
 
 Cases, ADRs, Labs e artigos.
 
-## Próxima fase
-
-# Technical Architecture
-
-Decidir formalmente:
-
-- framework;
-- rendering;
-- content engine;
-- repository structure;
-- routing;
-- internationalization;
-- SEO;
-- analytics;
-- deployment;
-- hosting;
-- testing;
-- CI/CD;
-- security;
-- observability;
-- content schemas.
-
 ## Sequência atualizada
 
 ```text
@@ -175,7 +177,7 @@ Contact                    ✅
 Work Index                 🟡
 Labs Index                 🟡
 Writing Index              🟡
-Technical Architecture     🔴
+Technical Architecture     ✅
 UX / Wireframes            🔴
 Visual Design              🔴
 Implementation             🔴
@@ -183,14 +185,35 @@ Quality Gate               🔴
 Launch                     🔴
 ```
 
-## Editorial Milestone
+## Milestones concluídos
 
-Podemos considerar concluído o marco **Content Foundation v1**.
+### Content Foundation v1 — ✅
 
-A identidade profissional, a narrativa central e a principal evidência técnica do site já estão documentadas.
+A identidade profissional, narrativa central e principal evidência técnica estão documentadas.
 
-A partir daqui, a pergunta passa a ser: qual é a melhor maneira de estruturar, apresentar e implementar aquilo que já definimos?
+### Technical Architecture v1 — ✅
 
-## Próximo passo recomendado
+Framework, renderização, pipeline de conteúdo, organização do código, internacionalização, SEO, analytics, testes, segurança, hosting e CI/CD foram formalmente definidos.
 
-Produzir um **Technical Architecture Decision Document** definindo Angular ou alternativa, SSR/SSG, versionamento de conteúdo, Markdown/JSON, rotas dinâmicas, i18n, SEO, structured data, hosting, deploy e preparação para crescimento sem infraestrutura excessiva.
+## Próxima etapa recomendada
+
+Produzir a especificação de **UX / Wireframes** com foco em estrutura, hierarquia visual e comportamento responsivo, ainda sem congelar identidade visual.
+
+A etapa deve definir pelo menos:
+
+1. application shell;
+2. header e navegação;
+3. homepage wireframe;
+4. Work index;
+5. Case Study template;
+6. Engineering index e Principles;
+7. ADR template;
+8. Writing index e Article template;
+9. Labs index e Lab template;
+10. About;
+11. Now;
+12. Contact;
+13. mobile navigation;
+14. estados de foco/keyboard;
+15. relações e Related Content;
+16. comportamento de diagramas e blocos de código.
