@@ -1,6 +1,6 @@
 # Documentação — Site Pessoal Cláudio Araújo
 
-Este diretório contém a fundação de produto, conteúdo, posicionamento, arquitetura técnica e UX do site pessoal de Cláudio Araújo.
+Este diretório contém a fundação de produto, conteúdo, posicionamento, arquitetura técnica, UX e design system do site pessoal de Cláudio Araújo.
 
 ## Fundação
 
@@ -15,6 +15,10 @@ Este diretório contém a fundação de produto, conteúdo, posicionamento, arqu
 ## UX
 
 - [UX Wireframes — MVP](./ux/UX-WIREFRAMES.md)
+
+## Visual Design
+
+- [Visual Design / Design System Foundation](./design/VISUAL-DESIGN-SYSTEM.md)
 
 ## Conteúdo principal
 
@@ -49,10 +53,12 @@ Este diretório contém a fundação de produto, conteúdo, posicionamento, arqu
 
 ## Estado
 
-A fundação editorial v1, a arquitetura técnica v1 e os wireframes estruturais do MVP estão definidos.
+Estão definidos: Content Foundation v1, Technical Architecture v1, UX/Wireframes v1 e Visual Design / Design System Foundation v1.
 
 Baseline técnica: Angular 22 + prerender/SSG + conteúdo Markdown validado em build time + deploy estático em Cloudflare Pages, sem backend dedicado no MVP.
 
 Princípio de UX: **Make depth available without making complexity mandatory.**
 
-A próxima etapa é Visual Design / Design System Foundation e, em seguida, implementação incremental.
+Assinatura visual: **Deep neutral surfaces + precise typography + structural lines + controlled blue accent + architecture as visual language.**
+
+A próxima etapa é Implementation Foundation e implementação incremental.
