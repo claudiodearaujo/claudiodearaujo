@@ -1,12 +1,16 @@
 # Documentação — Site Pessoal Cláudio Araújo
 
-Este diretório contém a fundação de produto, conteúdo e posicionamento do site pessoal de Cláudio Araújo.
+Este diretório contém a fundação de produto, conteúdo, posicionamento e arquitetura técnica do site pessoal de Cláudio Araújo.
 
 ## Fundação
 
 - [PRD](./PRD.md)
 - [Content Architecture + Sitemap](./CONTENT-ARCHITECTURE.md)
 - [Inventário Editorial do MVP](./EDITORIAL-INVENTORY.md)
+
+## Arquitetura técnica
+
+- [TAD-001 — Arquitetura Técnica do Site](./technical/TAD-001-SITE-ARCHITECTURE.md)
 
 ## Conteúdo principal
 
@@ -41,4 +45,8 @@ Este diretório contém a fundação de produto, conteúdo e posicionamento do s
 
 ## Estado
 
-A fundação editorial v1 está definida. A próxima etapa é a arquitetura técnica do site, seguida por UX/wireframes, visual design e implementação.
+A fundação editorial v1 e a arquitetura técnica v1 estão definidas.
+
+A baseline técnica é Angular 22 + prerender/SSG + conteúdo Markdown validado em build time + deploy estático em Cloudflare Pages, sem backend dedicado no MVP.
+
+A próxima etapa é UX/wireframes e, em seguida, visual design e implementação incremental.
