@@ -12,6 +12,10 @@ Este diretório contém a fundação de produto, conteúdo, posicionamento, arqu
 
 - [TAD-001 — Arquitetura Técnica do Site](./technical/TAD-001-SITE-ARCHITECTURE.md)
 
+## Implementation
+
+- [Implementation Foundation v1](./technical/IMPLEMENTATION-FOUNDATION.md)
+
 ## UX
 
 - [UX Wireframes — MVP](./ux/UX-WIREFRAMES.md)
@@ -61,4 +65,4 @@ Princípio de UX: **Make depth available without making complexity mandatory.**
 
 Assinatura visual: **Deep neutral surfaces + precise typography + structural lines + controlled blue accent + architecture as visual language.**
 
-A próxima etapa é Implementation Foundation e implementação incremental.
+A Implementation Foundation v1 está validada. A próxima etapa é a implementação incremental das páginas do MVP.
