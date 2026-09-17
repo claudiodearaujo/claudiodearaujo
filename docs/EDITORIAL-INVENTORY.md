@@ -2,13 +2,14 @@
 
 ## Status consolidado
 
-A fundação editorial e a arquitetura técnica v1 do site estão definidas. O projeto está pronto para avançar para UX/wireframes antes do visual design e da implementação.
+A fundação editorial, a arquitetura técnica v1 e a especificação de UX/wireframes do MVP estão definidas. O projeto está pronto para avançar para Visual Design / Design System Foundation antes da implementação.
 
 ## Product Foundation
 
 - PRD — ✅ Concluído
 - Content Architecture + Sitemap — ✅ Concluído
 - Technical Architecture — ✅ Concluído — [TAD-001](./technical/TAD-001-SITE-ARCHITECTURE.md)
+- UX / Wireframes — ✅ Concluído — [UX Wireframes](./ux/UX-WIREFRAMES.md)
 
 ## Conteúdo principal
 
@@ -27,15 +28,11 @@ A fundação editorial e a arquitetura técnica v1 do site estão definidas. O p
 
 ✅ Concluído.
 
-Princípios documentados incluem Evidence Before Autonomy, AI Is a System Not a Prompt, Human-in-the-loop Is Architecture, Observability by Design, Replaceable Boundaries, Domain Before Technology, Explicit State, Failure, Recovery, Safe Defaults, Immutability, Documentation, Context, Incremental Evolution, Complexity, Research vs Runtime, Scientific Correctness, Memory, Tools, Authorization, Idempotency, Auditability, Leadership e evolução arquitetural.
-
 ## Architecture Decisions
 
 - ADR 001 — Why MCP-first? — ✅
 - ADR 002 — Why Shadow Mode Before Autonomy? — ✅
 - ADR 003 — Why Human Control Belongs in the Architecture? — ✅
-
-Mínimo de ADRs para MVP atingido.
 
 ## Writing
 
@@ -43,14 +40,10 @@ Mínimo de ADRs para MVP atingido.
 - Article 002 — From Automation to Autonomy — ✅
 - Article 003 — Evidence Before Autonomy — ✅
 
-Mínimo editorial para MVP atingido.
-
 ## Labs
 
 - Lab 001 — Long-Term Memory for Agents — ✅
 - Lab 002 — Evaluating Agentic Systems — ✅
-
-Mínimo de Labs para MVP atingido.
 
 ## Conteúdo essencial do MVP
 
@@ -69,11 +62,11 @@ Now                      ✅
 Contact                  ✅
 ```
 
-## Páginas de índice ainda necessárias
+## Páginas de índice ainda necessárias no conteúdo final
 
 ### `/work`
 
-Deverá apresentar inicialmente LucyOS, Invest Lucy, Livrya, Argos, Enterprise AI e Financial Systems. Os três primeiros já possuem case completo; os três seguintes podem iniciar como cards resumidos.
+Apresentará LucyOS, Invest Lucy, Livrya, Argos, Enterprise AI e Financial Systems. Os três primeiros já possuem case completo; os demais podem iniciar como cards resumidos.
 
 ### `/labs`
 
@@ -106,6 +99,28 @@ O TAD-001 definiu:
 - GitHub Actions não obrigatório para o MVP;
 - nenhum backend, banco, autenticação, CMS, PWA ou service worker sem requisito real.
 
+## UX baseline aprovada
+
+A especificação de UX definiu:
+
+- Home como mapa narrativo do site;
+- landings como pontos de descoberta;
+- cases, artigos, ADRs e Labs como deep dives;
+- três níveis de leitura: Scan → Understand → Deep Dive;
+- navegação desktop e mobile;
+- templates para Home, Work, Case Study, Engineering, Principles, ADRs, Writing, Articles, Labs, About, Now e Contact;
+- mobile first-class, sem dependência de hover;
+- content graph com Related Content;
+- TOC lateral apenas quando largura permitir;
+- foco, teclado, reduced motion e semântica incorporados desde o wireframe;
+- ausência deliberada de formulário de contato, filtros complexos, skeletons e loaders artificiais no MVP;
+- 404 e estados essenciais definidos;
+- conteúdo estático tratado como build-time concern, não runtime fetching.
+
+Princípio central de UX:
+
+> **Make depth available without making complexity mandatory.**
+
 ## Conteúdo opcional para lançamento
 
 Não bloqueadores do MVP:
@@ -137,20 +152,6 @@ Antes da implementação definitiva:
 - reduzir textos onde UX exigir;
 - preservar versões completas para deep dives.
 
-## Content Depth Strategy
-
-### Level 1 — Scan
-
-Homepage e cards. Leitura em segundos.
-
-### Level 2 — Understand
-
-Introduções e seções resumidas. Leitura em minutos.
-
-### Level 3 — Deep Dive
-
-Cases, ADRs, Labs e artigos.
-
 ## Sequência atualizada
 
 ```text
@@ -178,7 +179,7 @@ Work Index                 🟡
 Labs Index                 🟡
 Writing Index              🟡
 Technical Architecture     ✅
-UX / Wireframes            🔴
+UX / Wireframes            ✅
 Visual Design              🔴
 Implementation             🔴
 Quality Gate               🔴
@@ -189,31 +190,37 @@ Launch                     🔴
 
 ### Content Foundation v1 — ✅
 
-A identidade profissional, narrativa central e principal evidência técnica estão documentadas.
+Identidade profissional, narrativa central e evidência técnica documentadas.
 
 ### Technical Architecture v1 — ✅
 
-Framework, renderização, pipeline de conteúdo, organização do código, internacionalização, SEO, analytics, testes, segurança, hosting e CI/CD foram formalmente definidos.
+Framework, renderização, pipeline de conteúdo, organização do código, internacionalização, SEO, analytics, testes, segurança, hosting e CI/CD definidos.
+
+### UX / Wireframes v1 — ✅
+
+Hierarquia, templates, navegação, responsividade, fluxos e padrões de interação definidos sem congelar a identidade visual.
 
 ## Próxima etapa recomendada
 
-Produzir a especificação de **UX / Wireframes** com foco em estrutura, hierarquia visual e comportamento responsivo, ainda sem congelar identidade visual.
+Produzir a especificação de **Visual Design / Design System Foundation**.
 
-A etapa deve definir pelo menos:
+A etapa deve fechar pelo menos:
 
-1. application shell;
-2. header e navegação;
-3. homepage wireframe;
-4. Work index;
-5. Case Study template;
-6. Engineering index e Principles;
-7. ADR template;
-8. Writing index e Article template;
-9. Labs index e Lab template;
-10. About;
-11. Now;
-12. Contact;
-13. mobile navigation;
-14. estados de foco/keyboard;
-15. relações e Related Content;
-16. comportamento de diagramas e blocos de código.
+1. direção estética;
+2. estratégia light/dark;
+3. identidade visual e marca CA;
+4. tipografia;
+5. paleta e semântica de cores;
+6. spacing e grid;
+7. tokens;
+8. botões e links;
+9. cards;
+10. headers e navegação;
+11. estilos editoriais;
+12. code blocks;
+13. diagramas;
+14. status e metadata;
+15. motion;
+16. protótipo visual da Home;
+17. protótipo de Case Study;
+18. protótipo de Article/Lab/ADR.
