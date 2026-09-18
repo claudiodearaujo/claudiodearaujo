@@ -16,7 +16,7 @@ Este diretório contém a fundação de produto, conteúdo, posicionamento, arqu
 
 - [Implementation Foundation v1](./technical/IMPLEMENTATION-FOUNDATION.md)
 - [Content Experience v1](./technical/CONTENT-EXPERIENCE-V1.md)
-- [Cloudflare Pages Deployment](./technical/DEPLOYMENT-CLOUDFLARE.md)
+- [Render Static Site Deployment](./technical/DEPLOYMENT-RENDER.md)
 
 ## UX
 
@@ -61,10 +61,10 @@ Este diretório contém a fundação de produto, conteúdo, posicionamento, arqu
 
 Estão definidos: Content Foundation v1, Technical Architecture v1, UX/Wireframes v1 e Visual Design / Design System Foundation v1.
 
-Baseline técnica: Angular 22 + prerender/SSG + conteúdo Markdown validado em build time + deploy estático em Cloudflare Pages, sem backend dedicado no MVP.
+Baseline técnica: Angular 22 + prerender/SSG + conteúdo Markdown validado em build time + deploy estático em Render Static Site, sem backend dedicado no MVP.
 
 Princípio de UX: **Make depth available without making complexity mandatory.**
 
 Assinatura visual: **Deep neutral surfaces + precise typography + structural lines + controlled blue accent + architecture as visual language.**
 
-A Content Experience v1 está implementada e validada localmente. A próxima etapa é review/merge do PR e criação do primeiro preview real em Cloudflare Pages.
+A Content Experience v1 está mergeada. A configuração de deploy em Render Static Site está sendo versionada; a próxima etapa externa é criar/sincronizar o Blueprint e validar o primeiro deploy real.

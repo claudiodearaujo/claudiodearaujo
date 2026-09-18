@@ -63,7 +63,7 @@ Now                      ✅
 Contact                  ✅
 ```
 
-## Páginas de índice ainda necessárias no conteúdo final
+## Páginas de índice implementadas
 
 ### `/work`
 
@@ -88,8 +88,8 @@ Apresentará os três artigos iniciais, categorias e espaço para crescimento ed
 - estrutura pronta para `pt` e `en`;
 - Signals sem store global dedicada;
 - Vitest + Playwright;
-- Cloudflare Pages;
-- Cloudflare Web Analytics;
+- Render Static Site;
+- analytics opcional e não bloqueador do MVP;
 - sem backend, banco, autenticação, CMS, PWA ou service worker sem requisito real.
 
 ## UX baseline aprovada
@@ -232,15 +232,15 @@ Fonte: [Implementation Foundation v1](./technical/IMPLEMENTATION-FOUNDATION.md).
 
 ## Content Experience v1 — ✅
 
-Renderer tipado, landings, deep dives, SEO, accessibility gates, performance budgets e preparação para Cloudflare Pages implementados.
+Renderer tipado, landings, deep dives, SEO, accessibility gates, performance budgets e preparação para Render Static Site implementados.
 
 Fonte: [Content Experience v1](./technical/CONTENT-EXPERIENCE-V1.md).
 
 ## Próxima etapa recomendada
 
-Concluir o **review e merge da Content Experience v1** e então:
+Com a **Content Experience v1 já mergeada**, concluir Render Deployment & Launch Readiness:
 
-1. criar o projeto no Cloudflare Pages;
+1. criar/sincronizar o Blueprint no Render;
 2. validar preview real;
 3. definir o domínio final;
 4. configurar `SITE_ORIGIN` somente em produção;

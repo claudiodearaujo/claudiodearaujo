@@ -105,7 +105,7 @@ A fundação encerra decisões de infraestrutura básica. O próximo trabalho pa
 8. About, Now e Contact completos;
 9. SEO metadata/JSON-LD/sitemap;
 10. acessibilidade e performance gates;
-11. Cloudflare Pages preview;
+11. Render Static Site preview;
 12. launch readiness.
 
 ## Regra para agentes

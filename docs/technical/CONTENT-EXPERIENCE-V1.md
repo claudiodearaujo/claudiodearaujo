@@ -31,7 +31,7 @@ Esta etapa substitui os placeholders por páginas publicáveis para Work, Engine
 - canonical condicionado a ambiente;
 - sitemap e robots gerados no build;
 - proteção de preview contra indexação;
-- configuração estática para Cloudflare Pages.
+- configuração estática para Render Static Site.
 
 ## Content pipeline
 
@@ -66,10 +66,12 @@ HTML arbitrário de runtime não é aceito pelo fluxo editorial.
 
 ## SEO e ambientes
 
-Sem `SITE_ORIGIN`:
+Fora do Render, sem `SITE_ORIGIN`:
 
 - nenhuma canonical absoluta é inventada;
 - nenhum sitemap de produção é persistido.
+
+Em produção no Render, `RENDER_EXTERNAL_URL` é usado como origem padrão enquanto um domínio customizado não for configurado.
 
 Em produção, com `SITE_ORIGIN`:
 
@@ -78,21 +80,21 @@ Em produção, com `SITE_ORIGIN`:
 - URLs em JSON-LD;
 - sitemap;
 - robots com referência ao sitemap.
-Em preview Cloudflare, quando `CF_PAGES=1` sem `SITE_ORIGIN`:
+Em PR preview no Render, quando `IS_PULL_REQUEST=true`:
 
 - `robots.txt` usa `Disallow: /`;
 - páginas recebem `noindex, nofollow`.
 
 A simulação de produção gerou 21 URLs válidas no sitemap.
 
-## Cloudflare Pages
+## Render Static Site
 
-Arquivos preparados em `public/`:
+Artefatos de deploy:
 
-- `_headers`;
-- `_redirects`;
-- `404.html`;
-- `robots.txt`.
+- `render.yaml` na raiz;
+- `robots.txt` gerado no build;
+- headers de segurança descritos no Blueprint;
+- PR previews configurados no Blueprint.
 
 O output esperado é:
 
@@ -100,7 +102,7 @@ O output esperado é:
 dist/claudiodearaujo/browser
 ```
 
-Detalhes: [Deployment Cloudflare](./DEPLOYMENT-CLOUDFLARE.md).
+Detalhes: [Deployment Render](./DEPLOYMENT-RENDER.md).
 ## Quality gates
 
 O gate consolidado permanece:
@@ -151,4 +153,4 @@ Durante a implementação os testes detectaram e permitiram corrigir:
 
 A camada editorial do MVP deixa de ser estrutural e passa a ser funcional.
 
-O projeto está pronto para review do PR e, após merge, para criação do primeiro preview real em Cloudflare Pages.
+A Content Experience v1 foi mergeada. O hosting definitivo foi ajustado para Render Static Site em trilha posterior de deployment readiness.
