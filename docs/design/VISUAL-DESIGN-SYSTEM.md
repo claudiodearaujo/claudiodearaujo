@@ -1181,5 +1181,5 @@ Com Product, Content, Technical Architecture, UX e Visual Design definidos, a pr
 11. implementar primeiros componentes do design system;
 12. adicionar Vitest e Playwright;
 13. configurar lint/format/typecheck;
-14. preparar Cloudflare Pages;
+14. preparar Render Static Site;
 15. migrar conteúdo aprovado de `docs/` para `src/content`.

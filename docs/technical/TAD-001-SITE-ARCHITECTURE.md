@@ -43,7 +43,7 @@ Prerender / SSG
        ↓
 Static HTML + JS + CSS
        ↓
-Cloudflare Pages / CDN
+Render Static Site / CDN
 ```
 
 ## 3. Angular 22 em vez de Angular 21
@@ -569,93 +569,70 @@ A geração dinâmica de OG images não é necessária no primeiro release.
 
 ## 23. Analytics
 
-Baseline de lançamento:
-
-**Cloudflare Web Analytics**.
+O lançamento inicial não dependerá de analytics.
 
 Motivos:
 
-- privacy-first;
-- sem cookies de rastreamento do visitante;
-- integração simples;
-- Core Web Vitals / RUM;
-- adequado para o estágio inicial.
+- evitar tracker externo sem necessidade real;
+- preservar privacidade por padrão;
+- reduzir CSP e integrações no primeiro release;
+- não criar coleta de dados sem uma decisão concreta que dependa dela.
 
-No MVP não haverá rastreamento comportamental extenso.
-
-Eventos customizados detalhados poderão ser avaliados depois, caso exista decisão real que dependa deles.
-
-Referência:
-
-- https://developers.cloudflare.com/web-analytics/about/
+Uma solução privacy-first poderá ser adicionada depois, caso métricas passem a orientar decisões reais de produto.
 
 ## 24. Hosting
 
 Decisão inicial:
 
-**Cloudflare Pages**.
+**Render Static Site**.
 
 Motivos:
 
-- excelente encaixe com output estático;
+- encaixe direto com o output prerenderizado;
 - CDN global;
+- TLS gerenciado;
 - custom domains;
-- previews por branch;
-- integração direta com GitHub;
+- pull request previews;
+- integração com GitHub;
+- response headers configuráveis;
 - não requer runtime Node em produção;
-- custom response headers;
-- reduz necessidade de GitHub Actions apenas para deploy.
+- suporta Blueprint versionado em `render.yaml`.
 
 Referências:
 
-- https://developers.cloudflare.com/pages/configuration/git-integration/github-integration/
-- https://developers.cloudflare.com/pages/configuration/custom-domains/
+- https://render.com/docs/static-sites
+- https://render.com/docs/blueprint-spec
+- https://render.com/docs/service-previews
 
 ## 25. CI/CD
 
-O deploy utilizará inicialmente a integração nativa GitHub → Cloudflare Pages.
+O deploy utilizará inicialmente a integração GitHub → Render, com infraestrutura descrita em `render.yaml`.
 
 Fluxo:
 
 ```text
 Branch / PR
     ↓
-Cloudflare Build
+Render PR Preview
     ↓
-Validation Scripts
-    ↓
-Angular Build + Prerender
-    ↓
-Preview Deployment
+Human Review
     ↓
 Merge main
     ↓
-Production Deployment
+Render Build
+    ↓
+npm ci
+    ↓
+npm run validate
+    ↓
+Angular Build + Prerender
+    ↓
+Atomic Static Deploy
 ```
 
 GitHub Actions **não será requisito para o MVP**.
 
-A build command deverá executar o gate completo.
-
-Exemplo conceitual:
-
-```bash
-npm run ci
-```
-
-Com:
-
-```text
-lint
-↓
-unit tests
-↓
-content validation
-↓
-build/prerender
-```
-
-Se qualquer etapa falhar, não haverá deploy.
+O build do Render executará o gate não-browser antes de publicar. O gate completo com Playwright continuará sendo obrigatório localmente antes de concluir mudanças relevantes.
 
 ## 26. Scripts previstos
 
@@ -765,12 +742,12 @@ Princípios:
 - HTTPS obrigatório;
 - HSTS no domínio de produção.
 
-Cloudflare Pages permite configurar headers estáticos via `_headers`.
+Render Static Sites permite configurar headers diretamente no Blueprint `render.yaml` ou no Dashboard.
 
 Referências:
 
 - https://angular.dev/best-practices/security
-- https://developers.cloudflare.com/pages/configuration/headers/
+- https://render.com/docs/static-site-headers
 
 ## 32. CSP
 
@@ -785,7 +762,7 @@ object-src 'none'
 base-uri 'self'
 ```
 
-Se Cloudflare Web Analytics estiver habilitado, seus endpoints deverão ser explicitamente incluídos em `script-src` / `connect-src` conforme necessário.
+Se qualquer analytics externo for habilitado futuramente, seus endpoints deverão ser explicitamente incluídos em `script-src` / `connect-src` conforme necessário.
 
 Evitar liberar domínios através de wildcards amplos.
 
@@ -863,7 +840,7 @@ Nenhum backend dedicado será criado.
 
 Se futuramente surgir necessidade de pequenas funções dinâmicas, avaliar primeiro:
 
-- Cloudflare Functions / Workers;
+- Render Web Service pequeno;
 - APIs serverless pequenas;
 
 antes de introduzir uma aplicação backend permanente.
@@ -874,8 +851,8 @@ Como produto estático, observability será simples.
 
 Inicialmente:
 
-- Cloudflare deployment status;
-- Web Analytics / RUM;
+- Render deployment status;
+- Web Analytics / RUM apenas se futuramente habilitado;
 - Core Web Vitals;
 - build logs;
 - E2E de produção opcional;
@@ -979,7 +956,7 @@ feature/*
 
 Mudanças relevantes devem ser feitas em branch e revisadas antes do merge.
 
-Cloudflare Preview Deployments fornecerá URL de validação por branch/PR.
+Render PR Previews fornecerá URL temporária `onrender.com` para validação de pull requests.
 
 ## 44. Environment configuration
 
@@ -1130,7 +1107,7 @@ Revisar esta arquitetura se ocorrer um dos seguintes:
 
 ### Phase 7 — Deployment
 
-- Cloudflare Pages;
+- Render Static Site;
 - GitHub integration;
 - previews;
 - custom domain;
@@ -1148,7 +1125,7 @@ Este documento será considerado implementado quando:
 - locale base estiver implementado;
 - SEO e structured data estiverem presentes;
 - testes definidos estiverem executáveis;
-- build estático puder ser hospedado no Cloudflare Pages;
+- build estático puder ser hospedado no Render;
 - nenhum backend estiver sendo mantido sem requisito;
 - quality gate bloquear deploy inválido.
 

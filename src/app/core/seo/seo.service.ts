@@ -1,7 +1,7 @@
 import { DOCUMENT } from '@angular/common';
 import { inject, Injectable } from '@angular/core';
 import { Meta, Title } from '@angular/platform-browser';
-import { isPagesPreview, siteOrigin } from '../../generated/site-config.generated';
+import { isPreview, siteOrigin } from '../../generated/site-config.generated';
 import { ContentEntry } from '../content/content.models';
 
 @Injectable({ providedIn: 'root' })
@@ -18,7 +18,7 @@ export class SeoService {
     this.meta.updateTag({ property: 'og:title', content: fullTitle });
     this.meta.updateTag({ property: 'og:description', content: description });
     this.meta.updateTag({ property: 'og:type', content: type });
-    if (isPagesPreview) {
+    if (isPreview) {
       this.meta.updateTag({ name: 'robots', content: 'noindex, nofollow' });
     } else {
       this.meta.removeTag("name='robots'");

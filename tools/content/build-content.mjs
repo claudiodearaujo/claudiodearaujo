@@ -10,8 +10,11 @@ const contentRoot = path.join(root, 'src', 'content');
 const generatedRoot = path.join(root, 'src', 'app', 'generated');
 const entriesRoot = path.join(generatedRoot, 'entries');
 const publicRoot = path.join(root, 'public');
-const siteOrigin = (process.env.SITE_ORIGIN ?? '').replace(/\/$/, '');
-const isPagesPreview = process.env.CF_PAGES === '1' && !siteOrigin;
+const isPreview = process.env.IS_PULL_REQUEST === 'true';
+const configuredOrigin = isPreview
+  ? ''
+  : (process.env.SITE_ORIGIN ?? process.env.RENDER_EXTERNAL_URL ?? '');
+const siteOrigin = configuredOrigin.replace(/\/$/, '');
 
 const schema = z.object({
   title: z.string().min(1),
@@ -139,7 +142,7 @@ await writeFile(
 
 await writeFile(
   path.join(generatedRoot, 'site-config.generated.ts'),
-  `// Generated. Do not edit.\nexport const siteOrigin = ${JSON.stringify(siteOrigin)} as const;\nexport const isPagesPreview = ${JSON.stringify(isPagesPreview)} as const;\n`,
+  `// Generated. Do not edit.\nexport const siteOrigin = ${JSON.stringify(siteOrigin)} as const;\nexport const isPreview = ${JSON.stringify(isPreview)} as const;\n`,
   'utf8',
 );
 
@@ -155,7 +158,7 @@ const publicRoutes = Array.from(
   ]),
 );
 
-const robots = isPagesPreview
+const robots = isPreview
   ? 'User-agent: *\nDisallow: /\n'
   : siteOrigin
     ? `User-agent: *\nAllow: /\nSitemap: ${siteOrigin}/sitemap.xml\n`
