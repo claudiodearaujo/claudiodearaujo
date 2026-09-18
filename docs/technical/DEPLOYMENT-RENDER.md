@@ -22,6 +22,7 @@ A configuração está versionada em `render.yaml`.
 
 Decisões principais:
 
+- service name: `claudiodearaujo-site`;
 - `type: web`;
 - `runtime: static`;
 - build: `npm ci && npm run validate`;
@@ -232,6 +233,18 @@ Após validar o deploy `onrender.com`:
 6. validar sitemap;
 7. validar Open Graph e JSON-LD;
 8. opcionalmente desabilitar o subdomínio `onrender.com` após estabilização.
+## Primeiro deploy real — concluído
+
+O primeiro Static Site está live em:
+
+```text
+https://claudiodearaujo-site.onrender.com
+```
+
+A validação completa está documentada em [Render Live Deployment Validation](./RENDER-LIVE-VALIDATION.md).
+
+A aplicação, SEO, sitemap, 404 e E2E live passaram. Headers adicionais e PR previews ainda dependem da sincronização via Blueprint.
+
 ## Launch blockers externos
 
 O código ficará pronto para Render após esta trilha.

@@ -203,7 +203,7 @@ Visual Design              ✅
 Implementation Foundation  ✅
 Implementation             ✅
 Quality Gate               ✅
-Launch                     🔴
+Launch                     🟡
 ```
 
 ## Milestones concluídos
@@ -240,12 +240,19 @@ Fonte: [Content Experience v1](./technical/CONTENT-EXPERIENCE-V1.md).
 
 Com a **Content Experience v1 já mergeada**, concluir Render Deployment & Launch Readiness:
 
-1. criar/sincronizar o Blueprint no Render;
-2. validar preview real;
-3. definir o domínio final;
-4. configurar `SITE_ORIGIN` somente em produção;
-5. validar headers, robots, sitemap e canonical no domínio real;
-6. executar revisão visual final;
-7. concluir launch readiness.
+1. sincronizar o Blueprint no Render;
+2. ativar/validar security headers;
+3. ativar/validar PR previews;
+4. definir o domínio final;
+5. configurar `SITE_ORIGIN` no domínio final;
+6. revalidar headers, robots, sitemap e canonical;
+7. executar revisão visual final;
+8. concluir launch readiness.
 
 Toda tarefa de implementação deve passar por `npm run validate:full` antes de ser considerada concluída.
+
+## Render Live Deployment — ✅
+
+O Static Site está live em `https://claudiodearaujo-site.onrender.com`. Build, deep routes, SEO, sitemap com 21 URLs, 404 e 13/13 E2E live foram validados. Headers adicionais e PR previews permanecem pendentes da sincronização do Blueprint.
+
+Fonte: [Render Live Deployment Validation](./technical/RENDER-LIVE-VALIDATION.md).
