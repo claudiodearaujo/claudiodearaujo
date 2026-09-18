@@ -22,25 +22,30 @@
         {{ theme.theme() === 'dark' ? '☀' : '◐' }}
       </button>
       <button
+        #menuButton
         class="menu-toggle"
         type="button"
-        (click)="menuOpen.set(!menuOpen())"
+        (click)="toggleMenu()"
         [attr.aria-expanded]="menuOpen()"
         aria-controls="mobile-menu"
       >
-        Menu
+        {{ menuOpen() ? 'Fechar' : 'Menu' }}
       </button>
     </div>
   </div>
+
   @if (menuOpen()) {
-    <nav id="mobile-menu" class="mobile-nav" aria-label="Navegação móvel">
+    <nav #mobileNav id="mobile-menu" class="mobile-nav" aria-label="Navegação móvel">
       @for (link of links; track link[1]) {
         <a [routerLink]="link[1]" routerLinkActive="is-active" (click)="closeMenu()">
           {{ link[0] }}
         </a>
       }
       <a routerLink="/pt/contact" (click)="closeMenu()">Contact</a>
-      <a href="https://github.com/claudiodearaujo" target="_blank" rel="noreferrer">GitHub</a>
+      <a href="https://github.com/claudiodearaujo" target="_blank" rel="me noreferrer">GitHub</a>
+      <a href="https://br.linkedin.com/in/claudio-de-araujo" target="_blank" rel="me noreferrer"
+        >LinkedIn</a
+      >
     </nav>
   }
 </header>

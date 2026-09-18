@@ -238,21 +238,26 @@ Fonte: [Content Experience v1](./technical/CONTENT-EXPERIENCE-V1.md).
 
 ## Próxima etapa recomendada
 
-Com a **Content Experience v1 já mergeada**, concluir Render Deployment & Launch Readiness:
+Com Render/Blueprint já validados, concluir **Launch Readiness & Professional Polish**:
 
-1. sincronizar o Blueprint no Render;
-2. ativar/validar security headers;
-3. ativar/validar PR previews;
-4. definir o domínio final;
-5. configurar `SITE_ORIGIN` no domínio final;
-6. revalidar headers, robots, sitemap e canonical;
-7. executar revisão visual final;
-8. concluir launch readiness.
+1. concluir polish visual/editorial;
+2. validar o PR preview real;
+3. definir o domínio final;
+4. configurar `SITE_ORIGIN` no domínio final;
+5. revalidar headers, robots, sitemap e canonical;
+6. executar E2E live final;
+7. marcar v1.0 Launch Candidate.
 
 Toda tarefa de implementação deve passar por `npm run validate:full` antes de ser considerada concluída.
 
 ## Render Live Deployment — ✅
 
-O Static Site está live em `https://claudiodearaujo-site.onrender.com`. Build, deep routes, SEO, sitemap com 21 URLs, 404 e 13/13 E2E live foram validados. Headers adicionais e PR previews permanecem pendentes da sincronização do Blueprint.
+O Static Site está live em `https://claudiodearaujo-site.onrender.com`. Build, deep routes, SEO, sitemap com 21 URLs, 404 e 13/13 E2E live foram validados. Blueprint, security headers e PR previews estão ativos.
 
 Fonte: [Render Live Deployment Validation](./technical/RENDER-LIVE-VALIDATION.md).
+
+## Launch Readiness & Professional Polish — 🟡
+
+Home narrative completa, links profissionais reais, favicon, SEO social, 404 noindex e navegação mobile por teclado foram implementados na trilha de lançamento. Domínio customizado e validação final pós-domínio permanecem pendentes.
+
+Fonte: [Launch Readiness](./technical/LAUNCH-READINESS.md).

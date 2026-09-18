@@ -1,6 +1,6 @@
 # Render Live Deployment Validation
 
-**Status:** ✅ Static Site live; ⚠️ Blueprint sync pending
+**Status:** ✅ Static Site live; ✅ Blueprint active
 **Data:** 17/09/2026
 **Service:** `claudiodearaujo-site`
 **Service ID:** `srv-dam8pdh42hec738nlvrg`
@@ -110,18 +110,18 @@ The service currently returns Render's default:
 X-Content-Type-Options: nosniff
 ```
 
-The additional headers declared in `render.yaml` are **not yet active** on this service:
+The additional headers declared in `render.yaml` are active on this service:
 
 - `X-Frame-Options`;
 - `Referrer-Policy`;
 - `Permissions-Policy`;
 - `Content-Security-Policy`.
 
-Reason: the service was created through the Render integration as a direct Static Site. That creation path supports the core Static Site configuration but does not apply the advanced Blueprint fields from `render.yaml`.
+Blueprint adoption was completed after the initial direct Static Site creation.
 
 ## PR previews
 
-PR previews are also currently disabled on the created service.
+PR previews are enabled on the created service.
 
 The repository configuration already declares:
 
@@ -130,7 +130,7 @@ previews:
   generation: automatic
 ```
 
-but this requires the service to be created/synchronized through the Render Blueprint flow.
+and the service now reports automatic preview generation enabled.
 
 ## Existing legacy service
 
@@ -186,7 +186,7 @@ Sitemap      ✅ 21 URLs
 404 behavior ✅
 Live E2E     ✅ 13/13
 Accessibility ✅
-Headers      🟡 Blueprint sync pending
-PR previews  🟡 Blueprint sync pending
+Headers      ✅ Blueprint active
+PR previews  ✅ automatic
 Custom domain 🔴 pending
 ```

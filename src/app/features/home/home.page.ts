@@ -18,7 +18,7 @@ export class HomePage {
     'AI',
     'Agents',
     'Autonomous Systems',
-  ];
+  ] as const;
 
   protected readonly projects = [
     [
@@ -54,6 +54,55 @@ export class HomePage {
     'Human-in-the-loop',
     'Replaceable Boundaries',
     'Documentation is Engineering',
+  ] as const;
+
+  protected readonly deliveryFlow = [
+    'Problem',
+    'Product',
+    'Architecture',
+    'Frontend',
+    'Backend',
+    'Data',
+    'Infrastructure',
+    'Observability',
+    'Governance',
+    'Production',
+  ] as const;
+
+  protected readonly leadership = [
+    'Technical direction',
+    'Architecture reviews',
+    'Problem decomposition',
+    'Engineering standards',
+    'Documentation',
+    'Risk management',
+  ] as const;
+
+  protected readonly exploring = [
+    ['Agentic AI', 'Agentes usando contexto, ferramentas e conhecimento de forma confiável.'],
+    ['MCP', 'Boundaries consistentes entre inteligência e capacidades externas.'],
+    ['Long-Term Memory', 'Memória útil sem transformar contexto acumulado em ruído.'],
+    ['AI Evaluation', 'Evidência objetiva sobre comportamento, qualidade e segurança.'],
+    ['AI Governance', 'Authority, auditabilidade, supervisão e autonomia progressiva.'],
+    ['Human-AI Collaboration', 'Automação que amplia capacidade humana sem remover controle.'],
+  ] as const;
+
+  protected readonly articles = [
+    [
+      'AI Agents Need Architecture, Not Just Prompts',
+      'Por que agentes confiáveis exigem muito mais do que bons prompts.',
+      '/pt/writing/ai-agents-need-architecture',
+    ],
+    [
+      'From Automation to Autonomy',
+      'Automatizar uma tarefa e delegar uma decisão são problemas diferentes.',
+      '/pt/writing/from-automation-to-autonomy',
+    ],
+    [
+      'Evidence Before Autonomy',
+      'Por que sistemas inteligentes deveriam conquistar autoridade através de evidência.',
+      '/pt/writing/evidence-before-autonomy',
+    ],
   ] as const;
 
   constructor() {

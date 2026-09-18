@@ -55,21 +55,15 @@ Mais importante do que um título específico é a oportunidade de trabalhar sob
 
 ### LinkedIn
 
-Para trajetória profissional, networking e contato.
+Trajetória profissional, networking e contato:
 
-**[LinkedIn]**
+[linkedin.com/in/claudio-de-araujo](https://br.linkedin.com/in/claudio-de-araujo)
 
 ### GitHub
 
-Para projetos, código e experimentos públicos.
+Projetos, código e experimentos públicos:
 
-**[GitHub]**
-
-### Email
-
-Para contato direto.
-
-**[Email]**
+[github.com/claudiodearaujo](https://github.com/claudiodearaujo)
 
 ## A Note About Messages
 
