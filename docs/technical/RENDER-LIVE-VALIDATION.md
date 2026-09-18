@@ -190,3 +190,8 @@ Headers      ✅ Blueprint active
 PR previews  ✅ automatic
 Custom domain 🔴 pending
 ```
+
+## Git Provider verification probe
+
+A minimal documentation change was used on 18/09/2026 to verify Render PR previews and automatic deploys end to end.
+
