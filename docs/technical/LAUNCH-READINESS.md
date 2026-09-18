@@ -172,3 +172,9 @@ Custom domain          ⏳
 SITE_ORIGIN final      ⏳
 Live production E2E    ⏳ after domain
 ```
+
+## Final domain decision — 18/09/2026
+
+O domínio final está definido como `claudiodearaujo.dev.br`. Esta decisão substitui qualquer nota anterior deste documento que trate o domínio como ainda indefinido.
+
+O Blueprint declara o domínio, mas `SITE_ORIGIN` **não deve** ser alterado antes de DNS, verificação do domínio no Render e HTTPS válido. O procedimento completo está em [Final Domain Cutover](./FINAL-DOMAIN-CUTOVER.md).

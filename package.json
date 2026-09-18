@@ -18,7 +18,10 @@
     "validate": "npm run content:build && npm run format:check && npm run lint && npm run typecheck && npm run test:unit && npm run build",
     "validate:full": "npm run validate && npm run test:e2e",
     "prestart": "npm run content:build",
-    "postinstall": "npm run content:build"
+    "postinstall": "npm run content:build",
+    "test:e2e:live": "playwright test --config playwright.live.config.ts --grep-invert \"not found route\"",
+    "validate:deployment": "node tools/launch/validate-deployment.mjs",
+    "validate:launch:live": "npm run validate:deployment && npm run test:e2e:live"
   },
   "private": true,
   "packageManager": "npm@11.15.0",

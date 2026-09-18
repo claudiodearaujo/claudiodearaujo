@@ -195,3 +195,7 @@ Custom domain 🔴 pending
 
 A minimal documentation change was used on 18/09/2026 to verify Render PR previews and automatic deploys end to end.
 
+
+## Git Provider verification — ✅
+
+O PR #6 comprovou o fluxo ponta a ponta após a reconexão do Git provider: PR preview automático, preview `noindex`, merge detectado, deploy da `main` com `trigger=new_commit` e build gate `npm ci && npm run validate` executado no Render.
