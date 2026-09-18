@@ -10,7 +10,14 @@
       <a class="button button--primary" routerLink="/pt/work">Conheça meu trabalho</a>
       <a class="button button--secondary" routerLink="/pt/engineering">Como eu penso engenharia</a>
     </div>
+    <div class="social-row" aria-label="Perfis profissionais">
+      <a href="https://github.com/claudiodearaujo" target="_blank" rel="me noreferrer">GitHub</a>
+      <a href="https://br.linkedin.com/in/claudio-de-araujo" target="_blank" rel="me noreferrer"
+        >LinkedIn</a
+      >
+    </div>
   </div>
+
   <div
     class="system-motif"
     aria-label="Software evoluindo para arquitetura, inteligência artificial e agentes"
@@ -41,6 +48,7 @@
     </div>
     <a class="text-link" routerLink="/pt/work">Ver todos</a>
   </div>
+
   <div class="project-grid">
     @for (project of projects; track project[0]) {
       <article class="project-card">
@@ -52,6 +60,7 @@
     }
   </div>
 </section>
+
 <section class="page-shell section-block">
   <div class="section-heading">
     <div>
@@ -60,6 +69,7 @@
     </div>
     <a class="text-link" routerLink="/pt/engineering">Ver princípios</a>
   </div>
+
   <div class="principle-grid">
     @for (principle of principles; track principle; let index = $index) {
       <article class="principle-card">
@@ -81,6 +91,7 @@
       </p>
       <a class="button button--secondary" routerLink="/pt/work/invest-lucy">Conhecer o case</a>
     </div>
+
     <ol class="evidence-flow" aria-label="Fluxo de evidência para autonomia">
       <li>Scientific Evidence</li>
       <li>Shadow Outcomes</li>
@@ -94,15 +105,104 @@
   </div>
 </section>
 
-<section class="page-shell section-block closing-block">
-  <p class="eyebrow">Technical Leadership</p>
-  <h2>Engineering is also direction.</h2>
+<section class="page-shell section-block">
+  <p class="eyebrow">From Idea to Production</p>
+  <h2>Engenharia atravessa o sistema inteiro</h2>
   <p class="lead">
-    Liderança técnica é transformar complexidade em direção compreensível — através de arquitetura,
-    contexto, padrões, documentação e decisões melhores.
+    Decisões locais têm consequências em outras camadas. Minha experiência atravessa produto,
+    arquitetura, software, dados, infraestrutura, observabilidade e governança.
+  </p>
+
+  <ol class="delivery-flow" aria-label="Fluxo de problema até produção">
+    @for (step of deliveryFlow; track step; let index = $index) {
+      <li>
+        <span>{{ index + 1 }}</span>
+        <strong>{{ step }}</strong>
+      </li>
+    }
+  </ol>
+</section>
+
+<section class="leadership-section">
+  <div class="page-shell leadership-section__inner">
+    <div>
+      <p class="eyebrow">Technical Leadership</p>
+      <h2>Engineering is also direction.</h2>
+      <p class="lead">
+        Liderança técnica é transformar complexidade em direção compreensível — através de
+        arquitetura, contexto, padrões, documentação e decisões melhores.
+      </p>
+      <a class="text-link" routerLink="/pt/about">Conheça minha trajetória</a>
+    </div>
+
+    <ul class="leadership-list">
+      @for (item of leadership; track item) {
+        <li>{{ item }}</li>
+      }
+    </ul>
+  </div>
+</section>
+
+<section class="page-shell section-block">
+  <div class="section-heading">
+    <div>
+      <p class="eyebrow">Currently Exploring</p>
+      <h2>Perguntas que estão guiando meu trabalho agora</h2>
+    </div>
+    <a class="text-link" routerLink="/pt/now">Ver meu foco atual</a>
+  </div>
+
+  <div class="exploration-grid">
+    @for (item of exploring; track item[0]) {
+      <article class="exploration-card">
+        <h3>{{ item[0] }}</h3>
+        <p>{{ item[1] }}</p>
+      </article>
+    }
+  </div>
+</section>
+
+<section class="page-shell section-block">
+  <div class="section-heading">
+    <div>
+      <p class="eyebrow">Writing</p>
+      <h2>Ideias transformadas em conhecimento reutilizável</h2>
+    </div>
+    <a class="text-link" routerLink="/pt/writing">Ver todos os textos</a>
+  </div>
+
+  <div class="article-grid">
+    @for (article of articles; track article[0]) {
+      <article class="article-card">
+        <h3>{{ article[0] }}</h3>
+        <p>{{ article[1] }}</p>
+        <a class="text-link" [routerLink]="article[2]">Ler artigo</a>
+      </article>
+    }
+  </div>
+</section>
+
+<section class="beyond-section">
+  <div class="page-shell beyond-section__inner">
+    <p class="eyebrow">Beyond Technology</p>
+    <h2>Tecnologia é parte da pergunta, não a pergunta inteira.</h2>
+    <p class="lead">
+      Também me interesso por comportamento humano, consciência, aprendizagem, filosofia e pelas
+      formas como pessoas constroem significado. Quanto mais trabalho com inteligência artificial,
+      mais importante se torna entender a relação entre tecnologia, decisão, confiança e controle.
+    </p>
+  </div>
+</section>
+
+<section class="page-shell section-block closing-block">
+  <p class="eyebrow">Closing</p>
+  <h2>Software muda. O desafio de construir bons sistemas permanece.</h2>
+  <p class="lead">
+    Continuo interessado na mesma pergunta: como transformar problemas complexos em sistemas úteis,
+    compreensíveis e capazes de evoluir?
   </p>
   <div class="action-row">
-    <a class="button button--primary" routerLink="/pt/about">Conheça minha trajetória</a>
+    <a class="button button--primary" routerLink="/pt/work">Explore meu trabalho</a>
     <a class="button button--secondary" routerLink="/pt/contact">Entre em contato</a>
   </div>
 </section>

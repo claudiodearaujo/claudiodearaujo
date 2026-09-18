@@ -1,5 +1,6 @@
-import { Component } from '@angular/core';
+import { Component, inject } from '@angular/core';
 import { RouterLink } from '@angular/router';
+import { SeoService } from '../../core/seo/seo.service';
 
 @Component({
   selector: 'app-not-found-page',
@@ -16,4 +17,10 @@ import { RouterLink } from '@angular/router';
     </section>
   `,
 })
-export class NotFoundPage {}
+export class NotFoundPage {
+  private readonly seo = inject(SeoService);
+
+  constructor() {
+    this.seo.setNotFound();
+  }
+}

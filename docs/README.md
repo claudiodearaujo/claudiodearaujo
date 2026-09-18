@@ -18,6 +18,7 @@ Este diretório contém a fundação de produto, conteúdo, posicionamento, arqu
 - [Content Experience v1](./technical/CONTENT-EXPERIENCE-V1.md)
 - [Render Static Site Deployment](./technical/DEPLOYMENT-RENDER.md)
 - [Render Live Deployment Validation](./technical/RENDER-LIVE-VALIDATION.md)
+- [Launch Readiness & Professional Polish](./technical/LAUNCH-READINESS.md)
 
 ## UX
 
@@ -68,4 +69,4 @@ Princípio de UX: **Make depth available without making complexity mandatory.**
 
 Assinatura visual: **Deep neutral surfaces + precise typography + structural lines + controlled blue accent + architecture as visual language.**
 
-A Content Experience v1 está mergeada e o Render Static Site está live em https://claudiodearaujo-site.onrender.com. O próximo passo é sincronizar o Blueprint para ativar headers adicionais e PR previews, seguido do domínio final.
+O Render Static Site está live em https://claudiodearaujo-site.onrender.com com Blueprint, security headers e PR previews ativos. A trilha atual é Launch Readiness & Professional Polish; o domínio customizado permanece como dependência externa final.
