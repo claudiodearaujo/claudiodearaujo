@@ -1,12 +1,13 @@
 # Final Domain Cutover — claudiodearaujo.dev.br
 
-**Status:** 🟡 DNS pending at Registro.br
+**Status:** ✅ Cutover complete — v1.0 Launch Candidate
 **Final origin:** `https://claudiodearaujo.dev.br`
-**Current production origin:** `https://claudiodearaujo-site.onrender.com`
+**Production origin:** `https://claudiodearaujo.dev.br`
+**Fallback origin:** `https://claudiodearaujo-site.onrender.com`
 
 ## Objective
 
-Prepare the final production-domain transition without changing canonical URLs before DNS and TLS are actually available.
+Record and validate the completed production-domain transition to the final public origin.
 
 ## Blueprint
 
@@ -17,26 +18,26 @@ domains:
   - claudiodearaujo.dev.br
 ```
 
-Render can provision the custom-domain association before DNS is pointed. DNS verification and TLS activation remain pending until Registro.br is ready.
+The custom-domain association is active. Registro.br DNS resolves to Render and HTTPS/TLS is valid on the final origin.
 
 For a root domain, Render also manages the corresponding `www` hostname and redirects it to the root domain.
 
-## Important sequencing rule
+## Cutover sequencing rule — completed
 
-Do **not** set:
+The production environment now uses:
 
 ```text
 SITE_ORIGIN=https://claudiodearaujo.dev.br
 ```
 
-until all of the following are true:
+This was applied only after all of the following became true:
 
 1. Registro.br allows DNS configuration;
 2. the required DNS records point to Render;
 3. Render reports the custom domain as verified;
 4. HTTPS works with a valid certificate at `https://claudiodearaujo.dev.br`.
 
-Until then, production canonical, Open Graph and sitemap continue to use the working `onrender.com` origin.
+Canonical, Open Graph, JSON-LD, robots and sitemap now use the final domain. The `onrender.com` origin remains enabled as a fallback.
 
 ## Automated live validation
 
@@ -82,7 +83,7 @@ The same final gate can be executed against the current Render origin without an
 npm run validate:launch:live
 ```
 
-This rehearsal has passed before DNS cutover.
+This rehearsal passed before DNS cutover, and the same gate passed again after the final-domain cutover.
 
 ## Final cutover — PowerShell
 
@@ -102,9 +103,9 @@ Before this command can pass, production must already have been rebuilt with:
 SITE_ORIGIN=https://claudiodearaujo.dev.br
 ```
 
-## Final cutover procedure
+## Final cutover procedure — completed
 
-When Registro.br is ready:
+Completed on 18/09/2026:
 
 1. configure the DNS records exactly as shown by Render;
 2. wait for the Render custom-domain verification state;
@@ -146,10 +147,10 @@ Launch polish                   ✅
 Automated deployment validator  ✅
 Automated live E2E              ✅
 Final domain declared           ✅
-Registro.br DNS                 ⏳
-Render domain verification      ⏳
-TLS on final domain             ⏳
-SITE_ORIGIN final               ⏳
-Final-domain gate               ⏳
-v1.0 Launch Candidate           ⏳
+Registro.br DNS                 ✅
+Render domain verification      ✅
+TLS on final domain             ✅
+SITE_ORIGIN final               ✅
+Final-domain gate               ✅
+v1.0 Launch Candidate           ✅
 ```

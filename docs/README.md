@@ -69,10 +69,10 @@ Princípio de UX: **Make depth available without making complexity mandatory.**
 
 Assinatura visual: **Deep neutral surfaces + precise typography + structural lines + controlled blue accent + architecture as visual language.**
 
-O Render Static Site está live em https://claudiodearaujo-site.onrender.com com Blueprint, security headers e PR previews ativos. A trilha atual é Launch Readiness & Professional Polish; o domínio customizado permanece como dependência externa final.
+O site está live em https://claudiodearaujo.dev.br como **v1.0 Launch Candidate**, com Render Static Site, Blueprint, security headers, PR previews, auto-deploy, domínio customizado, HTTPS e SEO final validados.
 
 ## Final domain
 
 - [Final Domain Cutover — claudiodearaujo.dev.br](./technical/FINAL-DOMAIN-CUTOVER.md)
 
-O domínio final foi definido como `claudiodearaujo.dev.br`. DNS/TLS e `SITE_ORIGIN` aguardam a liberação do Registro.br; o gate automatizado pós-DNS já está preparado.
+O domínio final `claudiodearaujo.dev.br` está ativo. DNS/TLS, `SITE_ORIGIN`, canonical, sitemap, redirect de `www` e 17/17 E2E live foram validados.

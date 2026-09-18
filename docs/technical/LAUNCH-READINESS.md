@@ -1,6 +1,6 @@
 # Launch Readiness & Professional Polish
 
-**Status:** 🟡 In progress
+**Status:** ✅ v1.0 Launch Candidate
 **Data:** 18/09/2026
 **Branch:** `feat/launch-readiness`
 
@@ -140,20 +140,19 @@ Foram adicionados E2E para:
 
 ## Dependências externas restantes
 
-### Custom domain
+### Custom domain — concluído
 
-Ainda precisa ser decidido e configurado.
+Domínio final: `https://claudiodearaujo.dev.br`.
 
-Depois disso:
+Concluído:
 
-1. adicionar domínio no Render;
-2. configurar DNS;
-3. definir `SITE_ORIGIN`;
-4. redeploy;
-5. validar canonical;
-6. validar sitemap;
-7. validar Open Graph;
-8. executar E2E live final.
+1. domínio adicionado ao Render;
+2. DNS configurado no Registro.br;
+3. HTTPS/TLS validado;
+4. `SITE_ORIGIN=https://claudiodearaujo.dev.br`;
+5. canonical, sitemap e Open Graph validados;
+6. redirect de `www` para a raiz validado;
+7. 17/17 E2E live no domínio final.
 
 ## Launch Candidate
 
@@ -168,13 +167,13 @@ PR previews            ✅
 Professional links     ✅
 No placeholders        ✅
 Visual/content polish  ✅
-Custom domain          ⏳
-SITE_ORIGIN final      ⏳
-Live production E2E    ⏳ after domain
+Custom domain          ✅
+SITE_ORIGIN final      ✅
+Live production E2E    ✅ 17/17
 ```
 
 ## Final domain decision — 18/09/2026
 
 O domínio final está definido como `claudiodearaujo.dev.br`. Esta decisão substitui qualquer nota anterior deste documento que trate o domínio como ainda indefinido.
 
-O Blueprint declara o domínio, mas `SITE_ORIGIN` **não deve** ser alterado antes de DNS, verificação do domínio no Render e HTTPS válido. O procedimento completo está em [Final Domain Cutover](./FINAL-DOMAIN-CUTOVER.md).
+O Blueprint declara o domínio e `SITE_ORIGIN=https://claudiodearaujo.dev.br` está ativo em produção. DNS, HTTPS, canonical, sitemap, Open Graph, headers, redirect de `www`, 404 e E2E live foram validados. O procedimento e evidências estão em [Final Domain Cutover](./FINAL-DOMAIN-CUTOVER.md).

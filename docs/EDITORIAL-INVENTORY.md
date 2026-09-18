@@ -203,7 +203,7 @@ Visual Design              ✅
 Implementation Foundation  ✅
 Implementation             ✅
 Quality Gate               ✅
-Launch                     🟡
+Launch                     ✅
 ```
 
 ## Milestones concluídos
@@ -236,17 +236,11 @@ Renderer tipado, landings, deep dives, SEO, accessibility gates, performance bud
 
 Fonte: [Content Experience v1](./technical/CONTENT-EXPERIENCE-V1.md).
 
-## Próxima etapa recomendada
+## Estado pós-lançamento
 
-Com Render/Blueprint já validados, concluir **Launch Readiness & Professional Polish**:
+A trilha **Launch Readiness & Professional Polish** foi concluída. O site está em **v1.0 Launch Candidate** no domínio final.
 
-1. concluir polish visual/editorial;
-2. validar o PR preview real;
-3. definir o domínio final;
-4. configurar `SITE_ORIGIN` no domínio final;
-5. revalidar headers, robots, sitemap e canonical;
-6. executar E2E live final;
-7. marcar v1.0 Launch Candidate.
+Validações finais concluídas: domínio, DNS/TLS, `SITE_ORIGIN`, canonical, robots, sitemap, security headers, redirect de `www`, HTTP 404 e E2E live.
 
 Toda tarefa de implementação deve passar por `npm run validate:full` antes de ser considerada concluída.
 
@@ -256,7 +250,7 @@ O Static Site está live em `https://claudiodearaujo-site.onrender.com`. Build, 
 
 Fonte: [Render Live Deployment Validation](./technical/RENDER-LIVE-VALIDATION.md).
 
-## Launch Readiness & Professional Polish — 🟡
+## Launch Readiness & Professional Polish — ✅
 
 Home narrative completa, links profissionais reais, favicon, SEO social, 404 noindex e navegação mobile por teclado foram implementados na trilha de lançamento. Domínio customizado e validação final pós-domínio permanecem pendentes.
 
