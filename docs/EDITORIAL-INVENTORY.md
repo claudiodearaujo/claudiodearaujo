@@ -51,13 +51,13 @@ A fundação editorial, a arquitetura técnica v1, a especificação de UX/wiref
 ```text
 Home                    ✅
 About                   ✅
-Work landing            🟡
+Work landing            ✅
 3 Case Studies          ✅
 Engineering Principles  ✅
 3 ADRs                   ✅
-Labs landing             🟡
+Labs landing             ✅
 2 Labs                   ✅
-Writing landing          🟡
+Writing landing          ✅
 3 Articles               ✅
 Now                      ✅
 Contact                  ✅
@@ -194,15 +194,15 @@ Lab 001                    ✅
 Lab 002                    ✅
 Now                        ✅
 Contact                    ✅
-Work Index                 🟡
-Labs Index                 🟡
-Writing Index              🟡
+Work Index                 ✅
+Labs Index                 ✅
+Writing Index              ✅
 Technical Architecture     ✅
 UX / Wireframes            ✅
 Visual Design              ✅
 Implementation Foundation  ✅
-Implementation             🟡
-Quality Gate               🔴
+Implementation             ✅
+Quality Gate               ✅
 Launch                     🔴
 ```
 
@@ -230,17 +230,22 @@ A base Angular 22, SSG, shell, tema, content pipeline e quality gates locais est
 
 Fonte: [Implementation Foundation v1](./technical/IMPLEMENTATION-FOUNDATION.md).
 
+## Content Experience v1 — ✅
+
+Renderer tipado, landings, deep dives, SEO, accessibility gates, performance budgets e preparação para Cloudflare Pages implementados.
+
+Fonte: [Content Experience v1](./technical/CONTENT-EXPERIENCE-V1.md).
+
 ## Próxima etapa recomendada
 
-Iniciar a **implementação incremental do MVP** sobre a baseline validada:
+Concluir o **review e merge da Content Experience v1** e então:
 
-1. renderer de conteúdo tipado;
-2. Work landing e Case Study template;
-3. Engineering, ADRs, Writing e Labs;
-4. About, Now e Contact;
-5. SEO técnico e structured data;
-6. accessibility/performance gates;
-7. preview em Cloudflare Pages;
-8. launch readiness.
+1. criar o projeto no Cloudflare Pages;
+2. validar preview real;
+3. definir o domínio final;
+4. configurar `SITE_ORIGIN` somente em produção;
+5. validar headers, robots, sitemap e canonical no domínio real;
+6. executar revisão visual final;
+7. concluir launch readiness.
 
 Toda tarefa de implementação deve passar por `npm run validate:full` antes de ser considerada concluída.

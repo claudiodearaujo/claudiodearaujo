@@ -1,0 +1,17 @@
+<section class="page-shell engineering-hero">
+  <p class="eyebrow">Engineering</p>
+  <h1>How I Engineer</h1>
+  <p class="lead">Princípios e decisões que uso para reduzir ambiguidade em sistemas complexos.</p>
+  <a class="button button--primary" routerLink="/pt/engineering/principles"
+    >Engineering Principles</a
+  >
+</section>
+<section class="page-shell">
+  <p class="eyebrow">Architecture Decisions</p>
+  <h2>Decisões públicas</h2>
+  <div class="decision-grid">
+    @for (decision of decisions; track decision.route) {
+      <app-content-card [entry]="decision" />
+    }
+  </div>
+</section>

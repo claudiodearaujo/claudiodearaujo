@@ -1,0 +1,102 @@
+.detail-shell {
+  padding-top: clamp(3rem, 8vw, 7rem);
+}
+.breadcrumb {
+  display: flex;
+  gap: 0.6rem;
+  color: var(--color-text-muted);
+  font-size: 0.86rem;
+}
+.breadcrumb a {
+  color: var(--color-text-secondary);
+}
+.detail-header {
+  max-width: 60rem;
+  margin: 2.5rem 0 4rem;
+}
+.detail-meta,
+.tag-row {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.55rem;
+  font: 600 0.72rem/1.4 var(--font-mono);
+  text-transform: uppercase;
+  color: var(--color-text-muted);
+}
+.tag {
+  padding: 0.25rem 0.45rem;
+  border: 1px solid var(--color-border);
+  border-radius: 999px;
+}
+.detail-layout {
+  display: grid;
+  grid-template-columns: minmax(0, var(--prose-max)) minmax(12rem, 18rem);
+  gap: clamp(3rem, 7vw, 7rem);
+  align-items: start;
+}
+.toc {
+  position: sticky;
+  top: calc(var(--header-height) + 2rem);
+  display: grid;
+  gap: 0.65rem;
+  padding-left: 1rem;
+  border-left: 1px solid var(--color-border);
+}
+.toc a {
+  color: var(--color-text-secondary);
+  text-decoration: none;
+  font-size: 0.86rem;
+}
+.toc-child {
+  padding-left: 0.75rem;
+}
+
+:host ::ng-deep .prose h2 {
+  margin: 3rem 0 1rem;
+  font-size: clamp(1.5rem, 3vw, 2rem);
+  scroll-margin-top: 6rem;
+}
+:host ::ng-deep .prose h3 {
+  margin: 2rem 0 0.8rem;
+  scroll-margin-top: 6rem;
+}
+:host ::ng-deep .prose p,
+:host ::ng-deep .prose li {
+  color: var(--color-text-secondary);
+  line-height: 1.78;
+}
+:host ::ng-deep .prose pre {
+  overflow: auto;
+  padding: 1rem;
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-md);
+  background: var(--color-bg-alt);
+}
+:host ::ng-deep .prose code {
+  font-family: var(--font-mono);
+}
+:host ::ng-deep .prose blockquote {
+  margin: 2rem 0;
+  padding-left: 1.2rem;
+  border-left: 2px solid var(--color-accent);
+  color: var(--color-text-secondary);
+}
+.related {
+  border-top: 1px solid var(--color-border);
+}
+.related-grid {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 1rem;
+}
+@media (max-width: 900px) {
+  .detail-layout {
+    grid-template-columns: 1fr;
+  }
+  .toc {
+    display: none;
+  }
+  .related-grid {
+    grid-template-columns: 1fr;
+  }
+}

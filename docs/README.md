@@ -15,6 +15,8 @@ Este diretório contém a fundação de produto, conteúdo, posicionamento, arqu
 ## Implementation
 
 - [Implementation Foundation v1](./technical/IMPLEMENTATION-FOUNDATION.md)
+- [Content Experience v1](./technical/CONTENT-EXPERIENCE-V1.md)
+- [Cloudflare Pages Deployment](./technical/DEPLOYMENT-CLOUDFLARE.md)
 
 ## UX
 
@@ -65,4 +67,4 @@ Princípio de UX: **Make depth available without making complexity mandatory.**
 
 Assinatura visual: **Deep neutral surfaces + precise typography + structural lines + controlled blue accent + architecture as visual language.**
 
-A Implementation Foundation v1 está validada. A próxima etapa é a implementação incremental das páginas do MVP.
+A Content Experience v1 está implementada e validada localmente. A próxima etapa é review/merge do PR e criação do primeiro preview real em Cloudflare Pages.

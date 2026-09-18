@@ -156,3 +156,33 @@ a {
     animation-duration: 0.01ms !important;
   }
 }
+
+.prose a {
+  color: var(--color-accent-strong);
+  text-underline-offset: 0.18em;
+}
+.prose ul,
+.prose ol {
+  padding-left: 1.4rem;
+}
+.prose hr {
+  margin: 3rem 0;
+  border: 0;
+  border-top: 1px solid var(--color-border);
+}
+.prose img {
+  max-width: 100%;
+  height: auto;
+}
+.prose table {
+  width: 100%;
+  border-collapse: collapse;
+  overflow-x: auto;
+  display: block;
+}
+.prose th,
+.prose td {
+  padding: 0.7rem;
+  border: 1px solid var(--color-border);
+  text-align: left;
+}

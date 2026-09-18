@@ -1,0 +1,10 @@
+<section class="page-shell index-hero">
+  <p class="eyebrow">{{ eyebrow }}</p>
+  <h1>{{ title }}</h1>
+  <p class="lead">{{ description }}</p>
+</section>
+<section class="page-shell content-grid" [attr.aria-label]="title">
+  @for (entry of entries; track entry.route) {
+    <app-content-card [entry]="entry" />
+  }
+</section>
