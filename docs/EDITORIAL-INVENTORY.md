@@ -261,3 +261,7 @@ Fonte: [Render Live Deployment Validation](./technical/RENDER-LIVE-VALIDATION.md
 Home narrative completa, links profissionais reais, favicon, SEO social, 404 noindex e navegação mobile por teclado foram implementados na trilha de lançamento. Domínio customizado e validação final pós-domínio permanecem pendentes.
 
 Fonte: [Launch Readiness](./technical/LAUNCH-READINESS.md).
+
+## Final Domain — 🟡
+
+Domínio final definido: `claudiodearaujo.dev.br`. Blueprint e validação pós-DNS estão preparados. Pendências externas: DNS no Registro.br, verificação/TLS no Render, `SITE_ORIGIN` final e gate live no domínio definitivo.

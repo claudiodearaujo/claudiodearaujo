@@ -4,6 +4,8 @@ services:
     name: claudiodearaujo-site
     buildCommand: npm ci && npm run validate
     staticPublishPath: ./dist/claudiodearaujo/browser
+    domains:
+      - claudiodearaujo.dev.br
     autoDeployTrigger: commit
     previews:
       generation: automatic
