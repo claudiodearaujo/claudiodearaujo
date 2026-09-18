@@ -1,7 +1,7 @@
 services:
   - type: web
     runtime: static
-    name: claudiodearaujo
+    name: claudiodearaujo-site
     buildCommand: npm ci && npm run validate
     staticPublishPath: ./dist/claudiodearaujo/browser
     autoDeployTrigger: commit
