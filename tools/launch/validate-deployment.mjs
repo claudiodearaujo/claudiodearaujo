@@ -1,8 +1,30 @@
+import { readFile } from 'node:fs/promises';
+import path from 'node:path';
+
 const targetOrigin = (
   process.env.TARGET_ORIGIN ?? 'https://claudiodearaujo-site.onrender.com'
 ).replace(/\/$/, '');
 const expectedOrigin = (process.env.EXPECTED_ORIGIN ?? targetOrigin).replace(/\/$/, '');
-const expectedSitemapUrls = Number(process.env.EXPECTED_SITEMAP_URLS ?? '21');
+
+// The expected sitemap is derived from the content build rather than hardcoded,
+// so publishing a new entry cannot fail this gate on a stale count.
+const publicRoutesFile = path.join(
+  process.cwd(),
+  'src',
+  'app',
+  'generated',
+  'public-routes.generated.json',
+);
+let expectedRoutes;
+try {
+  expectedRoutes = JSON.parse(await readFile(publicRoutesFile, 'utf8'));
+} catch {
+  console.error(
+    `Could not read ${publicRoutesFile}. Run \`npm run content:build\` before validating a deployment.`,
+  );
+  process.exit(1);
+}
+const expectedSitemapUrls = new Set(expectedRoutes.map((route) => `${expectedOrigin}${route}`));
 
 const failures = [];
 
@@ -84,13 +106,20 @@ assert(
 const sitemap = await fetchText('/sitemap.xml');
 assert(sitemap.response.status === 200, `sitemap.xml expected 200, got ${sitemap.response.status}`);
 const locations = [...sitemap.text.matchAll(/<loc>(.*?)<\/loc>/g)].map((match) => match[1]);
+const published = new Set(locations);
+const missingFromSitemap = [...expectedSitemapUrls].filter((url) => !published.has(url));
+const unexpectedInSitemap = [...published].filter((url) => !expectedSitemapUrls.has(url));
 assert(
-  locations.length === expectedSitemapUrls,
-  `sitemap expected ${expectedSitemapUrls} URLs, got ${locations.length}`,
+  missingFromSitemap.length === 0,
+  `sitemap is missing ${missingFromSitemap.length} URL(s): ${missingFromSitemap.join(', ')}`,
 );
 assert(
-  locations.every((url) => url.startsWith(`${expectedOrigin}/`)),
-  'sitemap contains URL outside expected origin',
+  unexpectedInSitemap.length === 0,
+  `sitemap has ${unexpectedInSitemap.length} unexpected URL(s): ${unexpectedInSitemap.join(', ')}`,
+);
+assert(
+  locations.length === published.size,
+  `sitemap contains ${locations.length - published.size} duplicate URL(s)`,
 );
 
 const favicon = await fetch(`${targetOrigin}/favicon.svg`);
@@ -127,6 +156,6 @@ if (failures.length) {
 console.log('\nDeployment validation passed.');
 console.log('- security headers: ok');
 console.log('- canonical / og:url: ok');
-console.log(`- robots / sitemap: ${locations.length} URLs`);
+console.log(`- robots / sitemap: ${locations.length} URLs matching the content build`);
 console.log('- favicon: ok');
 console.log('- HTTP 404: ok');

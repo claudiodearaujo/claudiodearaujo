@@ -4,6 +4,7 @@ import matter from 'gray-matter';
 import { marked } from 'marked';
 import sanitizeHtml from 'sanitize-html';
 import { z } from 'zod';
+import { routeFor, withHeadingAnchors } from './markdown.mjs';
 
 const root = process.cwd();
 const contentRoot = path.join(root, 'src', 'content');
@@ -28,52 +29,6 @@ const schema = z.object({
   publishedAt: z.string().optional(),
   updatedAt: z.string().optional(),
 });
-
-const routeFor = (meta) =>
-  meta.route ??
-  {
-    project: `/pt/work/${meta.slug}`,
-    article: `/pt/writing/${meta.slug}`,
-    lab: `/pt/labs/${meta.slug}`,
-    decision: `/pt/engineering/decisions/${meta.slug}`,
-  }[meta.type];
-
-const namedEntities = {
-  amp: '&',
-  lt: '<',
-  gt: '>',
-  quot: '"',
-  apos: "'",
-  nbsp: '\u00a0',
-};
-
-// marked escapes heading text, so entities must be decoded before they reach the
-// table of contents (interpolated as plain text) or the anchor slug.
-const decodeEntities = (value) =>
-  value
-    .replace(/&#x([0-9a-f]+);/gi, (_match, hex) => String.fromCodePoint(Number.parseInt(hex, 16)))
-    .replace(/&#(\d+);/g, (_match, code) => String.fromCodePoint(Number(code)))
-    .replace(/&([a-z]+);/gi, (match, name) => namedEntities[name.toLowerCase()] ?? match);
-
-const slugify = (value) =>
-  value
-    .normalize('NFD')
-    .replace(/[\u0300-\u036f]/g, '')
-    .toLowerCase()
-    .replace(/['\u2018\u2019]/g, '')
-    .replace(/[^a-z0-9]+/g, '-')
-    .replace(/^-|-$/g, '');
-
-// Repeated headings inside one document would otherwise emit duplicate ids,
-// which is invalid HTML and makes every table-of-contents link jump to the first one.
-const uniqueId = (base, used) => {
-  const seed = base || 'section';
-  let candidate = seed;
-  let suffix = 2;
-  while (used.has(candidate)) candidate = `${seed}-${suffix++}`;
-  used.add(candidate);
-  return candidate;
-};
 
 async function walk(directory) {
   const entries = await readdir(directory, { withFileTypes: true });
@@ -105,16 +60,8 @@ for (const file of files) {
   seenRoutes.add(route);
 
   const body = parsed.content.replace(/^\s*#\s+[^\r\n]+(?:\r?\n)+/, '');
-  const headings = [];
-  const usedHeadingIds = new Set();
-  let html = String(await marked.parse(body));
-  html = html.replace(/<(h[23])>([\s\S]*?)<\/\1>/g, (_match, tag, inner) => {
-    const text = decodeEntities(inner.replace(/<[^>]+>/g, '')).trim();
-    const id = uniqueId(slugify(text), usedHeadingIds);
-    headings.push({ level: Number(tag[1]), id, text });
-    return `<${tag} id="${id}">${inner}</${tag}>`;
-  });
-  html = sanitizeHtml(html, {
+  const { html: anchored, headings } = withHeadingAnchors(String(await marked.parse(body)));
+  let html = sanitizeHtml(anchored, {
     allowedTags: [...sanitizeHtml.defaults.allowedTags, 'img'],
     allowedAttributes: {
       ...sanitizeHtml.defaults.allowedAttributes,
@@ -183,6 +130,14 @@ const publicRoutes = Array.from(
     '/pt/labs',
     ...manifest.map((entry) => entry.route),
   ]),
+);
+
+// Single source of truth for the routes the deployment validator expects to
+// find in the published sitemap.
+await writeFile(
+  path.join(generatedRoot, 'public-routes.generated.json'),
+  `${JSON.stringify(publicRoutes, null, 2)}\n`,
+  'utf8',
 );
 
 const robots = isPreview
