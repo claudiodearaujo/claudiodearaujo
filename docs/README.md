@@ -8,6 +8,10 @@ Este diretório contém a fundação de produto, conteúdo, posicionamento, arqu
 - [Content Architecture + Sitemap](./CONTENT-ARCHITECTURE.md)
 - [Inventário Editorial do MVP](./EDITORIAL-INVENTORY.md)
 
+## Evolução
+
+- [Site Evolution Plan v2](./SITE-EVOLUTION-PLAN.md)
+
 ## Arquitetura técnica
 
 - [TAD-001 — Arquitetura Técnica do Site](./technical/TAD-001-SITE-ARCHITECTURE.md)
