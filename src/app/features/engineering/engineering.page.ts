@@ -1,5 +1,6 @@
 import { Component, inject } from '@angular/core';
 import { RouterLink } from '@angular/router';
+import { localizedPath } from '../../core/i18n/locale';
 import { ContentRepository } from '../../core/content/content.repository';
 import { SeoService } from '../../core/seo/seo.service';
 import { ContentCard } from '../../shared/content-card/content-card';
@@ -20,8 +21,14 @@ export class EngineeringPage {
       'How I Engineer',
       'Princípios, decisões e práticas que orientam meu trabalho.',
       'website',
-      '/pt/engineering',
+      localizedPath('engineering'),
       '/og/site/engineering.png',
     );
+  }
+
+  /** Links in this template are written relative to the locale — see
+   *  core/i18n/locale.ts. */
+  protected path(section = ''): string {
+    return localizedPath(section);
   }
 }

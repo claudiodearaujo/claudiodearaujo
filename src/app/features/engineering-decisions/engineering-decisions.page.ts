@@ -2,6 +2,7 @@ import { Component, inject } from '@angular/core';
 import { ContentSummary } from '../../core/content/content.models';
 import { ContentRepository } from '../../core/content/content.repository';
 import { SeoService } from '../../core/seo/seo.service';
+import { localizedPath } from '../../core/i18n/locale';
 import { AdrRow } from '../../shared/adr-row/adr-row';
 
 @Component({
@@ -29,7 +30,7 @@ export class EngineeringDecisionsPage {
       'Architecture Decisions',
       'Decisões técnicas públicas, com contexto, alternativas e consequências.',
       'website',
-      '/pt/engineering/decisions',
+      localizedPath('engineering/decisions'),
       '/og/site/engineering-decisions.png',
     );
   }

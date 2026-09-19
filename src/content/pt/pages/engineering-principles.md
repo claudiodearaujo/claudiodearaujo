@@ -3,7 +3,7 @@ title: Engineering Principles
 slug: engineering-principles
 locale: pt
 type: page
-route: /pt/engineering/principles
+route: engineering/principles
 summary: Princípios que orientam minhas decisões de engenharia, arquitetura e liderança técnica.
 tags: [Engineering, Architecture, Leadership]
 ---

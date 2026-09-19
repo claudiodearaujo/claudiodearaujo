@@ -2,6 +2,14 @@ import { DOCUMENT } from '@angular/common';
 import { inject, Injectable } from '@angular/core';
 import { Meta, Title } from '@angular/platform-browser';
 import { BreadcrumbItem, ContentEntry } from '../content/content.models';
+import { publishedLocales } from '../../generated/locales.generated';
+import {
+  DEFAULT_LOCALE,
+  LANGUAGE_TAG,
+  Locale,
+  localeFromPath,
+  localizedPath,
+} from '../i18n/locale';
 import { SITE_CONFIG } from './site-config';
 
 const githubUrl = 'https://github.com/claudiodearaujo';
@@ -32,7 +40,8 @@ export class SeoService {
     this.meta.updateTag({ property: 'og:description', content: description });
     this.meta.updateTag({ property: 'og:type', content: type });
     this.meta.updateTag({ property: 'og:site_name', content: 'Cláudio Araújo' });
-    this.meta.updateTag({ property: 'og:locale', content: 'pt_BR' });
+    const locale = route ? localeFromPath(route) : DEFAULT_LOCALE;
+    this.meta.updateTag({ property: 'og:locale', content: LANGUAGE_TAG[locale].replace('-', '_') });
     this.meta.updateTag({ name: 'twitter:title', content: fullTitle });
     this.meta.updateTag({ name: 'twitter:description', content: description });
 
@@ -43,6 +52,7 @@ export class SeoService {
     }
 
     this.setCanonical(route);
+    this.setAlternates(route);
     this.setOgImage(ogImagePath);
   }
 
@@ -50,14 +60,29 @@ export class SeoService {
     const description =
       'Software Engineer com 20+ anos de experiência em arquitetura, AI Engineering, sistemas autônomos e liderança técnica.';
 
-    this.setPage('Cláudio Araújo', description, 'profile', '/pt', '/og/site/home.png');
+    const home = localizedPath();
+    this.setPage('Cláudio Araújo', description, 'profile', home, '/og/site/home.png');
+    // Person and WebSite in one @graph rather than two scripts: they describe
+    // the same home document, and a crawler reads the graph as one statement.
     this.replaceJsonLd({
       '@context': 'https://schema.org',
-      '@type': 'Person',
-      name: 'Cláudio Araújo',
-      jobTitle: 'Software Engineer · AI Engineering · Technical Leadership',
-      url: this.config.origin ? `${this.config.origin}/pt` : undefined,
-      sameAs: [githubUrl, linkedinUrl],
+      '@graph': [
+        {
+          '@type': 'Person',
+          name: 'Cláudio Araújo',
+          jobTitle: 'Software Engineer · AI Engineering · Technical Leadership',
+          url: this.config.origin ? `${this.config.origin}${home}` : undefined,
+          sameAs: [githubUrl, linkedinUrl],
+        },
+        {
+          '@type': 'WebSite',
+          name: 'Cláudio Araújo',
+          description,
+          inLanguage: 'pt-BR',
+          url: this.config.origin ? `${this.config.origin}${home}` : undefined,
+          author: { '@type': 'Person', name: 'Cláudio Araújo' },
+        },
+      ],
     });
   }
 
@@ -75,9 +100,16 @@ export class SeoService {
       '@context': 'https://schema.org',
       '@type': entry.type === 'article' ? 'TechArticle' : 'CreativeWork',
       name: entry.title,
+      headline: entry.title,
       description: entry.summary,
       url: this.config.origin ? `${this.config.origin}${entry.route}` : undefined,
-      inLanguage: 'pt-BR',
+      inLanguage: LANGUAGE_TAG[entry.locale],
+      // Undated by design for `page` and `project`: a standing page and an
+      // ongoing project have no single publication date, and JSON.stringify
+      // drops the key rather than publishing an invented one.
+      datePublished: entry.publishedAt,
+      dateModified: entry.updatedAt ?? entry.publishedAt,
+      wordCount: entry.wordCount,
       author: {
         '@type': 'Person',
         name: 'Cláudio Araújo',
@@ -125,6 +157,39 @@ export class SeoService {
     this.meta.updateTag({ property: 'og:image:width', content: '1200' });
     this.meta.updateTag({ property: 'og:image:height', content: '630' });
     this.meta.updateTag({ name: 'twitter:image', content: url });
+  }
+
+  /**
+   * `hreflang` only means something where there is another language to point
+   * at. With a single published locale the correct markup is none at all, so
+   * this emits nothing until a second locale exists — and then emits one
+   * alternate per locale plus `x-default` pointing at the default one (E7).
+   */
+  private setAlternates(route?: string): void {
+    for (const link of Array.from(
+      this.document.querySelectorAll('link[rel="alternate"][hreflang]'),
+    )) {
+      link.remove();
+    }
+
+    if (!this.config.origin || !route || publishedLocales.length < 2) return;
+
+    const current = localeFromPath(route);
+    const suffix = route.replace(new RegExp(`^/${current}`), '');
+    const href = (locale: Locale) => `${this.config.origin}${localizedPath(suffix, locale)}`;
+
+    for (const locale of publishedLocales) {
+      this.appendAlternate(LANGUAGE_TAG[locale], href(locale));
+    }
+    this.appendAlternate('x-default', href(DEFAULT_LOCALE));
+  }
+
+  private appendAlternate(hreflang: string, href: string): void {
+    const link = this.document.createElement('link');
+    link.rel = 'alternate';
+    link.setAttribute('hreflang', hreflang);
+    link.href = href;
+    this.document.head.appendChild(link);
   }
 
   private setCanonical(route?: string): void {

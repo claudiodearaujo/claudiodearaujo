@@ -1,4 +1,5 @@
 import { Component, inject } from '@angular/core';
+import { localizedPath } from '../../core/i18n/locale';
 import { ContentRepository } from '../../core/content/content.repository';
 import { SeoService } from '../../core/seo/seo.service';
 import { ContentCard } from '../../shared/content-card/content-card';
@@ -27,7 +28,7 @@ export class WorkPage {
       'Selected Work',
       'Projetos e sistemas que representam minha trajetória em engenharia.',
       'website',
-      '/pt/work',
+      localizedPath('work'),
       '/og/site/work.png',
     );
   }

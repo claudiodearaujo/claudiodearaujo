@@ -1,25 +1,43 @@
 <header class="site-header">
   <div class="page-shell site-header__inner">
-    <a class="brand" routerLink="/pt" aria-label="Cláudio Araújo — início">
+    <a class="brand" [routerLink]="homePath" [attr.aria-label]="text.brandHome">
       <span class="brand__mark" aria-hidden="true">CA</span>
       <span class="brand__name">Cláudio Araújo</span>
     </a>
 
-    <nav class="desktop-nav" aria-label="Navegação principal">
-      @for (link of links; track link[1]) {
-        <a [routerLink]="link[1]" routerLinkActive="is-active">{{ link[0] }}</a>
+    <nav class="desktop-nav" [attr.aria-label]="text.primaryNav">
+      @for (link of links; track link.route) {
+        <a [routerLink]="link.route" routerLinkActive="is-active">{{ link.label }}</a>
       }
-      <a class="contact-link" routerLink="/pt/contact">Contact</a>
+      <a class="contact-link" [routerLink]="contactPath">Contact</a>
     </nav>
 
     <div class="header-actions">
+      @if (hasLanguageChoice) {
+        <nav class="locale-nav" [attr.aria-label]="text.chooseLanguage">
+          @for (option of locales; track option.locale) {
+            <a
+              [routerLink]="option.path"
+              [attr.aria-current]="option.isCurrent ? 'true' : null"
+              [attr.lang]="option.locale"
+              >{{ option.label }}</a
+            >
+          }
+        </nav>
+      }
+      <!-- Both glyphs are always rendered and CSS shows one, so this markup is
+           identical on the server and in the browser whatever the reader's
+           theme is. Rendering the active glyph from a signal made the
+           prerendered HTML disagree with the theme the inline boot script had
+           already applied, until hydration reconciled it (D18). -->
       <button
         class="theme-toggle"
         type="button"
         (click)="theme.toggle()"
-        [attr.aria-label]="theme.theme() === 'dark' ? 'Ativar tema claro' : 'Ativar tema escuro'"
+        [attr.aria-label]="text.toggleTheme"
       >
-        {{ theme.theme() === 'dark' ? '☀' : '◐' }}
+        <span class="theme-toggle__glyph theme-toggle__glyph--dark" aria-hidden="true">☀</span>
+        <span class="theme-toggle__glyph theme-toggle__glyph--light" aria-hidden="true">◐</span>
       </button>
       <button
         #menuButton
@@ -29,19 +47,19 @@
         [attr.aria-expanded]="menuOpen()"
         aria-controls="mobile-menu"
       >
-        {{ menuOpen() ? 'Fechar' : 'Menu' }}
+        {{ menuOpen() ? text.closeMenu : text.openMenu }}
       </button>
     </div>
   </div>
 
   @if (menuOpen()) {
-    <nav #mobileNav id="mobile-menu" class="mobile-nav" aria-label="Navegação móvel">
-      @for (link of links; track link[1]) {
-        <a [routerLink]="link[1]" routerLinkActive="is-active" (click)="closeMenu()">
-          {{ link[0] }}
+    <nav #mobileNav id="mobile-menu" class="mobile-nav" [attr.aria-label]="text.mobileNav">
+      @for (link of links; track link.route) {
+        <a [routerLink]="link.route" routerLinkActive="is-active" (click)="closeMenu()">
+          {{ link.label }}
         </a>
       }
-      <a routerLink="/pt/contact" (click)="closeMenu()">Contact</a>
+      <a [routerLink]="contactPath" (click)="closeMenu()">Contact</a>
       <a href="https://github.com/claudiodearaujo" target="_blank" rel="me noreferrer">GitHub</a>
       <a href="https://br.linkedin.com/in/claudio-de-araujo" target="_blank" rel="me noreferrer"
         >LinkedIn</a

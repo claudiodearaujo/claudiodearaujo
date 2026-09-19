@@ -1,4 +1,5 @@
 import { Component, input } from '@angular/core';
+import { stringsFor } from '../../core/i18n/ui-strings';
 import { StatusBadge } from '../status-badge/status-badge';
 
 /**
@@ -14,6 +15,7 @@ import { StatusBadge } from '../status-badge/status-badge';
   styleUrl: './metadata-row.scss',
 })
 export class MetadataRow {
+  protected readonly text = stringsFor();
   readonly type = input.required<string>();
   readonly status = input<string>();
   readonly readingTime = input<number>();

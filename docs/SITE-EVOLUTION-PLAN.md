@@ -373,6 +373,93 @@ Diagramas SVG            @defer (hydrate never)
 
 **DoD:** benchmark antes/depois registrado neste documento; nenhum aviso de hydration mismatch no console em nenhuma das 21 rotas (asserção E2E).
 
+#### Resultado medido
+
+**Trabalho de hydration** — a contagem que o próprio Angular reporta, de nós
+e componentes efetivamente hidratados. É a métrica que responde D17 com
+precisão. Medida contra `ng serve` (que renderiza no servidor), com
+`--no-hmr`: em modo HMR o Angular avisa via `NG0751` que carrega as
+dependências de `@defer` avidamente, e as contagens oscilam o bastante para
+invalidar qualquer comparação.
+
+| Rota                                      | Antes (comp/nós) | Depois (comp/nós) | Nós    |
+| ----------------------------------------- | ---------------- | ----------------- | ------ |
+| `/pt/engineering/principles`              | 14 / 442         | 6 / 150           | −66,1% |
+| `/pt/work/invest-lucy`                    | 16 / 458         | 7 / 161           | −64,8% |
+| `/pt/writing/ai-agents-need-architecture` | 13 / 296         | 6 / 150           | −49,3% |
+| `/pt`                                     | 4 / 427          | 4 / 432           | +1,2%  |
+| `/pt/work`                                | 13 / 236         | 13 / 241          | +2,1%  |
+| `/pt/topics/mcp`                          | 10 / 176         | 10 / 181          | +2,8%  |
+| `/pt/engineering/decisions`               | 10 / 116         | 10 / 121          | +4,3%  |
+
+Nas páginas de conteúdo — as únicas com prosa longa, que é o que D17
+descreve — os componentes hidratados caem para menos da metade e os nós
+caem entre 49% e 66%. As demais rotas sobem exatamente 5 nós: é a região
+`aria-live` do anúncio de rota (D19), que não existia antes. `skipped=0` em
+todas as rotas, nos dois temas.
+
+**Tempo e bundle** em `/pt/work/invest-lucy`, no build prerenderizado servido
+estaticamente, Chromium com CPU throttling 4x (sem throttle a máquina de
+desenvolvimento esconde o custo por completo — não há uma única long task).
+Mediana de 7 execuções:
+
+| Métrica            | Antes     | Depois    | Δ      |
+| ------------------ | --------- | --------- | ------ |
+| Layout             | 116,63 ms | 94,67 ms  | −18,8% |
+| Script (4x CPU)    | 173,06 ms | 162,61 ms | −6,0%  |
+| Long tasks         | 411 ms    | 396 ms    | −3,6%  |
+| JS inicial (bruto) | 290,65 kB | 305,34 kB | +5,1%  |
+
+**O resultado mais útil desta fase é a distância entre as duas tabelas.**
+Cortar 65% dos nós hidratados comprou 6% de tempo de script. A meta de
+aceite (−60% no tempo de hydration) foi atingida na contagem de trabalho e
+não no relógio, porque o relógio mede outra coisa: o custo dominante é o
+bootstrap do framework e do router, não a hydration por nó. A evidência
+disso já estava no baseline e passou despercebida na redação do plano —
+antes da mudança, `/pt/work/invest-lucy` (458 nós) e qualquer rota de índice
+custavam praticamente o mesmo, ~170 ms de script e ~410 ms de long task.
+
+A segunda meta (JS inicial abaixo de 200 kB brutos) **não foi atingida e o
+número andou para trás**: a runtime de incremental hydration mais a
+maquinaria de `@defer` custam ~14,7 kB, e não há conteúdo diferível que
+compense isso. Chegar a 200 kB exigiria remover código de framework — abrir
+mão do router, ou emitir as páginas sem Angular no cliente — que é outra
+decisão de arquitetura, não uma fronteira de hydration.
+
+Esse crescimento estourou o orçamento de bundle do `main` em `angular.json`
+(aviso em 300 kB). O aviso foi movido para 310 kB — não para esconder o
+custo, que está medido acima, mas para o orçamento voltar a sinalizar
+crescimento **não intencional**. O limite de erro continua em 340 kB, então
+a margem real de guarda não mudou. Um aviso permanente em todo build treina
+quem o lê a ignorá-lo, que é o modo de falha que orçamento existe para
+evitar.
+
+#### Desvios deliberados do plano
+
+- **O header continua hidratando.** O plano previa
+  `@defer (hydrate on interaction)` nele. Isso quebraria o
+  `routerLinkActive`: numa navegação SPA disparada de qualquer outro ponto
+  da página (um card de conteúdo, por exemplo), o header não teria hidratado
+  e o item de menu ativo ficaria congelado na página anterior. O header é
+  também a única ilha genuinamente interativa do site. Mantido hidratado, com
+  asserção E2E fixando o comportamento do destaque de navegação.
+- **O footer continua hidratando.** Medido: `hydrate never` nele rendia 15
+  nós e um componente, e custava aos seus links a navegação por router (um
+  `<a href>` não hidratado faz carga completa de documento) mais uma pintura
+  atrasada nas rotas renderizadas no cliente. Mau negócio, revertido.
+- **`PrerenderFallback.None` não foi aplicado.** Os tipos do `@angular/ssr`
+  só aceitam `fallback` em rota de prerender que declare `getPrerenderParams`,
+  e esta aplicação não tem mais rota parametrizada — as rotas de conteúdo e
+  de tópico são geradas explicitamente. O item não se aplica a esta
+  configuração; a razão está registrada em `app.routes.server.ts`.
+- **O `redirectTo: 'pt'` do cliente foi mantido** junto com o redirect de
+  borda. O redirect de borda resolve o D20 (o crawler recebe 301 em vez do
+  shell), mas o comportamento do Render não é verificável a partir do
+  ambiente de desenvolvimento; sem a rota cliente, um host que ignorasse a
+  regra serviria a página 404 na raiz do site.
+- **`inlineCritical` não foi reavaliado.** Item 7, sem impacto nos defeitos
+  D17–D20; fica para quando houver medição de CSS crítico que o justifique.
+
 ### E6 — SEO e distribuição
 
 **Problema:** seção 3.4.
@@ -386,6 +473,30 @@ Diagramas SVG            @defer (hydrate never)
 5. scaffolding de `hreflang` e `x-default`, ativado quando `en` existir.
 
 **DoD:** Rich Results Test sem erro em uma amostra por tipo; feed validado pelo W3C Feed Validator.
+
+#### Resultado
+
+Entregue: `WebSite` e `Person` num único `@graph` na home; `TechArticle` com
+`datePublished`, `dateModified`, `author` e `wordCount` (contado no build a
+partir do mesmo corpo que já produzia o reading time); `sitemap.xml` com
+`lastmod`; feed RSS 2.0 em `/rss.xml` com os 8 conteúdos datados, descoberto
+por `<link rel="alternate">` e linkado no rodapé para leitores humanos.
+
+Duas decisões que valem registro:
+
+- **Nenhum `lastmod` inventado.** Nenhum conteúdo declara `updatedAt` hoje, e
+  as rotas de índice e de tópico não têm data própria. O `lastmod` sai de
+  `updatedAt ?? publishedAt` e é **omitido** onde não existe — carimbar a data
+  do build diria ao crawler que o site inteiro muda a cada deploy.
+- **O feed carrega só o que é datado** (artigos, labs e decisões). Um projeto
+  é contínuo, não publicado numa data, e uma página institucional não é item
+  que um assinante queira receber de novo.
+
+Validação: XML dos dois arquivos conferido como bem-formado, e 10 asserções
+E2E sobre o JSON-LD servido, a descoberta do feed e a ausência de data
+inventada em página institucional. O Rich Results Test e o W3C Feed Validator
+são serviços externos e não rodam deste ambiente — ficam como verificação
+pós-deploy, junto de `validate:deployment`.
 
 ### E7 — Prontidão para `en`
 
@@ -401,6 +512,38 @@ Diagramas SVG            @defer (hydrate never)
 **Fora desta trilha:** traduzir os 4.851 linhas de conteúdo. A trilha entrega a **capacidade**; a tradução é decisão editorial separada. Recomendação para a primeira leva em `en`: Home, About e os 3 artigos.
 
 **DoD:** grep por `'/pt` em `src/app` retorna zero ocorrências fora do helper e da configuração de locale padrão.
+
+#### Resultado
+
+**DoD atingido: zero ocorrências em código de produção**, partindo de 67 em
+18 arquivos. O que sobra é `core/i18n/locale.ts` (o helper, onde o literal
+aparece nos exemplos do próprio comentário) e os arquivos `.spec.ts`. As
+specs mantêm URLs literais de propósito: um teste que constrói a expectativa
+com o mesmo helper que está testando não verifica nada.
+
+O que mudou de forma:
+
+- `routeFor` deriva de `meta.locale`, e o front matter das páginas passou a
+  declarar rota **relativa ao locale** (`engineering/principles`), não
+  `/pt/engineering/principles`. As três páginas que seguiam o padrão
+  `/{locale}/{slug}` não declaram rota nenhuma agora;
+- `app.routes.ts` monta as rotas de seção por locale a partir de
+  `publishedLocales`, que o build deriva do conteúdo — publicar um idioma
+  adiciona suas rotas sem editar o arquivo;
+- tópicos passaram a ser **por locale**. Um artigo em português e um em
+  inglês com a mesma tag não são a mesma página de tópico, e contá-los juntos
+  publicaria uma rota listando conteúdo que o leitor não lê;
+- o chrome da UI (navegação, landmarks, controles, afordâncias repetidas)
+  saiu para `core/i18n/ui-strings.ts`. Copy editorial — títulos de página,
+  corpo de case study — continua no conteúdo, que é onde ela é traduzida.
+
+**Nada foi traduzido especulativamente.** `UI_STRINGS` tem só `pt`; a
+interface `UiStrings` é o contrato que um segundo idioma preenche. Pelo mesmo
+critério, `hreflang`/`x-default` só são emitidos quando há 2+ locales
+publicados — com um só, a marcação correta é nenhuma — e o seletor de idioma
+no header fica fora do DOM em vez de renderizar um controle de uma opção.
+Esse seletor é, portanto, **o único trecho desta trilha que nenhum teste
+exercita**, por não haver um segundo idioma para exercitá-lo.
 
 ### E8 — Gates que enxergam a página
 
@@ -420,7 +563,24 @@ Diagramas SVG            @defer (hydrate never)
 
 ### E9 — Profundidade editorial
 
-`docs/` guarda 2.889 linhas de conteúdo editorial aprovado que não está publicado.
+~~`docs/` guarda 2.889 linhas de conteúdo editorial aprovado que não está publicado.~~
+
+**Esta premissa estava errada e foi verificada como falsa.** As 15 peças em
+`docs/case-studies`, `docs/writing`, `docs/labs`, `docs/engineering` e
+`docs/content` são os *drafts* do que já está em `src/content` — todas
+publicadas. Comparando linha a linha, cada versão publicada é **maior** que
+seu draft, porque carrega front matter e, em alguns casos, diagramas e índice
+adicionados nas fases E3 e E4:
+
+```text title="Draft versus publicado, em linhas"
+LUCYOS.md                 409  ->  445
+INVEST-LUCY.md            618  ->  641
+PRINCIPLES.md             458  ->  528
+ABOUT.md                  310  ->  319
+```
+
+Não há conteúdo editorial aprovado à espera de publicação. O que falta é
+conteúdo **novo**, e ele depende de material que só o autor tem.
 
 **Entregas sugeridas, sem bloqueio técnico:**
 
@@ -428,6 +588,38 @@ Diagramas SVG            @defer (hydrate never)
 - ADRs 004+ (`PRD.md` §22 lista oito candidatos);
 - cadência de escrita — o `Content Strategy Loop` do PRD §49 só funciona com publicação contínua;
 - fotografia profissional no About (Visual §39), opcional.
+
+#### Resultado
+
+**Entregue: ADR 004 e ADR 005**, sobre decisões tomadas neste próprio
+repositório, com contexto, alternativas e consequências verificáveis no
+código e nas medições registradas acima:
+
+- *Why This Site Intercepts Its Own Fragment Links?* — o `<base href="/">`
+  que o build exige quebrava o skip link, uma falha de WCAG 2.4.1 que a
+  suíte não via porque testava presença, não comportamento;
+- *Why Keep Incremental Hydration After It Missed Its Target?* — a medição
+  da fase E5, incluindo a meta mal formulada e a contaminação por HMR que
+  quase foi publicada como resultado.
+
+**O restante da trilha não foi feito, e não por falta de tempo.**
+
+Os cases de Argos, Enterprise AI e Financial Systems foram *removidos* em E4
+justamente porque não existe material de origem para eles em lugar nenhum do
+repositório. Escrevê-los agora significaria inventar a trajetória
+profissional do autor em um site cujo objetivo declarado é autoridade
+profissional. O mesmo vale para os oito candidatos a ADR do `PRD.md` §22
+(*Why local-first?*, *RAG versus agent memory*, *Why append-only audit
+trails?*): são decisões sobre LucyOS e Invest Lucy, e seu Context, Decision,
+Alternatives e Consequences reais só existem com quem as tomou. Um título de
+ADR não é material de origem.
+
+Cadência de escrita é processo, não entrega. Fotografia depende do autor.
+
+**Pré-requisito para fechar E9:** material de origem — notas, decisões
+registradas, o que foi tentado e descartado — para cada peça. Com isso, a
+publicação em si é barata: o pipeline valida, gera rota, imagem social, feed
+e tópicos sozinho.
 
 ## 6. Sequência
 

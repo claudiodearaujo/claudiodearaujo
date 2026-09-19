@@ -1,5 +1,6 @@
 import { afterNextRender, Component, input, OnDestroy, signal } from '@angular/core';
 import { ContentHeading } from '../../core/content/content.models';
+import { stringsFor } from '../../core/i18n/ui-strings';
 
 /**
  * Renders the "on this page" navigation for a content detail page.
@@ -20,6 +21,7 @@ import { ContentHeading } from '../../core/content/content.models';
   styleUrl: './table-of-contents.scss',
 })
 export class TableOfContents implements OnDestroy {
+  protected readonly text = stringsFor();
   readonly headings = input.required<readonly ContentHeading[]>();
 
   protected readonly activeId = signal<string | null>(null);

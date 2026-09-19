@@ -6,7 +6,9 @@ import sanitizeHtml from 'sanitize-html';
 import { z } from 'zod';
 import {
   addHeadingAnchorLinks,
+  escapeXml,
   readingTimeMinutes,
+  wordCount,
   renderCode,
   routeFor,
   slugify,
@@ -48,7 +50,13 @@ const schema = z
     slug: z.string().regex(/^[a-z0-9]+(?:-[a-z0-9]+)*$/),
     locale: z.enum(['pt', 'en']),
     type: z.enum(['project', 'article', 'lab', 'decision', 'page']),
-    route: z.string().startsWith('/').optional(),
+    // Relative to the locale, without a leading slash: `engineering/principles`
+    // becomes `/pt/engineering/principles`. Writing the locale in here would
+    // pin the file to one language (E7).
+    route: z
+      .string()
+      .regex(/^(?!\/)[a-z0-9/-]+$/, 'must be a locale-relative path, without a leading slash')
+      .optional(),
     summary: z.string().min(1),
     status: z.string().optional(),
     tags: z.array(z.string()).default([]),
@@ -172,6 +180,9 @@ for (const { file, parsed, meta, route } of parsedFiles) {
     route,
     relatedRoutes: related,
     readingTime: readingTimeMinutes(parsed.content),
+    // Published in the Article JSON-LD; readingTime is derived from the same
+    // count, so carrying both costs nothing.
+    wordCount: wordCount(parsed.content),
     source: path.relative(root, file).replaceAll('\\', '/'),
   };
   manifest.push(summary);
@@ -215,33 +226,49 @@ await writeFile(
 // needing an enumerable-params hook or falling back to client rendering.
 // First-seen spelling of a tag (by manifest order, already route-alphabetical)
 // becomes that topic's display label.
-const topicLabelBySlug = new Map();
-const topicCountBySlug = new Map();
-for (const entry of manifest) {
-  for (const tag of entry.tags) {
-    const slug = slugify(tag);
-    if (!topicLabelBySlug.has(slug)) topicLabelBySlug.set(slug, tag);
-    topicCountBySlug.set(slug, (topicCountBySlug.get(slug) ?? 0) + 1);
-  }
-}
 // A tag used by a single entry has no topic to collect: the page would list
 // the one item the reader just came from. Those tags still render — as plain
 // text, not links (ContentRepository.hasTopic decides that from this same
 // threshold) — so the site never publishes a thin dead-end page or links to
 // a route that was not generated.
 const TOPIC_MIN_ENTRIES = 2;
-const topics = [...topicLabelBySlug.entries()]
-  .filter(([slug]) => topicCountBySlug.get(slug) >= TOPIC_MIN_ENTRIES)
-  .map(([slug, label]) => ({ slug, label }))
-  .sort((a, b) => a.slug.localeCompare(b.slug));
 
-const topicRouteSource = topics
-  .map(
-    ({ slug, label }) => `  {
-    path: 'pt/topics/${slug}',
-    data: { tagSlug: ${JSON.stringify(slug)}, tagLabel: ${JSON.stringify(label)} },
+// Locales are whatever the content actually declares, never a fixed list: a
+// locale exists here the moment a file is published in it, and disappears
+// when the last one goes (E7).
+const publishedLocales = [...new Set(manifest.map((entry) => entry.locale))].sort();
+
+// Tags are counted within a locale. A Portuguese and an English article
+// sharing the tag "Agents" are not the same topic page, and counting them
+// together would publish a topic route listing content the reader cannot read.
+const topicsByLocale = new Map(
+  publishedLocales.map((locale) => {
+    const labelBySlug = new Map();
+    const countBySlug = new Map();
+    for (const entry of manifest.filter((candidate) => candidate.locale === locale)) {
+      for (const tag of entry.tags) {
+        const slug = slugify(tag);
+        if (!labelBySlug.has(slug)) labelBySlug.set(slug, tag);
+        countBySlug.set(slug, (countBySlug.get(slug) ?? 0) + 1);
+      }
+    }
+    const topics = [...labelBySlug.entries()]
+      .filter(([slug]) => countBySlug.get(slug) >= TOPIC_MIN_ENTRIES)
+      .map(([slug, label]) => ({ slug, label }))
+      .sort((a, b) => a.slug.localeCompare(b.slug));
+    return [locale, topics];
+  }),
+);
+
+const topicRouteSource = publishedLocales
+  .flatMap((locale) =>
+    topicsByLocale.get(locale).map(
+      ({ slug, label }) => `  {
+    path: '${locale}/topics/${slug}',
+    data: { locale: '${locale}', tagSlug: ${JSON.stringify(slug)}, tagLabel: ${JSON.stringify(label)} },
     loadComponent: () => import('../features/topic/topic.page').then((m) => m.TopicPage),
   }`,
+    ),
   )
   .join(',\n');
 
@@ -257,17 +284,28 @@ await writeFile(
   'utf8',
 );
 
+// What the app needs to know about languages, derived from the content rather
+// than configured: which locales exist, and which one `/` resolves to.
+await writeFile(
+  path.join(generatedRoot, 'locales.generated.ts'),
+  `// Generated. Do not edit.\nimport { Locale } from '../core/i18n/locale';\nexport const publishedLocales: readonly Locale[] = ${JSON.stringify(publishedLocales)};\n`,
+  'utf8',
+);
+
+// The pages that exist once per locale and are not content files, as paths
+// below the locale. app.routes.ts builds its routes from this same shape.
+const staticSections = ['', 'work', 'engineering', 'engineering/decisions', 'writing', 'labs'];
+
 const publicRoutes = Array.from(
   new Set([
     '/',
-    '/pt',
-    '/pt/work',
-    '/pt/engineering',
-    '/pt/engineering/decisions',
-    '/pt/writing',
-    '/pt/labs',
+    ...publishedLocales.flatMap((locale) =>
+      staticSections.map((section) => (section ? `/${locale}/${section}` : `/${locale}`)),
+    ),
     ...manifest.map((entry) => entry.route),
-    ...topics.map(({ slug }) => `/pt/topics/${slug}`),
+    ...publishedLocales.flatMap((locale) =>
+      topicsByLocale.get(locale).map(({ slug }) => `/${locale}/topics/${slug}`),
+    ),
   ]),
 );
 
@@ -286,9 +324,22 @@ const robots = isPreview
     : 'User-agent: *\nAllow: /\n';
 await writeFile(path.join(publicRoot, 'robots.txt'), robots, 'utf8');
 
+// `lastmod` only where a date is actually declared. A content route carries
+// its own `updatedAt ?? publishedAt`; an index or a topic page has no date of
+// its own, and inventing one (the build date, say) would tell crawlers the
+// whole site changes on every deploy.
+const lastmodByRoute = new Map(
+  manifest
+    .map((entry) => [entry.route, entry.updatedAt ?? entry.publishedAt])
+    .filter(([, date]) => Boolean(date)),
+);
+
 if (siteOrigin) {
   const urls = publicRoutes
-    .map((route) => `  <url><loc>${siteOrigin}${route}</loc></url>`)
+    .map((route) => {
+      const lastmod = lastmodByRoute.get(route);
+      return `  <url><loc>${siteOrigin}${route}</loc>${lastmod ? `<lastmod>${lastmod}</lastmod>` : ''}</url>`;
+    })
     .join('\n');
   await writeFile(
     path.join(publicRoot, 'sitemap.xml'),
@@ -299,4 +350,51 @@ if (siteOrigin) {
   await rm(path.join(publicRoot, 'sitemap.xml'), { force: true });
 }
 
-console.log(`Validated and rendered ${manifest.length} content entries into lazy route modules.`);
+// The feed carries what is actually published on a date — articles, labs and
+// decisions. A project is ongoing rather than dated, and a standing page
+// (About, Now) is not an item a subscriber wants delivered again.
+const feedItems = manifest
+  .filter((entry) => datedTypes.includes(entry.type))
+  .sort((a, b) => (b.publishedAt ?? '').localeCompare(a.publishedAt ?? ''));
+
+if (siteOrigin) {
+  // Dates in front matter are plain YYYY-MM-DD; RSS wants RFC 822, and
+  // parsing them as UTC keeps the day from shifting under a negative offset.
+  const rfc822 = (date) => new Date(`${date}T00:00:00Z`).toUTCString();
+  const items = feedItems
+    .map(
+      (entry) => `    <item>
+      <title>${escapeXml(entry.title)}</title>
+      <link>${siteOrigin}${entry.route}</link>
+      <guid isPermaLink="true">${siteOrigin}${entry.route}</guid>
+      <pubDate>${rfc822(entry.publishedAt)}</pubDate>
+      <description>${escapeXml(entry.summary)}</description>
+${entry.tags.map((tag) => `      <category>${escapeXml(tag)}</category>`).join('\n')}
+    </item>`,
+    )
+    .join('\n');
+
+  await writeFile(
+    path.join(publicRoot, 'rss.xml'),
+    `<?xml version="1.0" encoding="UTF-8"?>
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
+  <channel>
+    <title>Cláudio Araújo</title>
+    <link>${siteOrigin}/pt</link>
+    <description>Engenharia de software, arquitetura, inteligência artificial e liderança técnica.</description>
+    <language>pt-BR</language>
+    <atom:link href="${siteOrigin}/rss.xml" rel="self" type="application/rss+xml"/>
+${items}
+  </channel>
+</rss>
+`,
+    'utf8',
+  );
+} else {
+  await rm(path.join(publicRoot, 'rss.xml'), { force: true });
+}
+
+console.log(
+  `Validated and rendered ${manifest.length} content entries into lazy route modules` +
+    `${siteOrigin ? `, with ${feedItems.length} of them in the feed` : ''}.`,
+);

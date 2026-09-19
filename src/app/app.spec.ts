@@ -23,4 +23,12 @@ describe('App', () => {
     expect(compiled.querySelector('app-site-header')).toBeTruthy();
     expect(compiled.querySelector('app-site-footer')).toBeTruthy();
   });
+
+  it('starts with an empty route announcer so a first load says nothing', () => {
+    const fixture = TestBed.createComponent(App);
+    fixture.detectChanges();
+    const announcer = (fixture.nativeElement as HTMLElement).querySelector('[role="status"]');
+    expect(announcer).toBeTruthy();
+    expect(announcer?.textContent?.trim()).toBe('');
+  });
 });

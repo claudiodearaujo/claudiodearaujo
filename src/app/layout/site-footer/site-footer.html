@@ -4,15 +4,15 @@
       <strong>Cláudio Araújo</strong>
       <p>Software Engineering · AI Engineering · Technical Leadership</p>
     </div>
-    <nav aria-label="Links do rodapé">
-      <a routerLink="/pt/work">Work</a>
-      <a routerLink="/pt/engineering">Engineering</a>
-      <a routerLink="/pt/writing">Writing</a>
-      <a routerLink="/pt/contact">Contact</a>
+    <nav [attr.aria-label]="text.footerNav">
+      @for (link of links; track link.route) {
+        <a [routerLink]="link.route">{{ link.label }}</a>
+      }
       <a href="https://github.com/claudiodearaujo" target="_blank" rel="me noreferrer">GitHub</a>
       <a href="https://br.linkedin.com/in/claudio-de-araujo" target="_blank" rel="me noreferrer"
         >LinkedIn</a
       >
+      <a href="/rss.xml">RSS</a>
     </nav>
   </div>
   <div class="page-shell site-footer__meta">© {{ year }} Cláudio Araújo</div>

@@ -92,6 +92,16 @@ export const addHeadingAnchorLinks = (html) =>
 const escapeHtml = (value) =>
   value.replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;');
 
+// XML has no named entities beyond these five, so a feed needs the quotes
+// escaped too — unlike HTML text content, where they are legal as-is.
+export const escapeXml = (value) =>
+  String(value)
+    .replace(/&/g, '&amp;')
+    .replace(/</g, '&lt;')
+    .replace(/>/g, '&gt;')
+    .replace(/"/g, '&quot;')
+    .replace(/'/g, '&apos;');
+
 // The info string after a fence's language is normally discarded by marked's
 // default renderer. This is the one place it survives, so a ```text fence
 // can optionally carry `title="..."` for its figcaption — e.g.:
@@ -140,16 +150,33 @@ export const wrapTables = (html) =>
 // Not stripped of Markdown syntax first: headings, fence markers and link
 // brackets are a small, roughly constant fraction of any real document here
 // and the estimate is a reading-time hint, not a precise metric.
-export const readingTimeMinutes = (text) => {
-  const words = text.trim().split(/\s+/).filter(Boolean).length;
-  return Math.max(1, Math.ceil(words / 200));
+export const wordCount = (text) => text.trim().split(/\s+/).filter(Boolean).length;
+
+export const readingTimeMinutes = (text) => Math.max(1, Math.ceil(wordCount(text) / 200));
+
+// The path segment each content type lives under, below its locale. Kept in
+// one place because the TypeScript side has to agree with it — see
+// src/app/core/i18n/locale.ts.
+export const sectionForType = {
+  project: 'work',
+  article: 'writing',
+  lab: 'labs',
+  decision: 'engineering/decisions',
 };
 
-export const routeFor = (meta) =>
-  meta.route ??
-  {
-    project: `/pt/work/${meta.slug}`,
-    article: `/pt/writing/${meta.slug}`,
-    lab: `/pt/labs/${meta.slug}`,
-    decision: `/pt/engineering/decisions/${meta.slug}`,
-  }[meta.type];
+/**
+ * Every route is `/{locale}/…`, derived rather than written out, so the same
+ * content file published under another locale lands on the right path with no
+ * edit (docs/SITE-EVOLUTION-PLAN.md E7).
+ *
+ * `page` has no section of its own and must say where it goes, as a path
+ * relative to its locale: `route: engineering/principles`, never `/pt/…`.
+ * Omitted, a page falls back to its own slug — which is what About, Now and
+ * Contact want.
+ */
+export const routeFor = (meta) => {
+  if (meta.route) return `/${meta.locale}/${meta.route.replace(/^\/+/, '')}`;
+  const section = sectionForType[meta.type];
+  if (section) return `/${meta.locale}/${section}/${meta.slug}`;
+  return meta.type === 'page' ? `/${meta.locale}/${meta.slug}` : undefined;
+};

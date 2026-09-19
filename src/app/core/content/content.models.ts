@@ -25,6 +25,8 @@ export interface ContentSummary {
   readonly relatedRoutes: readonly string[];
   /** Minutes, rounded up from a ~200wpm estimate over the raw Markdown body. */
   readonly readingTime: number;
+  /** Words in the raw Markdown body — published as the Article's wordCount. */
+  readonly wordCount: number;
   readonly source: string;
 }
 

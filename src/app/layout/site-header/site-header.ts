@@ -1,6 +1,9 @@
 import { DOCUMENT } from '@angular/common';
 import { Component, ElementRef, inject, signal, viewChild } from '@angular/core';
 import { RouterLink, RouterLinkActive } from '@angular/router';
+import { publishedLocales } from '../../generated/locales.generated';
+import { DEFAULT_LOCALE, localizedPath, LOCALE_LABEL } from '../../core/i18n/locale';
+import { stringsFor } from '../../core/i18n/ui-strings';
 import { ThemeService } from '../../core/theme/theme.service';
 
 @Component({
@@ -18,14 +21,24 @@ export class SiteHeader {
   private readonly menuButton = viewChild<ElementRef<HTMLButtonElement>>('menuButton');
   private readonly mobileNav = viewChild<ElementRef<HTMLElement>>('mobileNav');
 
-  protected readonly links = [
-    ['Work', '/pt/work'],
-    ['Engineering', '/pt/engineering'],
-    ['Labs', '/pt/labs'],
-    ['Writing', '/pt/writing'],
-    ['About', '/pt/about'],
-    ['Now', '/pt/now'],
-  ] as const;
+  protected readonly text = stringsFor();
+  protected readonly homePath = localizedPath();
+  protected readonly contactPath = localizedPath('contact');
+  protected readonly links = this.text.nav.map(({ label, path }) => ({
+    label,
+    route: localizedPath(path),
+  }));
+
+  // The picker is a list of alternatives; with one published language there
+  // is nothing to pick, so it stays out of the DOM entirely rather than
+  // rendering a control with a single option.
+  protected readonly locales = publishedLocales.map((locale) => ({
+    locale,
+    label: LOCALE_LABEL[locale],
+    path: localizedPath('', locale),
+    isCurrent: locale === DEFAULT_LOCALE,
+  }));
+  protected readonly hasLanguageChoice = publishedLocales.length > 1;
 
   protected toggleMenu(): void {
     const opening = !this.menuOpen();

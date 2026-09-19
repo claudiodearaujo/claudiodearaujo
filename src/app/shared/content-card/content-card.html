@@ -9,7 +9,7 @@
     <a [routerLink]="entry().route">{{ entry().title }}</a>
   </h2>
   <p>{{ entry().summary }}</p>
-  <div class="tag-row" aria-label="Tags">
+  <div class="tag-row" [attr.aria-label]="text.tags">
     @for (tag of entry().tags; track tag) {
       @if (hasTopic(tag)) {
         <a class="tag" [routerLink]="topicRoute(tag)">{{ tag }}</a>
@@ -18,5 +18,5 @@
       }
     }
   </div>
-  <a class="text-link" [routerLink]="entry().route">Ler conteúdo</a>
+  <a class="text-link" [routerLink]="entry().route">{{ text.readEntry }}</a>
 </article>

@@ -53,6 +53,7 @@ Thumbs.db
 # Environment-generated SEO
 /public/robots.txt
 /public/sitemap.xml
+/public/rss.xml
 
 # Self-hosted fonts, reproduced from node_modules by tools/launch/copy-fonts.mjs
 /public/fonts/

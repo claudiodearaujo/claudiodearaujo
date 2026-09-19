@@ -2,6 +2,8 @@ import { Component, inject, input } from '@angular/core';
 import { RouterLink } from '@angular/router';
 import { ContentSummary } from '../../core/content/content.models';
 import { ContentRepository } from '../../core/content/content.repository';
+import { localizedPath } from '../../core/i18n/locale';
+import { stringsFor } from '../../core/i18n/ui-strings';
 import { slugifyTag } from '../../core/content/slug.util';
 import { MetadataRow } from '../metadata-row/metadata-row';
 
@@ -14,6 +16,7 @@ import { MetadataRow } from '../metadata-row/metadata-row';
 export class ContentCard {
   private readonly repository = inject(ContentRepository);
 
+  protected readonly text = stringsFor();
   readonly entry = input.required<ContentSummary>();
 
   protected hasTopic(tag: string): boolean {
@@ -21,6 +24,6 @@ export class ContentCard {
   }
 
   protected topicRoute(tag: string): string {
-    return `/pt/topics/${slugifyTag(tag)}`;
+    return localizedPath(`topics/${slugifyTag(tag)}`, this.entry().locale);
   }
 }

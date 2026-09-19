@@ -1,6 +1,6 @@
-<aside class="toc" aria-label="Neste conteúdo">
+<aside class="toc" [attr.aria-label]="text.tableOfContents">
   <details open>
-    <summary>Nesta página</summary>
+    <summary>{{ text.onThisPage }}</summary>
     <ul>
       @for (heading of headings(); track heading.id) {
         <li [class.toc-child]="heading.level === 3">
