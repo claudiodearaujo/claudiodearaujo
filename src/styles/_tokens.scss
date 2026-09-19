@@ -1,29 +1,6 @@
-:root {
-  color-scheme: dark light;
-  --font-display: 'Manrope Variable', 'Manrope', system-ui, sans-serif;
-  --font-body: 'Inter Variable', 'Inter', system-ui, sans-serif;
-  --font-mono: 'JetBrains Mono Variable', 'JetBrains Mono', ui-monospace, monospace;
-  --layout-max: 82rem;
-  --prose-max: 72ch;
-  --header-height: 4.5rem;
-  --radius-sm: 0.5rem;
-  --radius-md: 0.75rem;
-  --radius-lg: 1rem;
-  --color-bg: #090b10;
-  --color-bg-alt: #0e1118;
-  --color-surface: #141923;
-  --color-surface-raised: #191f2b;
-  --color-text: #f3f6fa;
-  --color-text-secondary: #aab4c3;
-  --color-text-muted: #748094;
-  --color-border: #202836;
-  --color-border-strong: #334055;
-  --color-accent: #6ea8fe;
-  --color-accent-strong: #8bb9ff;
-  --color-accent-soft: #1a2c47;
-  --color-accent-contrast: #08111f;
-}
-html[data-theme='light'] {
+// Both light selectors below must define the same tokens: any token left out falls
+// back to its dark value, producing dark surfaces under light text.
+@mixin light-theme {
   --color-bg: #f7f9fc;
   --color-bg-alt: #ffffff;
   --color-surface: #ffffff;
@@ -37,17 +14,46 @@ html[data-theme='light'] {
   --color-accent-strong: #174eae;
   --color-accent-soft: #e7f0ff;
   --color-accent-contrast: #ffffff;
+  --color-ember: #c96a1c;
+  --color-ember-strong: #a4550f;
+  --color-ember-soft: #fdf0e3;
+}
+
+:root {
+  color-scheme: dark light;
+  --font-display: 'Space Grotesk', system-ui, sans-serif;
+  --font-body: 'IBM Plex Sans', system-ui, sans-serif;
+  --font-mono: 'IBM Plex Mono', ui-monospace, monospace;
+  --layout-max: 82rem;
+  --prose-max: 72ch;
+  --header-height: 4.5rem;
+  --radius-sm: 0.5rem;
+  --radius-md: 0.75rem;
+  --radius-lg: 1rem;
+  --color-bg: #0a0d12;
+  --color-bg-alt: #10141b;
+  --color-surface: #141a23;
+  --color-surface-raised: #181f2a;
+  --color-text: #f4f6fa;
+  --color-text-secondary: #a9b3c4;
+  --color-text-muted: #6b7686;
+  --color-border: #232b38;
+  --color-border-strong: #333f4f;
+  --color-accent: #4f8fef;
+  --color-accent-strong: #7fb0ff;
+  --color-accent-soft: #16233a;
+  --color-accent-contrast: #061020;
+  --color-ember: #ff9f4a;
+  --color-ember-strong: #ffb672;
+  --color-ember-soft: #3a2712;
+}
+
+html[data-theme='light'] {
+  @include light-theme;
 }
 
 @media (prefers-color-scheme: light) {
   :root:not([data-theme]) {
-    --color-bg: #f7f9fc;
-    --color-surface: #ffffff;
-    --color-text: #111722;
-    --color-text-secondary: #495568;
-    --color-border: #e2e7ef;
-    --color-border-strong: #c6d0de;
-    --color-accent: #2766d0;
-    --color-accent-contrast: #ffffff;
+    @include light-theme;
   }
 }

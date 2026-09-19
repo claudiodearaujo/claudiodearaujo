@@ -4,6 +4,14 @@
   box-sizing: border-box;
 }
 
+// Full-bleed decorations are sized in vw, which exceeds the content width by the
+// scrollbar. `clip` contains them while leaving overflow-y `visible`, so neither
+// element becomes a scroll container — `hidden` would, breaking the sticky header.
+html,
+body {
+  overflow-x: clip;
+}
+
 html {
   scroll-behavior: smooth;
   background: var(--color-bg);
@@ -125,6 +133,38 @@ a {
 .text-link {
   color: var(--color-accent);
   text-underline-offset: 0.2em;
+}
+
+.status-pill {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.4rem;
+  padding: 0.25rem 0.6rem;
+  border: 1px solid var(--color-border-strong);
+  border-radius: 999px;
+  color: var(--color-text-secondary);
+  font: 600 0.68rem/1 var(--font-mono);
+  letter-spacing: 0.05em;
+  text-transform: uppercase;
+  white-space: nowrap;
+}
+
+.status-pill::before {
+  content: '';
+  width: 0.4rem;
+  height: 0.4rem;
+  border-radius: 50%;
+  background: var(--color-text-muted);
+}
+
+.status-pill--active::before,
+.status-pill--accepted::before {
+  background: var(--color-accent);
+}
+
+.status-pill--research::before,
+.status-pill--active-research::before {
+  background: var(--color-ember);
 }
 .section-placeholder {
   min-height: 65dvh;

@@ -12,36 +12,40 @@ export class HomePage {
   private readonly seo = inject(SeoService);
 
   protected readonly journey = [
-    'Web',
-    'Enterprise',
-    'Architecture',
-    'AI',
-    'Agents',
-    'Autonomous Systems',
+    { label: 'Web', intelligence: false },
+    { label: 'Enterprise', intelligence: false },
+    { label: 'Architecture', intelligence: false },
+    { label: 'AI', intelligence: true },
+    { label: 'Agents', intelligence: true },
+    { label: 'Autonomous Systems', intelligence: true },
   ] as const;
 
   protected readonly projects = [
     [
       'LucyOS',
       'Personal Agentic AI Platform',
+      'Active',
       'Agentes, memória, conhecimento, ferramentas e MCP.',
       '/pt/work/lucyos',
     ],
     [
       'Invest Lucy',
       'Evidence-Driven Autonomous Research',
+      'Research',
       'Autonomia progressiva sustentada por evidência, risco e governança.',
       '/pt/work/invest-lucy',
     ],
     [
       'Livrya',
       'AI-Powered Publishing Platform',
+      'Active',
       'Produto editorial com IA, colaboração, publicação e áudio.',
       '/pt/work/livrya',
     ],
     [
       'Enterprise AI',
       'Knowledge & Retrieval Systems',
+      'Active',
       'RAG, embeddings e integração de conhecimento corporativo.',
       '/pt/work',
     ],

@@ -22,8 +22,8 @@
     class="system-motif"
     aria-label="Software evoluindo para arquitetura, inteligência artificial e agentes"
   >
-    <span>Software</span><i></i><span>Architecture</span><i></i><span>AI</span><i></i
-    ><span>Agents</span>
+    <span>Software</span><i></i><span>Architecture</span><i class="is-decision"></i
+    ><span class="is-decision">AI</span><i class="is-decision"></i><span>Agents</span>
   </div>
 </section>
 
@@ -31,10 +31,10 @@
   <p class="eyebrow">Engineering Journey</p>
   <h2>Mais de 20 anos construindo software</h2>
   <div class="journey" aria-label="Evolução profissional">
-    @for (step of journey; track step; let last = $last) {
-      <span>{{ step }}</span>
+    @for (step of journey; track step.label; let last = $last; let i = $index) {
+      <span [class.is-decision]="step.intelligence">{{ step.label }}</span>
       @if (!last) {
-        <i aria-hidden="true"></i>
+        <i aria-hidden="true" [class.is-decision]="journey[i + 1].intelligence"></i>
       }
     }
   </div>
@@ -52,10 +52,15 @@
   <div class="project-grid">
     @for (project of projects; track project[0]) {
       <article class="project-card">
-        <p class="eyebrow">{{ project[1] }}</p>
+        <div class="project-card__head">
+          <p class="eyebrow">{{ project[1] }}</p>
+          <span class="status-pill" [class]="'status-pill--' + project[2].toLowerCase()">{{
+            project[2]
+          }}</span>
+        </div>
         <h3>{{ project[0] }}</h3>
-        <p>{{ project[2] }}</p>
-        <a class="text-link" [routerLink]="project[3]">Explorar projeto</a>
+        <p>{{ project[3] }}</p>
+        <a class="text-link" [routerLink]="project[4]">Explorar projeto →</a>
       </article>
     }
   </div>
@@ -100,7 +105,7 @@
       <li>Walk-forward</li>
       <li>OOS</li>
       <li>Monte Carlo</li>
-      <li>Human Review</li>
+      <li class="is-decision">Human Review</li>
     </ol>
   </div>
 </section>

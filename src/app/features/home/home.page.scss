@@ -1,10 +1,22 @@
 .hero {
+  position: relative;
   min-height: calc(100dvh - var(--header-height));
   display: grid;
   grid-template-columns: minmax(0, 1.25fr) minmax(18rem, 0.75fr);
   align-items: center;
   gap: clamp(3rem, 8vw, 8rem);
   padding-block: clamp(5rem, 12vw, 9rem);
+}
+
+.hero::before {
+  content: '';
+  position: absolute;
+  inset: -2rem calc(50% - 50vw) 0;
+  z-index: -1;
+  background-image: radial-gradient(circle, var(--color-border) 1px, transparent 1px);
+  background-size: 28px 28px;
+  mask-image: linear-gradient(to bottom, black, transparent);
+  opacity: 0.6;
 }
 
 .hero h1 {
@@ -41,6 +53,29 @@
   background: linear-gradient(90deg, var(--color-accent), var(--color-border));
 }
 
+.system-motif i.is-decision {
+  background: linear-gradient(90deg, var(--color-accent), var(--color-ember));
+}
+
+.system-motif span.is-decision {
+  position: relative;
+  padding-left: 1.1rem;
+  color: var(--color-ember-strong);
+}
+
+.system-motif span.is-decision::before {
+  content: '';
+  position: absolute;
+  left: 0;
+  top: 50%;
+  width: 0.5rem;
+  aspect-ratio: 1;
+  border-radius: 50%;
+  background: var(--color-ember);
+  box-shadow: 0 0 0 3px var(--color-ember-soft);
+  transform: translateY(-50%);
+}
+
 .journey {
   display: flex;
   align-items: center;
@@ -50,11 +85,20 @@
   font: 600 0.78rem/1.4 var(--font-mono);
 }
 
+.journey span.is-decision {
+  color: var(--color-ember-strong);
+}
+
 .journey i {
   flex: 1;
   min-width: 1.5rem;
   height: 1px;
   background: var(--color-border-strong);
+}
+
+.journey i.is-decision {
+  background: var(--color-ember);
+  opacity: 0.6;
 }
 
 .project-grid,
@@ -89,6 +133,40 @@
 .exploration-card,
 .article-card {
   padding: clamp(1.5rem, 3vw, 2.25rem);
+}
+
+.project-grid {
+  counter-reset: project;
+}
+
+.project-card {
+  position: relative;
+  background: var(--color-surface-raised);
+  border-top: 3px solid var(--color-accent);
+  counter-increment: project;
+}
+
+.project-card:nth-child(even) {
+  border-top-color: var(--color-ember);
+}
+
+.project-card::before {
+  content: counter(project, decimal-leading-zero);
+  display: block;
+  margin-bottom: 0.5rem;
+  color: var(--color-text-muted);
+  font: 700 0.75rem/1 var(--font-mono);
+}
+
+.project-card__head {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 1rem;
+}
+
+.project-card__head .eyebrow {
+  margin: 0;
 }
 
 .project-card h3,
@@ -162,8 +240,20 @@
   width: 0.5rem;
   aspect-ratio: 1;
   border-radius: 50%;
-  background: var(--color-accent);
+  background: var(--color-ember);
   transform: translateY(-50%);
+}
+
+.evidence-flow li.is-decision {
+  border-left-color: var(--color-accent);
+  color: var(--color-accent-strong);
+}
+
+.evidence-flow li.is-decision::before {
+  width: 0.65rem;
+  left: -0.335rem;
+  background: var(--color-accent);
+  box-shadow: 0 0 0 3px var(--color-accent-soft);
 }
 
 .delivery-flow {

@@ -2,7 +2,7 @@
   <div class="content-card__meta">
     <span>{{ entry().type }}</span>
     @if (entry().status) {
-      <span>{{ entry().status }}</span>
+      <span class="status-pill" [class]="statusModifier()">{{ entry().status }}</span>
     }
   </div>
   <h2>
