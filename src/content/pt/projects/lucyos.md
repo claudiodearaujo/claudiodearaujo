@@ -57,19 +57,39 @@ Essas questões transformam rapidamente um chatbot em um problema de arquitetura
 
 A visão do LucyOS é criar uma camada de inteligência pessoal capaz de operar sobre diferentes capacidades sem ficar excessivamente acoplada a nenhuma delas.
 
-```text
-Human
-  ↓
-Lucy
-  ↓
-Agent Runtime
-  ├── Memory
-  ├── Knowledge
-  ├── Tools
-  ├── MCP
-  ├── Projects
-  └── Specialist Agents
-```
+<figure class="diagram-frame diagram-frame--svg">
+<figcaption class="diagram-frame__label">LucyOS Layers</figcaption>
+<svg viewBox="0 0 420 380" role="img" aria-labelledby="lucyos-layers-title lucyos-layers-desc" xmlns="http://www.w3.org/2000/svg">
+  <title id="lucyos-layers-title">LucyOS Layers</title>
+  <desc id="lucyos-layers-desc">Human conecta-se a Lucy, a interface cognitiva principal, que por sua vez conecta-se ao Agent Runtime. O Agent Runtime se ramifica em seis capacidades de plataforma: Memory, Knowledge, Tools, MCP, Projects e Specialist Agents. Nenhuma dessas capacidades é a inteligência em si — são componentes substituíveis sobre os quais a plataforma opera.</desc>
+  <line x1="24" y1="28" x2="24" y2="128" stroke="var(--color-border-strong)" stroke-width="2" />
+  <circle cx="24" cy="28" r="6" fill="var(--color-accent)" />
+  <text x="48" y="34" fill="var(--color-text-secondary)" font-size="19" font-family="var(--font-mono)">Human</text>
+  <circle cx="24" cy="78" r="6" fill="var(--color-accent)" />
+  <text x="48" y="84" fill="var(--color-text-secondary)" font-size="19" font-family="var(--font-mono)">Lucy</text>
+  <circle cx="24" cy="128" r="6" fill="var(--color-accent)" />
+  <text x="48" y="134" fill="var(--color-text-secondary)" font-size="19" font-family="var(--font-mono)">Agent Runtime</text>
+  <line x1="64" y1="128" x2="64" y2="350" stroke="var(--color-border-strong)" stroke-width="2" />
+  <line x1="64" y1="170" x2="88" y2="170" stroke="var(--color-border-strong)" stroke-width="2" />
+  <circle cx="88" cy="170" r="5" fill="var(--color-accent-strong)" />
+  <text x="104" y="175" fill="var(--color-text-secondary)" font-size="17" font-family="var(--font-mono)">Memory</text>
+  <line x1="64" y1="206" x2="88" y2="206" stroke="var(--color-border-strong)" stroke-width="2" />
+  <circle cx="88" cy="206" r="5" fill="var(--color-accent-strong)" />
+  <text x="104" y="211" fill="var(--color-text-secondary)" font-size="17" font-family="var(--font-mono)">Knowledge</text>
+  <line x1="64" y1="242" x2="88" y2="242" stroke="var(--color-border-strong)" stroke-width="2" />
+  <circle cx="88" cy="242" r="5" fill="var(--color-accent-strong)" />
+  <text x="104" y="247" fill="var(--color-text-secondary)" font-size="17" font-family="var(--font-mono)">Tools</text>
+  <line x1="64" y1="278" x2="88" y2="278" stroke="var(--color-border-strong)" stroke-width="2" />
+  <circle cx="88" cy="278" r="5" fill="var(--color-accent-strong)" />
+  <text x="104" y="283" fill="var(--color-text-secondary)" font-size="17" font-family="var(--font-mono)">MCP</text>
+  <line x1="64" y1="314" x2="88" y2="314" stroke="var(--color-border-strong)" stroke-width="2" />
+  <circle cx="88" cy="314" r="5" fill="var(--color-accent-strong)" />
+  <text x="104" y="319" fill="var(--color-text-secondary)" font-size="17" font-family="var(--font-mono)">Projects</text>
+  <line x1="64" y1="350" x2="88" y2="350" stroke="var(--color-border-strong)" stroke-width="2" />
+  <circle cx="88" cy="350" r="5" fill="var(--color-accent-strong)" />
+  <text x="104" y="355" fill="var(--color-text-secondary)" font-size="17" font-family="var(--font-mono)">Specialist Agents</text>
+</svg>
+</figure>
 
 Lucy funciona como a principal interface cognitiva. Abaixo dela existe uma plataforma responsável por disponibilizar capacidades.
 

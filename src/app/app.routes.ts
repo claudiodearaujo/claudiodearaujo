@@ -21,6 +21,7 @@ export const routes: Routes = [
       description: 'Ensaios sobre engenharia, arquitetura e inteligência artificial.',
       contentType: 'article',
       canonical: '/pt/writing',
+      ogImage: '/og/site/writing.png',
     },
     loadComponent: () =>
       import('./features/content-index/content-index.page').then((m) => m.ContentIndexPage),
@@ -33,6 +34,7 @@ export const routes: Routes = [
       description: 'Experimentos e pesquisas em sistemas inteligentes.',
       contentType: 'lab',
       canonical: '/pt/labs',
+      ogImage: '/og/site/labs.png',
     },
     loadComponent: () =>
       import('./features/content-index/content-index.page').then((m) => m.ContentIndexPage),

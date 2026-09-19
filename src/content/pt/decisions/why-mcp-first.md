@@ -20,7 +20,7 @@ Sistemas agentic precisam interagir com capacidades externas como arquivos, banc
 
 Uma implementação direta tende a crescer assim:
 
-```text
+```text title="Direct Integration"
 Agent
  ├── GitHub SDK
  ├── Database Client
@@ -42,7 +42,7 @@ O sistema deveria conseguir responder **Qual capacidade está disponível?** sem
 
 Adotar **MCP-first** como estratégia preferencial de integração para capacidades compatíveis.
 
-```text
+```text title="MCP Boundary"
 Agent
   ↓
 MCP Boundary
@@ -113,7 +113,7 @@ Toda chamada relevante deveria registrar agente, ferramenta, argumentos relevant
 
 ## LucyOS Application
 
-```text
+```text title="LucyOS Application"
 Lucy
  ↓
 Agents

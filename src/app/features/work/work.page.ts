@@ -38,6 +38,7 @@ export class WorkPage {
       'Projetos e sistemas que representam minha trajetória em engenharia.',
       'website',
       '/pt/work',
+      '/og/site/work.png',
     );
   }
 }

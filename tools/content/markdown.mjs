@@ -1,4 +1,19 @@
-// Pure helpers shared by the content build. Kept free of I/O so they can be unit tested.
+// Helpers shared by the content build. Everything below `walk` is pure and
+// free of I/O so it can be unit tested directly.
+import { readdir } from 'node:fs/promises';
+import path from 'node:path';
+
+/** Recursively lists every .md file under `directory`, used by both the content build and the OG image build. */
+export async function walk(directory) {
+  const entries = await readdir(directory, { withFileTypes: true });
+  const files = await Promise.all(
+    entries.map(async (entry) => {
+      const full = path.join(directory, entry.name);
+      return entry.isDirectory() ? walk(full) : full;
+    }),
+  );
+  return files.flat().filter((file) => file.endsWith('.md'));
+}
 
 const namedEntities = {
   amp: '&',
@@ -74,17 +89,41 @@ export const addHeadingAnchorLinks = (html) =>
     return `<${tag} id="${id}">${inner}${link}</${tag}>`;
   });
 
-// Every fenced block in this repo's content is tagged ```text — they are
-// ASCII architecture diagrams, not source code (see docs/SITE-EVOLUTION-PLAN.md
-// D13). Framing them as a labeled figure instead of a bare <pre> gives them
-// their own visual identity without inventing a new authoring syntax; a real
-// ```language fence (actual code) is left untouched for E3's highlighter.
-export const wrapDiagramBlocks = (html) =>
-  html.replace(
-    /<pre><code class="language-text">([\s\S]*?)<\/code><\/pre>/g,
-    (_match, code) =>
-      `<figure class="diagram-frame"><figcaption class="diagram-frame__label">Diagram</figcaption><pre><code class="language-text">${code}</code></pre></figure>`,
-  );
+const escapeHtml = (value) =>
+  value.replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;');
+
+// The info string after a fence's language is normally discarded by marked's
+// default renderer. This is the one place it survives, so a ```text fence
+// can optionally carry `title="..."` for its figcaption — e.g.:
+//   ```text title="Evidence Pipeline"
+export const parseFenceInfo = (lang) => {
+  const [language = '', ...rest] = (lang ?? '').trim().split(/\s+/);
+  const title = rest.join(' ').match(/title="([^"]*)"/)?.[1];
+  return { language, title };
+};
+
+/**
+ * A marked `code` token renderer (`new Marked({ renderer: { code: renderCode } })`).
+ *
+ * Every fenced block in this repo's content is tagged ```text — they are
+ * ASCII architecture diagrams, not source code (docs/SITE-EVOLUTION-PLAN.md
+ * D13) — so it gets a labeled <figure> instead of a bare <pre>, with the
+ * fence's own title when it declares one and a generic fallback otherwise.
+ * A real ```language fence (actual code) renders as plain code, untouched,
+ * for E3's build-time syntax highlighter.
+ */
+export const renderCode = ({ text, lang }) => {
+  const { language, title } = parseFenceInfo(lang);
+  const escaped = escapeHtml(text);
+
+  if (language === 'text') {
+    const caption = escapeHtml(title || 'Diagram');
+    return `<figure class="diagram-frame"><figcaption class="diagram-frame__label">${caption}</figcaption><pre><code class="language-text">${escaped}</code></pre></figure>`;
+  }
+
+  const classAttr = language ? ` class="language-${escapeHtml(language)}"` : '';
+  return `<pre><code${classAttr}>${escaped}</code></pre>`;
+};
 
 // A `display: block` table (the previous mobile-overflow fix) drops table
 // semantics for parts of the AT tree. Wrapping the untouched <table> in a

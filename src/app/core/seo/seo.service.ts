@@ -14,7 +14,13 @@ export class SeoService {
   private readonly document = inject(DOCUMENT);
   private readonly config = inject(SITE_CONFIG);
 
-  setPage(title: string, description: string, type = 'website', route?: string): void {
+  setPage(
+    title: string,
+    description: string,
+    type = 'website',
+    route?: string,
+    ogImagePath?: string,
+  ): void {
     this.clearJsonLd();
     this.clearBreadcrumbJsonLd();
 
@@ -27,7 +33,6 @@ export class SeoService {
     this.meta.updateTag({ property: 'og:type', content: type });
     this.meta.updateTag({ property: 'og:site_name', content: 'Cláudio Araújo' });
     this.meta.updateTag({ property: 'og:locale', content: 'pt_BR' });
-    this.meta.updateTag({ name: 'twitter:card', content: 'summary' });
     this.meta.updateTag({ name: 'twitter:title', content: fullTitle });
     this.meta.updateTag({ name: 'twitter:description', content: description });
 
@@ -38,13 +43,14 @@ export class SeoService {
     }
 
     this.setCanonical(route);
+    this.setOgImage(ogImagePath);
   }
 
   setHome(): void {
     const description =
       'Software Engineer com 20+ anos de experiência em arquitetura, AI Engineering, sistemas autônomos e liderança técnica.';
 
-    this.setPage('Cláudio Araújo', description, 'profile', '/pt');
+    this.setPage('Cláudio Araújo', description, 'profile', '/pt', '/og/site/home.png');
     this.replaceJsonLd({
       '@context': 'https://schema.org',
       '@type': 'Person',
@@ -61,6 +67,8 @@ export class SeoService {
       entry.summary,
       entry.type === 'article' ? 'article' : 'website',
       entry.route,
+      // Matches the path tools/og/build.mjs writes for this exact entry.
+      `/og/${entry.type}/${entry.slug}.png`,
     );
 
     this.replaceJsonLd({
@@ -90,6 +98,33 @@ export class SeoService {
       'website',
     );
     this.meta.updateTag({ name: 'robots', content: 'noindex, nofollow' });
+  }
+
+  // Images are rendered at build time by tools/og/build.mjs, one per content
+  // entry plus a handful of hand-kept static pages — see that script for
+  // which routes get one. A route without an image keeps twitter:card at
+  // the plain "summary" already set by setPage, rather than claiming a
+  // large-image card with nothing to show in it.
+  private setOgImage(path?: string): void {
+    this.meta.removeTag("property='og:image'");
+    this.meta.removeTag("property='og:image:width'");
+    this.meta.removeTag("property='og:image:height'");
+    this.meta.removeTag("name='twitter:image'");
+
+    // Without an absolute origin (local dev, a preview build without
+    // SITE_ORIGIN) there is no URL an external crawler could resolve, so
+    // this stays a plain "summary" card rather than promising an image.
+    if (!path || !this.config.origin) {
+      this.meta.updateTag({ name: 'twitter:card', content: 'summary' });
+      return;
+    }
+
+    const url = `${this.config.origin}${path}`;
+    this.meta.updateTag({ name: 'twitter:card', content: 'summary_large_image' });
+    this.meta.updateTag({ property: 'og:image', content: url });
+    this.meta.updateTag({ property: 'og:image:width', content: '1200' });
+    this.meta.updateTag({ property: 'og:image:height', content: '630' });
+    this.meta.updateTag({ name: 'twitter:image', content: url });
   }
 
   private setCanonical(route?: string): void {

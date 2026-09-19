@@ -32,7 +32,7 @@ Precisamos separar **Decision capability** de **Execution authority**.
 
 Toda estratégia candidata a autonomia deve passar por **Shadow Mode** antes de receber autorização operacional equivalente.
 
-```text
+```text title="Shadow Mode Pipeline"
 Market State
      ↓
 Strategy
@@ -56,7 +56,7 @@ Isso produz evidência prospectiva.
 
 ## Matured Outcomes
 
-```text
+```text title="Matured Outcomes"
 Recommendation
      ↓
 Pending
@@ -92,7 +92,7 @@ Produz feedback real, mas usa risco financeiro como mecanismo de validação. Re
 
 ## Separation from Runtime
 
-```text
+```text title="Separation from Runtime"
 Research
    ↓
 Shadow
@@ -104,7 +104,7 @@ Shadow não deve possuir autoridade implícita sobre Runtime.
 
 ## Scientific Pipeline
 
-```text
+```text title="Scientific Pipeline"
 Scientific Evidence Accumulation
               ↓
 Shadow Outcomes
@@ -136,7 +136,7 @@ Recomendações históricas não devem ser alteradas silenciosamente depois que 
 
 ## Same-Candle Protection
 
-```text
+```text title="Same-Candle Protection"
 Candle N closes
       ↓
 Signal
@@ -160,7 +160,7 @@ Não prova sozinho robustez, lucratividade futura, estabilidade em outros regime
 
 ## Promotion Gate
 
-```text
+```text title="Promotion Gate"
 Shadow
 +
 Calibration

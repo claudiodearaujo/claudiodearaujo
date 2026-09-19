@@ -119,11 +119,11 @@
   }
 }
 
-// Every fenced block in this repo's content is ```text — an ASCII diagram,
-// not source code (D13). tools/content/markdown.mjs (wrapDiagramBlocks) wraps
-// each one in this labeled figure so it reads as an architecture diagram
-// instead of an unstyled code dump. Real code (a future ```language fence)
-// is left as a plain .prose pre and gets its own treatment in E3.
+// A fenced ```text block is an ASCII diagram, not source code (D13).
+// tools/content/markdown.mjs (renderCode) wraps it in this labeled figure so
+// it reads as an architecture diagram instead of an unstyled code dump. Real
+// code (a ```language fence) renders as a plain .prose pre and gets its own
+// treatment when the site has real code to show.
 .diagram-frame {
   margin: var(--space-32) 0;
   padding: 0;
@@ -135,6 +135,19 @@
   font: 650 var(--text-meta) / 1.4 var(--font-mono);
   letter-spacing: var(--tracking-wide);
   text-transform: uppercase;
+}
+
+// A hand-authored inline SVG diagram (the two priority diagrams in
+// docs/SITE-EVOLUTION-PLAN.md E3). Scaling the whole vector by viewBox means
+// the labels shrink with it instead of overflowing on a narrow viewport —
+// unlike the ASCII <pre> it replaces, this needs no horizontal scroll at
+// 390px. Colors are CSS custom properties set directly as SVG presentation
+// attributes, so the diagram follows the active theme with no extra CSS.
+.diagram-frame--svg svg {
+  display: block;
+  width: 100%;
+  max-width: 30rem;
+  height: auto;
 }
 
 .diagram-frame pre {

@@ -2,11 +2,12 @@ import { describe, expect, it } from 'vitest';
 import {
   addHeadingAnchorLinks,
   decodeEntities,
+  parseFenceInfo,
+  renderCode,
   routeFor,
   slugify,
   uniqueId,
   withHeadingAnchors,
-  wrapDiagramBlocks,
   wrapTables,
 } from './markdown.mjs';
 
@@ -155,9 +156,27 @@ describe('addHeadingAnchorLinks', () => {
   });
 });
 
-describe('wrapDiagramBlocks', () => {
-  it('wraps a ```text code block in a labeled figure', () => {
-    const html = wrapDiagramBlocks('<pre><code class="language-text">A -&gt; B</code></pre>');
+describe('parseFenceInfo', () => {
+  it('reads the language alone when there is no extra info', () => {
+    expect(parseFenceInfo('text')).toEqual({ language: 'text', title: undefined });
+  });
+
+  it('reads an optional title out of the rest of the info string', () => {
+    expect(parseFenceInfo('text title="Evidence Pipeline"')).toEqual({
+      language: 'text',
+      title: 'Evidence Pipeline',
+    });
+  });
+
+  it('handles a missing info string', () => {
+    expect(parseFenceInfo(undefined)).toEqual({ language: '', title: undefined });
+    expect(parseFenceInfo('')).toEqual({ language: '', title: undefined });
+  });
+});
+
+describe('renderCode', () => {
+  it('wraps a ```text fence in a figure with a generic label by default', () => {
+    const html = renderCode({ text: 'A -> B', lang: 'text' });
 
     expect(html).toBe(
       '<figure class="diagram-frame"><figcaption class="diagram-frame__label">Diagram</figcaption>' +
@@ -165,14 +184,29 @@ describe('wrapDiagramBlocks', () => {
     );
   });
 
-  it('leaves a real code fence untouched', () => {
-    const html = '<pre><code class="language-ts">const x = 1;</code></pre>';
+  it('uses the fence title as the figcaption when the fence declares one', () => {
+    const html = renderCode({ text: 'A -> B', lang: 'text title="Evidence Pipeline"' });
 
-    expect(wrapDiagramBlocks(html)).toBe(html);
+    expect(html).toContain(
+      '<figcaption class="diagram-frame__label">Evidence Pipeline</figcaption>',
+    );
   });
 
-  it('leaves plain paragraphs untouched', () => {
-    expect(wrapDiagramBlocks('<p>No fences here</p>')).toBe('<p>No fences here</p>');
+  it('escapes both the code and the title', () => {
+    const html = renderCode({ text: 'x < y', lang: 'text title="A & B"' });
+
+    expect(html).toContain('<figcaption class="diagram-frame__label">A &amp; B</figcaption>');
+    expect(html).toContain('<code class="language-text">x &lt; y</code>');
+  });
+
+  it('renders a real code fence as plain code, not a diagram figure', () => {
+    const html = renderCode({ text: 'const x = 1;', lang: 'ts' });
+
+    expect(html).toBe('<pre><code class="language-ts">const x = 1;</code></pre>');
+  });
+
+  it('renders an unfenced or language-less block without a class', () => {
+    expect(renderCode({ text: 'plain', lang: '' })).toBe('<pre><code>plain</code></pre>');
   });
 });
 

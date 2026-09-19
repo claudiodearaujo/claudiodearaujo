@@ -103,29 +103,36 @@ A execução passou a ser apenas uma parte de um ciclo maior de aprendizagem e c
 
 ## The Research Pipeline
 
-```text
-Scientific Evidence Accumulation
-              ↓
-Shadow Outcomes
-              ↓
-Calibration
-              ↓
-≥ 20 Matured Outcomes
-              ↓
-Strategy Advisor Thesis
-              ↓
-Hypothesis Experiments
-              ↓
-Walk-forward
-              ↓
-Out-of-Sample Validation
-              ↓
-Monte Carlo
-              ↓
-Consolidated Evidence
-              ↓
-Human Review
-```
+<figure class="diagram-frame diagram-frame--svg">
+<figcaption class="diagram-frame__label">Evidence Pipeline</figcaption>
+<svg viewBox="0 0 560 560" role="img" aria-labelledby="evidence-pipeline-title evidence-pipeline-desc" xmlns="http://www.w3.org/2000/svg">
+  <title id="evidence-pipeline-title">Evidence Pipeline</title>
+  <desc id="evidence-pipeline-desc">Fluxo vertical de onze etapas, da primeira evidência científica até a revisão humana: Scientific Evidence Accumulation, Shadow Outcomes, Calibration, vinte ou mais Matured Outcomes, Strategy Advisor Thesis, Hypothesis Experiments, Walk-forward, Out-of-Sample Validation, Monte Carlo, Consolidated Evidence e Human Review. Só depois dessa sequência completa existe espaço para discutir handoff para runtime.</desc>
+  <line x1="16" y1="28" x2="16" y2="528" stroke="var(--color-border-strong)" stroke-width="2" />
+  <circle cx="16" cy="28" r="6" fill="var(--color-accent)" />
+  <text x="40" y="34" fill="var(--color-text-secondary)" font-size="19" font-family="var(--font-mono)">Scientific Evidence Accumulation</text>
+  <circle cx="16" cy="78" r="6" fill="var(--color-accent)" />
+  <text x="40" y="84" fill="var(--color-text-secondary)" font-size="19" font-family="var(--font-mono)">Shadow Outcomes</text>
+  <circle cx="16" cy="128" r="6" fill="var(--color-accent)" />
+  <text x="40" y="134" fill="var(--color-text-secondary)" font-size="19" font-family="var(--font-mono)">Calibration</text>
+  <circle cx="16" cy="178" r="6" fill="var(--color-accent)" />
+  <text x="40" y="184" fill="var(--color-text-secondary)" font-size="19" font-family="var(--font-mono)">≥ 20 Matured Outcomes</text>
+  <circle cx="16" cy="228" r="6" fill="var(--color-accent)" />
+  <text x="40" y="234" fill="var(--color-text-secondary)" font-size="19" font-family="var(--font-mono)">Strategy Advisor Thesis</text>
+  <circle cx="16" cy="278" r="6" fill="var(--color-accent)" />
+  <text x="40" y="284" fill="var(--color-text-secondary)" font-size="19" font-family="var(--font-mono)">Hypothesis Experiments</text>
+  <circle cx="16" cy="328" r="6" fill="var(--color-accent)" />
+  <text x="40" y="334" fill="var(--color-text-secondary)" font-size="19" font-family="var(--font-mono)">Walk-forward</text>
+  <circle cx="16" cy="378" r="6" fill="var(--color-accent)" />
+  <text x="40" y="384" fill="var(--color-text-secondary)" font-size="19" font-family="var(--font-mono)">Out-of-Sample Validation</text>
+  <circle cx="16" cy="428" r="6" fill="var(--color-accent)" />
+  <text x="40" y="434" fill="var(--color-text-secondary)" font-size="19" font-family="var(--font-mono)">Monte Carlo</text>
+  <circle cx="16" cy="478" r="6" fill="var(--color-accent)" />
+  <text x="40" y="484" fill="var(--color-text-secondary)" font-size="19" font-family="var(--font-mono)">Consolidated Evidence</text>
+  <circle cx="16" cy="528" r="6" fill="var(--color-accent)" />
+  <text x="40" y="534" fill="var(--color-text-secondary)" font-size="19" font-family="var(--font-mono)">Human Review</text>
+</svg>
+</figure>
 
 Somente após essa sequência existe espaço para discutir Runtime Handoff e eventual nova campanha PAPER.
 

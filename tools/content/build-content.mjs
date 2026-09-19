@@ -1,16 +1,19 @@
-import { readdir, readFile, mkdir, rm, writeFile } from 'node:fs/promises';
+import { readFile, mkdir, rm, writeFile } from 'node:fs/promises';
 import path from 'node:path';
 import matter from 'gray-matter';
-import { marked } from 'marked';
+import { Marked } from 'marked';
 import sanitizeHtml from 'sanitize-html';
 import { z } from 'zod';
 import {
   addHeadingAnchorLinks,
+  renderCode,
   routeFor,
+  walk,
   withHeadingAnchors,
-  wrapDiagramBlocks,
   wrapTables,
 } from './markdown.mjs';
+
+const markdown = new Marked({ renderer: { code: renderCode } });
 
 const root = process.cwd();
 const contentRoot = path.join(root, 'src', 'content');
@@ -36,17 +39,6 @@ const schema = z.object({
   updatedAt: z.string().optional(),
 });
 
-async function walk(directory) {
-  const entries = await readdir(directory, { withFileTypes: true });
-  const files = await Promise.all(
-    entries.map(async (entry) => {
-      const full = path.join(directory, entry.name);
-      return entry.isDirectory() ? walk(full) : full;
-    }),
-  );
-  return files.flat().filter((file) => file.endsWith('.md'));
-}
-
 await rm(generatedRoot, { recursive: true, force: true });
 await mkdir(entriesRoot, { recursive: true });
 await mkdir(publicRoot, { recursive: true });
@@ -66,12 +58,23 @@ for (const file of files) {
   seenRoutes.add(route);
 
   const body = parsed.content.replace(/^\s*#\s+[^\r\n]+(?:\r?\n)+/, '');
-  const { html: anchored, headings } = withHeadingAnchors(String(await marked.parse(body)));
+  const { html: anchored, headings } = withHeadingAnchors(String(await markdown.parse(body)));
   const withPermalinks = addHeadingAnchorLinks(anchored);
-  const withDiagrams = wrapDiagramBlocks(withPermalinks);
-  const withTables = wrapTables(withDiagrams);
+  const withTables = wrapTables(withPermalinks);
   let html = sanitizeHtml(withTables, {
-    allowedTags: [...sanitizeHtml.defaults.allowedTags, 'img'],
+    allowedTags: [
+      ...sanitizeHtml.defaults.allowedTags,
+      'img',
+      // Hand-authored inline diagrams (docs/SITE-EVOLUTION-PLAN.md E3). Content
+      // is repo-controlled, never user input, so allowing a fixed, minimal SVG
+      // vocabulary here is the same trust level as the rest of this Markdown.
+      'svg',
+      'title',
+      'desc',
+      'line',
+      'circle',
+      'text',
+    ],
     allowedAttributes: {
       ...sanitizeHtml.defaults.allowedAttributes,
       h2: ['id'],
@@ -82,8 +85,18 @@ for (const file of files) {
       figcaption: ['class'],
       code: ['class'],
       img: ['src', 'alt', 'title', 'loading'],
+      svg: ['viewBox', 'role', 'aria-labelledby', 'xmlns'],
+      title: ['id'],
+      desc: ['id'],
+      line: ['x1', 'y1', 'x2', 'y2', 'stroke', 'stroke-width'],
+      circle: ['cx', 'cy', 'r', 'fill'],
+      text: ['x', 'y', 'fill', 'font-size', 'font-family'],
     },
     allowedSchemes: ['http', 'https', 'mailto'],
+    // SVG's own attributes (viewBox, and any future addition like
+    // preserveAspectRatio) are case-sensitive; the default lowercasing this
+    // parser applies to plain HTML would silently break them.
+    parser: { lowerCaseAttributeNames: false },
   });
 
   const summary = {

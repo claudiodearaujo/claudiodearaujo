@@ -34,7 +34,7 @@ Juntos, esses problemas definem a arquitetura do produto.
 
 ## Product Vision
 
-```text
+```text title="Product Vision"
 Idea
   ↓
 Create
