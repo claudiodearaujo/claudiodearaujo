@@ -6,6 +6,11 @@ type: lab
 summary: Como avaliar comportamento de agentes completos além da resposta final.
 status: Active Research
 tags: [AI, Agents, Evaluation]
+category: Evaluation
+publishedAt: 2026-09-05
+related:
+  - /pt/work/invest-lucy
+  - /pt/writing/evidence-before-autonomy
 ---
 
 # Evaluating Agentic Systems

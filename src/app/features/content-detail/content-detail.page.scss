@@ -1,111 +1,70 @@
 .detail-shell {
+  // Bespoke curve (min/vw differ from --space-section-inner); kept local.
   padding-top: clamp(3rem, 8vw, 7rem);
-}
-.breadcrumb {
-  display: flex;
-  gap: 0.6rem;
-  color: var(--color-text-muted);
-  font-size: 0.86rem;
-}
-.breadcrumb a {
-  color: var(--color-text-secondary);
 }
 .detail-header {
   max-width: 60rem;
-  margin: 2.5rem 0 4rem;
+  margin: 2.5rem 0 var(--space-64); // 2.5rem: no exact scale step, kept literal
 }
-.detail-meta,
 .tag-row {
   display: flex;
   flex-wrap: wrap;
   gap: 0.55rem;
-  font: 600 0.72rem/1.4 var(--font-mono);
+  font: 600 var(--text-meta) / 1.4 var(--font-mono);
   text-transform: uppercase;
   color: var(--color-text-muted);
 }
 .tag {
-  padding: 0.25rem 0.45rem;
-  border: 1px solid var(--color-border);
+  padding: var(--space-4) 0.45rem;
+  border: var(--border-width) solid var(--color-border);
   border-radius: 999px;
+  text-decoration: none;
+  transition:
+    color var(--motion-fast) var(--motion-ease),
+    border-color var(--motion-fast) var(--motion-ease);
+}
+
+// Only the linked tags react: a tag with too few entries to have a topic
+// page renders as a <span>, and must not look clickable.
+a.tag:hover,
+a.tag:focus-visible {
+  color: var(--color-accent);
+  border-color: var(--color-accent);
 }
 .detail-layout {
   display: grid;
   grid-template-columns: minmax(0, var(--prose-max)) minmax(12rem, 18rem);
+  // Bespoke curve (min/vw differ from --space-section-inner); kept local.
   gap: clamp(3rem, 7vw, 7rem);
   align-items: start;
 }
 
-/* A grid item's automatic minimum size is its min-content width, so a long
-   code block or an unbreakable word would widen the column past the viewport
-   instead of scrolling inside its own box. */
-.prose {
-  min-width: 0;
-  overflow-wrap: break-word;
-}
-.toc {
-  position: sticky;
-  top: calc(var(--header-height) + 2rem);
-  display: grid;
-  gap: 0.65rem;
-  padding-left: 1rem;
-  border-left: 1px solid var(--color-border);
-}
-.toc a {
-  color: var(--color-text-secondary);
-  text-decoration: none;
-  font-size: 0.86rem;
-}
-.toc-child {
-  padding-left: 0.75rem;
-}
-
-:host ::ng-deep .prose h2 {
-  margin: 3rem 0 1rem;
-  font-size: clamp(1.5rem, 3vw, 2rem);
-  scroll-margin-top: 6rem;
-}
-:host ::ng-deep .prose h3 {
-  margin: 2rem 0 0.8rem;
-  scroll-margin-top: 6rem;
-}
-:host ::ng-deep .prose p,
-:host ::ng-deep .prose li {
-  color: var(--color-text-secondary);
-  line-height: 1.78;
-}
-:host ::ng-deep .prose pre {
-  max-width: 100%;
-  overflow: auto;
-  padding: 1rem;
-  border: 1px solid var(--color-border);
-  border-radius: var(--radius-md);
-  background: var(--color-bg-alt);
-}
-:host ::ng-deep .prose code {
-  font-family: var(--font-mono);
-}
-:host ::ng-deep .prose blockquote {
-  margin: 2rem 0;
-  padding-left: 1.2rem;
-  border-left: 2px solid var(--color-accent);
-  color: var(--color-text-secondary);
-}
 .related {
-  border-top: 1px solid var(--color-border);
+  border-top: var(--border-width) solid var(--color-border);
 }
 .related-grid {
   display: grid;
   grid-template-columns: repeat(3, minmax(0, 1fr));
-  gap: 1rem;
+  gap: var(--space-16);
 }
+
+// Below 900px the TOC (app-table-of-contents) drops out of the two-column
+// grid and flows above the prose instead — it is never display:none (D3):
+// its own <details> lets a mobile reader collapse it, but it starts open and
+// is always in the accessibility tree.
 @media (max-width: 900px) {
   .detail-layout {
+    // minmax(0, 1fr), not a bare 1fr: without the 0 floor, a grid item's
+    // default min-width: auto lets its content's intrinsic size (a code
+    // block's min-content width, or a diagram-frame--svg's replaced-element
+    // sizing) push the column wider than the viewport instead of shrinking
+    // to fit it.
     grid-template-columns: minmax(0, 1fr);
   }
-  .toc {
-    display: none;
+  app-table-of-contents {
+    order: -1;
   }
   .related-grid {
-    grid-template-columns: 1fr;
+    grid-template-columns: minmax(0, 1fr);
   }
 }

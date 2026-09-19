@@ -1,26 +1,24 @@
 .site-header {
   position: sticky;
   top: 0;
-  z-index: 100;
-  border-bottom: 1px solid color-mix(in srgb, var(--color-border) 78%, transparent);
+  z-index: var(--z-header);
+  border-bottom: var(--border-width) solid color-mix(in srgb, var(--color-border) 78%, transparent);
   background: color-mix(in srgb, var(--color-bg) 88%, transparent);
   backdrop-filter: blur(18px);
 }
 
 .site-header__inner {
-  width: min(100% - 2rem, var(--layout-max));
   min-height: var(--header-height);
-  margin-inline: auto;
   display: flex;
   align-items: center;
   justify-content: space-between;
-  gap: 1rem;
+  gap: var(--space-16);
 }
 
 .brand {
   display: inline-flex;
   align-items: center;
-  gap: 0.75rem;
+  gap: var(--space-12);
   color: var(--color-text);
   text-decoration: none;
 }
@@ -30,9 +28,9 @@
   place-items: center;
   width: 2.25rem;
   aspect-ratio: 1;
-  border: 1px solid var(--color-border-strong);
+  border: var(--border-width) solid var(--color-border-strong);
   border-radius: var(--radius-sm);
-  font: 700 0.78rem/1 var(--font-mono);
+  font: 700 var(--text-meta) / 1 var(--font-mono);
   color: var(--color-accent);
 }
 .desktop-nav,
@@ -46,6 +44,7 @@
 .mobile-nav a {
   color: var(--color-text-secondary);
   text-decoration: none;
+  transition: color var(--motion-fast) var(--motion-ease);
 }
 
 .desktop-nav a:hover,
@@ -55,8 +54,8 @@
 }
 
 .contact-link {
-  padding: 0.55rem 0.8rem;
-  border: 1px solid var(--color-border-strong);
+  padding: var(--space-8) var(--space-12);
+  border: var(--border-width) solid var(--color-border-strong);
   border-radius: var(--radius-sm);
 }
 
@@ -73,6 +72,7 @@
   background: transparent;
   color: var(--color-text);
   cursor: pointer;
+  transition: color var(--motion-fast) var(--motion-ease);
 }
 .menu-toggle,
 .mobile-nav {
@@ -91,14 +91,14 @@
 
   .mobile-nav {
     display: grid;
-    gap: 1rem;
-    padding: 1.25rem 1rem 1.5rem;
-    border-top: 1px solid var(--color-border);
+    gap: var(--space-16);
+    padding: 1.25rem var(--space-16) var(--space-24); // 1.25rem: no exact scale step, kept literal
+    border-top: var(--border-width) solid var(--color-border);
     background: var(--color-bg);
   }
 
   .mobile-nav a {
-    padding: 0.55rem 0;
+    padding: var(--space-8) 0;
     font-size: 1.1rem;
   }
 }

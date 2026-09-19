@@ -1,0 +1,11 @@
+<div class="metadata-row" [class.metadata-row--between]="justify() === 'between'">
+  <span class="metadata-row__group">
+    <span class="metadata-row__type">{{ type() }}</span>
+    @if (readingTime(); as minutes) {
+      <span class="metadata-row__reading-time">{{ minutes }} min</span>
+    }
+  </span>
+  @if (status(); as status) {
+    <app-status-badge [status]="status" />
+  }
+</div>

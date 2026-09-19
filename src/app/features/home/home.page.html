@@ -50,12 +50,12 @@
   </div>
 
   <div class="project-grid">
-    @for (project of projects; track project[0]) {
+    @for (project of projects; track project.route) {
       <article class="project-card">
-        <p class="eyebrow">{{ project[1] }}</p>
-        <h3>{{ project[0] }}</h3>
-        <p>{{ project[2] }}</p>
-        <a class="text-link" [routerLink]="project[3]">Explorar projeto</a>
+        <p class="eyebrow">{{ project.category }}</p>
+        <h3>{{ project.title }}</h3>
+        <p>{{ project.summary }}</p>
+        <a class="text-link" [routerLink]="project.route">Explorar projeto</a>
       </article>
     }
   </div>
@@ -172,11 +172,12 @@
   </div>
 
   <div class="article-grid">
-    @for (article of articles; track article[0]) {
+    @for (article of articles; track article.route) {
       <article class="article-card">
-        <h3>{{ article[0] }}</h3>
-        <p>{{ article[1] }}</p>
-        <a class="text-link" [routerLink]="article[2]">Ler artigo</a>
+        <h3>{{ article.title }}</h3>
+        <p>{{ article.summary }}</p>
+        <p class="article-card__meta">{{ article.readingTime }} min de leitura</p>
+        <a class="text-link" [routerLink]="article.route">Ler artigo</a>
       </article>
     }
   </div>

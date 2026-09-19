@@ -21,6 +21,7 @@ export class EngineeringPage {
       'Princípios, decisões e práticas que orientam meu trabalho.',
       'website',
       '/pt/engineering',
+      '/og/site/engineering.png',
     );
   }
 }

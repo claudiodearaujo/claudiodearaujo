@@ -1,5 +1,16 @@
 import { describe, expect, it } from 'vitest';
-import { decodeEntities, routeFor, slugify, uniqueId, withHeadingAnchors } from './markdown.mjs';
+import {
+  addHeadingAnchorLinks,
+  decodeEntities,
+  parseFenceInfo,
+  readingTimeMinutes,
+  renderCode,
+  routeFor,
+  slugify,
+  uniqueId,
+  withHeadingAnchors,
+  wrapTables,
+} from './markdown.mjs';
 
 describe('decodeEntities', () => {
   it('decodes the named entities marked emits', () => {
@@ -115,6 +126,120 @@ describe('withHeadingAnchors', () => {
 
     expect(headings).toEqual([]);
     expect(html).toBe('<h1>Title</h1><h4>Aside</h4>');
+  });
+});
+
+describe('addHeadingAnchorLinks', () => {
+  it('appends a permalink pointing at the heading id', () => {
+    const html = addHeadingAnchorLinks('<h2 id="overview">Overview</h2>');
+
+    expect(html).toBe(
+      '<h2 id="overview">Overview<a class="heading-anchor" href="#overview" aria-label="Link para a seção Overview">#</a></h2>',
+    );
+  });
+
+  it('leaves headings without an id untouched', () => {
+    expect(addHeadingAnchorLinks('<h2>No id</h2>')).toBe('<h2>No id</h2>');
+  });
+
+  it('strips inner markup and decodes entities for the aria-label', () => {
+    const html = addHeadingAnchorLinks(
+      '<h3 id="x">The <code>Retry</code> &amp; Fallback path</h3>',
+    );
+
+    expect(html).toContain('aria-label="Link para a seção The Retry &amp; Fallback path"');
+  });
+
+  it('escapes a literal quote in the heading text for the attribute', () => {
+    const html = addHeadingAnchorLinks('<h2 id="x">Say &quot;hi&quot;</h2>');
+
+    expect(html).toContain('aria-label="Link para a seção Say &quot;hi&quot;"');
+  });
+});
+
+describe('parseFenceInfo', () => {
+  it('reads the language alone when there is no extra info', () => {
+    expect(parseFenceInfo('text')).toEqual({ language: 'text', title: undefined });
+  });
+
+  it('reads an optional title out of the rest of the info string', () => {
+    expect(parseFenceInfo('text title="Evidence Pipeline"')).toEqual({
+      language: 'text',
+      title: 'Evidence Pipeline',
+    });
+  });
+
+  it('handles a missing info string', () => {
+    expect(parseFenceInfo(undefined)).toEqual({ language: '', title: undefined });
+    expect(parseFenceInfo('')).toEqual({ language: '', title: undefined });
+  });
+});
+
+describe('renderCode', () => {
+  it('wraps a ```text fence in a figure with a generic label by default', () => {
+    const html = renderCode({ text: 'A -> B', lang: 'text' });
+
+    expect(html).toBe(
+      '<figure class="diagram-frame"><figcaption class="diagram-frame__label">Diagram</figcaption>' +
+        '<pre><code class="language-text">A -&gt; B</code></pre></figure>',
+    );
+  });
+
+  it('uses the fence title as the figcaption when the fence declares one', () => {
+    const html = renderCode({ text: 'A -> B', lang: 'text title="Evidence Pipeline"' });
+
+    expect(html).toContain(
+      '<figcaption class="diagram-frame__label">Evidence Pipeline</figcaption>',
+    );
+  });
+
+  it('escapes both the code and the title', () => {
+    const html = renderCode({ text: 'x < y', lang: 'text title="A & B"' });
+
+    expect(html).toContain('<figcaption class="diagram-frame__label">A &amp; B</figcaption>');
+    expect(html).toContain('<code class="language-text">x &lt; y</code>');
+  });
+
+  it('renders a real code fence as plain code, not a diagram figure', () => {
+    const html = renderCode({ text: 'const x = 1;', lang: 'ts' });
+
+    expect(html).toBe('<pre><code class="language-ts">const x = 1;</code></pre>');
+  });
+
+  it('renders an unfenced or language-less block without a class', () => {
+    expect(renderCode({ text: 'plain', lang: '' })).toBe('<pre><code>plain</code></pre>');
+  });
+});
+
+describe('wrapTables', () => {
+  it('wraps a table in a scrollable, labeled region', () => {
+    const html = wrapTables('<table><tr><td>1</td></tr></table>');
+
+    expect(html).toBe(
+      '<div class="table-scroll" role="region" tabindex="0" aria-label="Tabela com rolagem horizontal">' +
+        '<table><tr><td>1</td></tr></table></div>',
+    );
+  });
+
+  it('leaves content without a table untouched', () => {
+    expect(wrapTables('<p>No table</p>')).toBe('<p>No table</p>');
+  });
+});
+
+describe('readingTimeMinutes', () => {
+  it('rounds up to the nearest whole minute', () => {
+    expect(readingTimeMinutes(Array(199).fill('word').join(' '))).toBe(1);
+    expect(readingTimeMinutes(Array(201).fill('word').join(' '))).toBe(2);
+    expect(readingTimeMinutes(Array(400).fill('word').join(' '))).toBe(2);
+  });
+
+  it('never reports less than one minute, even for a single word', () => {
+    expect(readingTimeMinutes('word')).toBe(1);
+    expect(readingTimeMinutes('')).toBe(1);
+  });
+
+  it('collapses repeated whitespace instead of counting empty words', () => {
+    expect(readingTimeMinutes('word   word\n\nword')).toBe(1);
   });
 });
 

@@ -22,8 +22,9 @@ export class ContentIndexPage {
   protected readonly type = this.route.snapshot.data['contentType'] as ContentType;
   protected readonly entries = this.repository.list(this.type);
   private readonly canonical = this.route.snapshot.data['canonical'] as string;
+  private readonly ogImage = this.route.snapshot.data['ogImage'] as string;
 
   constructor() {
-    this.seo.setPage(this.title, this.description, 'website', this.canonical);
+    this.seo.setPage(this.title, this.description, 'website', this.canonical, this.ogImage);
   }
 }

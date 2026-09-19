@@ -1,0 +1,20 @@
+.metadata-row {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--space-16);
+  font: 600 var(--text-meta) / 1.4 var(--font-mono);
+  text-transform: uppercase;
+  letter-spacing: var(--tracking-wide);
+  color: var(--color-text-muted);
+}
+
+.metadata-row--between {
+  justify-content: space-between;
+}
+
+.metadata-row__group {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: var(--space-16);
+}

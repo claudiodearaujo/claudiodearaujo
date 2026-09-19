@@ -16,6 +16,9 @@ const entry: ContentEntry = {
   route: '/pt/writing/evidence-before-autonomy',
   summary: 'Por que sistemas inteligentes deveriam conquistar autoridade.',
   tags: ['ai', 'governance'],
+  featured: false,
+  relatedRoutes: [],
+  readingTime: 3,
   source: 'src/content/pt/writing/evidence-before-autonomy.md',
   headings: [],
   html: '<p>x</p>',
@@ -83,6 +86,56 @@ describe('SeoService', () => {
     expect(canonical[0].getAttribute('href')).toBe(`${origin}/pt/writing`);
   });
 
+  it('defaults to a plain summary card without an og:image', () => {
+    seo.setPage('Labs', 'Experimentos', 'website', '/pt/labs');
+
+    expect(meta('meta[name="twitter:card"]')).toBe('summary');
+    expect(meta('meta[property="og:image"]')).toBeNull();
+    expect(meta('meta[name="twitter:image"]')).toBeNull();
+  });
+
+  it('publishes a large-image card when a page has one', () => {
+    seo.setPage('Labs', 'Experimentos', 'website', '/pt/labs', '/og/site/labs.png');
+
+    expect(meta('meta[name="twitter:card"]')).toBe('summary_large_image');
+    expect(meta('meta[property="og:image"]')).toBe(`${origin}/og/site/labs.png`);
+    expect(meta('meta[property="og:image:width"]')).toBe('1200');
+    expect(meta('meta[property="og:image:height"]')).toBe('630');
+    expect(meta('meta[name="twitter:image"]')).toBe(`${origin}/og/site/labs.png`);
+  });
+
+  it('derives the content entry image from its own type and slug', () => {
+    seo.setContent(entry);
+
+    expect(meta('meta[property="og:image"]')).toBe(
+      `${origin}/og/article/evidence-before-autonomy.png`,
+    );
+  });
+
+  it('clears a stale og:image when the next page has none', () => {
+    seo.setPage('Labs', 'Experimentos', 'website', '/pt/labs', '/og/site/labs.png');
+    seo.setPage('Sem imagem', 'Sem imagem');
+
+    expect(meta('meta[property="og:image"]')).toBeNull();
+    expect(meta('meta[name="twitter:card"]')).toBe('summary');
+  });
+
+  it('falls back to a summary card when there is no origin to resolve the image against', () => {
+    TestBed.resetTestingModule();
+    TestBed.configureTestingModule({
+      providers: [{ provide: SITE_CONFIG, useValue: { origin: '', isPreview: false } }],
+    });
+
+    const noOriginSeo = TestBed.inject(SeoService);
+    const noOriginDocument = TestBed.inject(DOCUMENT);
+    noOriginSeo.setPage('Labs', 'Experimentos', 'website', '/pt/labs', '/og/site/labs.png');
+
+    expect(
+      noOriginDocument.querySelector('meta[name="twitter:card"]')?.getAttribute('content'),
+    ).toBe('summary');
+    expect(noOriginDocument.querySelector('meta[property="og:image"]')).toBeNull();
+  });
+
   it('describes content entries as structured data', () => {
     seo.setContent(entry);
 
@@ -100,6 +153,30 @@ describe('SeoService', () => {
     const blocks = document.querySelectorAll('#page-jsonld');
     expect(blocks).toHaveLength(1);
     expect(JSON.parse(blocks[0].textContent ?? '{}')['@type']).toBe('CreativeWork');
+  });
+
+  it('publishes a BreadcrumbList alongside the content schema', () => {
+    seo.setContent(entry, [{ label: 'Writing', route: '/pt/writing' }, { label: entry.title }]);
+
+    const jsonLd = JSON.parse(document.getElementById('breadcrumb-jsonld')?.textContent ?? '{}');
+    expect(jsonLd['@type']).toBe('BreadcrumbList');
+    expect(jsonLd.itemListElement).toEqual([
+      { '@type': 'ListItem', position: 1, name: 'Writing', item: `${origin}/pt/writing` },
+      { '@type': 'ListItem', position: 2, name: entry.title, item: undefined },
+    ]);
+  });
+
+  it('omits the breadcrumb script when no breadcrumb is given', () => {
+    seo.setContent(entry);
+
+    expect(document.getElementById('breadcrumb-jsonld')).toBeNull();
+  });
+
+  it('clears a stale breadcrumb when the next page has none', () => {
+    seo.setContent(entry, [{ label: 'Writing', route: '/pt/writing' }, { label: entry.title }]);
+    seo.setPage('Labs', 'Experimentos', 'website', '/pt/labs');
+
+    expect(document.getElementById('breadcrumb-jsonld')).toBeNull();
   });
 
   it('marks the not found page as noindex without a canonical', () => {

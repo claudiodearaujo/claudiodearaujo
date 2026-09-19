@@ -17,8 +17,8 @@ body {
   background: var(--color-bg);
   color: var(--color-text);
   font-family: var(--font-body);
-  font-size: 1rem;
-  line-height: 1.65;
+  font-size: var(--text-body);
+  line-height: var(--leading-relaxed);
   text-rendering: optimizeLegibility;
   -webkit-font-smoothing: antialiased;
 }
@@ -43,15 +43,29 @@ h4 {
   text-wrap: balance;
 }
 
+// Every page has exactly one h1 (the page title); it must always be the
+// largest heading on the page. It previously fell through this rule with no
+// font-size at all and rendered smaller than the h2s beneath it.
+h1 {
+  font-size: var(--text-h1);
+  letter-spacing: var(--tracking-tight);
+  line-height: var(--leading-tight);
+}
+
 h2 {
-  font-size: clamp(2rem, 5vw, 3.4rem);
-  letter-spacing: -0.04em;
-  line-height: 1.05;
+  font-size: var(--text-h2);
+  letter-spacing: var(--tracking-tight);
+  line-height: var(--leading-tight);
 }
 
 h3 {
-  font-size: clamp(1.25rem, 2vw, 1.6rem);
-  line-height: 1.2;
+  font-size: var(--text-h3);
+  line-height: var(--leading-snug);
+}
+
+h4 {
+  font-size: var(--text-h4);
+  line-height: var(--leading-snug);
 }
 
 p {
@@ -63,60 +77,69 @@ a {
 }
 
 :focus-visible {
-  outline: 2px solid var(--color-accent);
-  outline-offset: 4px;
+  outline: var(--border-width-focus) solid var(--color-accent);
+  outline-offset: var(--space-4);
 }
 .page-shell {
-  width: min(100% - 2rem, var(--layout-max));
+  width: min(100% - var(--space-32), var(--layout-max));
   margin-inline: auto;
 }
 
 .section-block {
-  padding-block: clamp(4rem, 9vw, 7rem);
+  padding-block: var(--space-section);
 }
 
 .section-heading {
   display: flex;
   align-items: end;
   justify-content: space-between;
-  gap: 2rem;
+  gap: var(--space-32);
 }
 
 .eyebrow {
-  margin: 0 0 0.65rem;
+  margin: 0 0 var(--space-8);
   color: var(--color-accent);
-  font: 650 0.76rem/1.4 var(--font-mono);
-  letter-spacing: 0.06em;
+  font: 650 var(--text-meta) / 1.4 var(--font-mono);
+  letter-spacing: var(--tracking-wide);
   text-transform: uppercase;
 }
 
 .lead {
   max-width: 62ch;
   color: var(--color-text-secondary);
-  font-size: clamp(1.05rem, 2vw, 1.25rem);
+  font-size: var(--text-body-l);
 }
 .action-row {
   display: flex;
   flex-wrap: wrap;
-  gap: 0.85rem;
-  margin-top: 2rem;
+  gap: var(--space-12);
+  margin-top: var(--space-32);
 }
 
 .button {
   display: inline-flex;
   align-items: center;
   justify-content: center;
-  min-height: 2.9rem;
-  padding: 0.65rem 1rem;
-  border: 1px solid transparent;
+  min-height: var(--button-height);
+  padding: var(--space-8) var(--space-16);
+  border: var(--border-width) solid transparent;
   border-radius: var(--radius-sm);
   text-decoration: none;
   font-weight: 650;
+  transition:
+    background-color var(--motion-standard) var(--motion-ease),
+    border-color var(--motion-standard) var(--motion-ease),
+    color var(--motion-standard) var(--motion-ease);
 }
 
 .button--primary {
   background: var(--color-accent);
   color: var(--color-accent-contrast);
+}
+
+.button--primary:hover,
+.button--primary:focus-visible {
+  background: var(--color-accent-strong);
 }
 
 .button--secondary {
@@ -125,21 +148,34 @@ a {
   background: transparent;
 }
 
+.button--secondary:hover,
+.button--secondary:focus-visible {
+  border-color: var(--color-accent);
+  color: var(--color-accent);
+}
+
 .text-link {
   color: var(--color-accent);
   text-underline-offset: 0.2em;
+  transition: color var(--motion-fast) var(--motion-ease);
 }
+
+.text-link:hover,
+.text-link:focus-visible {
+  color: var(--color-accent-strong);
+}
+
 .section-placeholder {
   min-height: 65dvh;
   display: grid;
   align-content: center;
-  padding-block: 5rem;
+  padding-block: var(--space-64);
 }
 
 .section-placeholder h1 {
   max-width: 18ch;
-  font-size: clamp(2.5rem, 7vw, 5rem);
-  letter-spacing: -0.05em;
+  font-size: var(--text-display-l);
+  letter-spacing: var(--tracking-tighter);
   line-height: 1;
 }
 
@@ -158,34 +194,4 @@ a {
     transition-duration: 0.01ms !important;
     animation-duration: 0.01ms !important;
   }
-}
-
-.prose a {
-  color: var(--color-accent-strong);
-  text-underline-offset: 0.18em;
-}
-.prose ul,
-.prose ol {
-  padding-left: 1.4rem;
-}
-.prose hr {
-  margin: 3rem 0;
-  border: 0;
-  border-top: 1px solid var(--color-border);
-}
-.prose img {
-  max-width: 100%;
-  height: auto;
-}
-.prose table {
-  width: 100%;
-  border-collapse: collapse;
-  overflow-x: auto;
-  display: block;
-}
-.prose th,
-.prose td {
-  padding: 0.7rem;
-  border: 1px solid var(--color-border);
-  text-align: left;
 }

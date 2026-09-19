@@ -1,0 +1,14 @@
+<aside class="toc" aria-label="Neste conteúdo">
+  <details open>
+    <summary>Nesta página</summary>
+    <ul>
+      @for (heading of headings(); track heading.id) {
+        <li [class.toc-child]="heading.level === 3">
+          <a [href]="'#' + heading.id" [class.is-active]="activeId() === heading.id">{{
+            heading.text
+          }}</a>
+        </li>
+      }
+    </ul>
+  </details>
+</aside>

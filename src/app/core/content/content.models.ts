@@ -15,12 +15,26 @@ export interface ContentSummary {
   readonly summary: string;
   readonly status?: string;
   readonly tags: readonly string[];
+  readonly category?: string;
+  /** Promoted to the Home narrative — see ContentRepository.featured(). */
+  readonly featured: boolean;
   readonly publishedAt?: string;
   readonly updatedAt?: string;
+  /** Editorial cross-references from front matter, validated at build time
+   *  against the content manifest — see ContentRepository.related(). */
+  readonly relatedRoutes: readonly string[];
+  /** Minutes, rounded up from a ~200wpm estimate over the raw Markdown body. */
+  readonly readingTime: number;
   readonly source: string;
 }
 
 export interface ContentEntry extends ContentSummary {
   readonly headings: readonly ContentHeading[];
   readonly html: string;
+}
+
+export interface BreadcrumbItem {
+  readonly label: string;
+  /** Omitted for the current page — it renders as plain text, not a link. */
+  readonly route?: string;
 }

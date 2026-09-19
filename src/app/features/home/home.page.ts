@@ -1,5 +1,6 @@
 import { Component, inject } from '@angular/core';
 import { RouterLink } from '@angular/router';
+import { ContentRepository } from '../../core/content/content.repository';
 import { SeoService } from '../../core/seo/seo.service';
 
 @Component({
@@ -10,6 +11,7 @@ import { SeoService } from '../../core/seo/seo.service';
 })
 export class HomePage {
   private readonly seo = inject(SeoService);
+  private readonly repository = inject(ContentRepository);
 
   protected readonly journey = [
     'Web',
@@ -20,33 +22,16 @@ export class HomePage {
     'Autonomous Systems',
   ] as const;
 
-  protected readonly projects = [
-    [
-      'LucyOS',
-      'Personal Agentic AI Platform',
-      'Agentes, memória, conhecimento, ferramentas e MCP.',
-      '/pt/work/lucyos',
-    ],
-    [
-      'Invest Lucy',
-      'Evidence-Driven Autonomous Research',
-      'Autonomia progressiva sustentada por evidência, risco e governança.',
-      '/pt/work/invest-lucy',
-    ],
-    [
-      'Livrya',
-      'AI-Powered Publishing Platform',
-      'Produto editorial com IA, colaboração, publicação e áudio.',
-      '/pt/work/livrya',
-    ],
-    [
-      'Enterprise AI',
-      'Knowledge & Retrieval Systems',
-      'RAG, embeddings e integração de conhecimento corporativo.',
-      '/pt/work',
-    ],
-  ] as const;
+  // Driven by `featured: true` in front matter (docs/SITE-EVOLUTION-PLAN.md
+  // D7) instead of a hand-kept copy of data the content entries already
+  // carry — publishing a new project only means setting that flag, not
+  // editing this file.
+  protected readonly projects = this.repository.featured('project');
 
+  // These name sections *inside* the single Engineering Principles document,
+  // not separate content entries — there is no per-principle manifest row a
+  // `featured` flag could select from, so this stays a hand-curated teaser
+  // of that one page rather than a copy of data that lives elsewhere.
   protected readonly principles = [
     'Evidence Before Autonomy',
     'AI is a System, Not a Prompt',
@@ -87,23 +72,7 @@ export class HomePage {
     ['Human-AI Collaboration', 'Automação que amplia capacidade humana sem remover controle.'],
   ] as const;
 
-  protected readonly articles = [
-    [
-      'AI Agents Need Architecture, Not Just Prompts',
-      'Por que agentes confiáveis exigem muito mais do que bons prompts.',
-      '/pt/writing/ai-agents-need-architecture',
-    ],
-    [
-      'From Automation to Autonomy',
-      'Automatizar uma tarefa e delegar uma decisão são problemas diferentes.',
-      '/pt/writing/from-automation-to-autonomy',
-    ],
-    [
-      'Evidence Before Autonomy',
-      'Por que sistemas inteligentes deveriam conquistar autoridade através de evidência.',
-      '/pt/writing/evidence-before-autonomy',
-    ],
-  ] as const;
+  protected readonly articles = this.repository.featured('article');
 
   constructor() {
     this.seo.setHome();

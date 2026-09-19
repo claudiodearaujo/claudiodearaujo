@@ -8,7 +8,10 @@
     "watch": "ng build --watch --configuration development",
     "test": "ng test",
     "content:build": "node tools/content/build-content.mjs",
-    "prebuild": "npm run content:build",
+    "fonts:copy": "node tools/launch/copy-fonts.mjs",
+    "og:build": "node tools/og/build.mjs",
+    "assets:build": "npm run content:build && npm run fonts:copy && npm run og:build",
+    "prebuild": "npm run assets:build",
     "postbuild": "node tools/launch/emit-404.mjs && node tools/launch/csp-hashes.mjs",
     "csp:update": "node tools/launch/csp-hashes.mjs --update",
     "lint": "ng lint",
@@ -18,12 +21,12 @@
     "test:e2e": "playwright test",
     "format": "prettier --write \"src/**/*.{ts,html,scss,md}\" \"e2e/**/*.ts\" \"tools/**/*.mjs\" \"*.{ts,json}\"",
     "format:check": "prettier --check \"src/**/*.{ts,html,scss,md}\" \"e2e/**/*.ts\" \"tools/**/*.mjs\" \"*.{ts,json}\"",
-    "validate": "npm run content:build && npm run format:check && npm run lint && npm run typecheck && npm run test:tools && npm run test:unit && npm run build",
+    "validate": "npm run assets:build && npm run format:check && npm run lint && npm run typecheck && npm run test:tools && npm run test:unit && npm run build",
     "validate:full": "npm run validate && npm run test:e2e",
-    "prestart": "npm run content:build",
-    "postinstall": "npm run content:build",
+    "prestart": "npm run assets:build",
+    "postinstall": "npm run assets:build",
     "test:e2e:live": "playwright test --config playwright.live.config.ts",
-    "validate:deployment": "npm run content:build && node tools/launch/validate-deployment.mjs",
+    "validate:deployment": "npm run assets:build && node tools/launch/validate-deployment.mjs",
     "validate:launch:live": "npm run validate:deployment && npm run test:e2e:live"
   },
   "private": true,
@@ -46,7 +49,14 @@
     "@angular/compiler-cli": "^22.1.0",
     "@axe-core/playwright": "^4.13.0",
     "@eslint/js": "^10.0.1",
+    "@fontsource-variable/inter": "^5.3.0",
+    "@fontsource-variable/jetbrains-mono": "^5.3.0",
+    "@fontsource-variable/manrope": "^5.3.0",
+    "@fontsource/inter": "^5.3.0",
+    "@fontsource/jetbrains-mono": "^5.3.0",
+    "@fontsource/manrope": "^5.3.0",
     "@playwright/test": "^1.63.0",
+    "@resvg/resvg-js": "^2.6.2",
     "@types/node": "^20.17.19",
     "angular-eslint": "22.5.0",
     "eslint": "^10.9.1",
@@ -55,12 +65,17 @@
     "marked": "^18.0.13",
     "prettier": "^3.8.1",
     "sanitize-html": "^2.17.7",
+    "satori": "^0.33.4",
     "typescript": "~6.0.2",
     "typescript-eslint": "8.69.0",
     "vitest": "^4.0.8",
+    "wawoff2": "^2.0.1",
     "zod": "^4.6.5"
   },
   "engines": {
     "node": ">=22.22.3"
+  },
+  "overrides": {
+    "fflate": "^0.8.3"
   }
 }

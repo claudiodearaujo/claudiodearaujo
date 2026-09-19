@@ -18,6 +18,66 @@ Ao longo da minha trajetória, fui acumulando ideias que influenciam a forma com
 
 Não trato esses princípios como regras absolutas. Eles são ferramentas de decisão.
 
+## Index by Theme
+
+Trinta e oito princípios em ordem de escrita ficam difíceis de escanear. Agrupados por tema, eles ficam mais fáceis de navegar sem perder a leitura linear abaixo.
+
+### Autonomy & AI
+
+- [1. Evidence Before Autonomy](#1-evidence-before-autonomy)
+- [2. AI Is a System, Not a Prompt](#2-ai-is-a-system-not-a-prompt)
+- [3. Human-in-the-loop Is Architecture](#3-human-in-the-loop-is-architecture)
+- [22. Tools Create Responsibility](#22-tools-create-responsibility)
+- [24. Authorization Is a Domain Problem](#24-authorization-is-a-domain-problem)
+- [28. Auditability Grows with Power](#28-auditability-grows-with-power)
+
+### Architecture & Boundaries
+
+- [5. Replaceable Boundaries](#5-replaceable-boundaries)
+- [6. Domain Before Technology](#6-domain-before-technology)
+- [7. Explicit State Beats Implicit Behavior](#7-explicit-state-beats-implicit-behavior)
+- [14. Incremental Evolution](#14-incremental-evolution)
+- [15. Complexity Must Pay Rent](#15-complexity-must-pay-rent)
+- [16. Simplicity Before Infrastructure](#16-simplicity-before-infrastructure)
+- [23. Protocols Can Become Architecture](#23-protocols-can-become-architecture)
+- [35. Architecture Should Make Change Safer](#35-architecture-should-make-change-safer)
+- [37. The Goal Is Not Maximum Abstraction](#37-the-goal-is-not-maximum-abstraction)
+- [38. Build for Evolution, Not Prediction](#38-build-for-evolution-not-prediction)
+
+### Reliability & Failure
+
+- [4. Observability by Design](#4-observability-by-design)
+- [8. Failure Is Part of the Architecture](#8-failure-is-part-of-the-architecture)
+- [9. Recovery Is a Feature](#9-recovery-is-a-feature)
+- [10. Safe Defaults](#10-safe-defaults)
+- [11. Immutability Where History Matters](#11-immutability-where-history-matters)
+- [25. Partial Failure Is Still Failure](#25-partial-failure-is-still-failure)
+- [26. Cancellation Is a Protocol](#26-cancellation-is-a-protocol)
+- [27. Idempotency Is a Reliability Tool](#27-idempotency-is-a-reliability-tool)
+
+### Research & Evidence
+
+- [17. Research and Runtime Are Different Systems](#17-research-and-runtime-are-different-systems)
+- [18. Baselines Must Be Protected](#18-baselines-must-be-protected)
+- [19. Scientific Correctness Is Different from Software Correctness](#19-scientific-correctness-is-different-from-software-correctness)
+
+### Context & Memory
+
+- [20. Context Is a Resource](#20-context-is-a-resource)
+- [21. Memory Requires Curation](#21-memory-requires-curation)
+
+### Leadership & Communication
+
+- [12. Documentation Is Engineering](#12-documentation-is-engineering)
+- [13. Decisions Need Context](#13-decisions-need-context)
+- [29. UX Must Reflect System Truth](#29-ux-must-reflect-system-truth)
+- [30. Engineering Is Also Communication](#30-engineering-is-also-communication)
+- [31. Context Before Direction](#31-context-before-direction)
+- [32. Principles Before Rules](#32-principles-before-rules)
+- [33. Ownership Before Control](#33-ownership-before-control)
+- [34. Systems Before Heroes](#34-systems-before-heroes)
+- [36. Optimize for Understanding](#36-optimize-for-understanding)
+
 ## 1. Evidence Before Autonomy
 
 **Autonomy should be earned, not assumed.**
