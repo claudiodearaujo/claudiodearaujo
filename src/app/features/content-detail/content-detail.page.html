@@ -40,8 +40,8 @@
 
 @if (related.length) {
   <section class="page-shell related">
-    <p class="eyebrow">Related</p>
-    <h2>Continue explorando</h2>
+    <p class="eyebrow">{{ text.relatedEyebrow }}</p>
+    <h2>{{ text.relatedHeading }}</h2>
     @defer (hydrate on viewport) {
       <div class="related-grid">
         @for (item of related; track item.route) {

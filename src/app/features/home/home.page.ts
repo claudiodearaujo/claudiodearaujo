@@ -1,5 +1,6 @@
 import { Component, inject } from '@angular/core';
 import { RouterLink } from '@angular/router';
+import { localizedPath } from '../../core/i18n/locale';
 import { ContentRepository } from '../../core/content/content.repository';
 import { SeoService } from '../../core/seo/seo.service';
 
@@ -76,5 +77,11 @@ export class HomePage {
 
   constructor() {
     this.seo.setHome();
+  }
+
+  /** Links in this template are written relative to the locale — see
+   *  core/i18n/locale.ts. */
+  protected path(section = ''): string {
+    return localizedPath(section);
   }
 }

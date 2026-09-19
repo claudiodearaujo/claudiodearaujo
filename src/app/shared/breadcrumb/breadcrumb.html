@@ -1,4 +1,4 @@
-<nav class="breadcrumb" aria-label="Breadcrumb">
+<nav class="breadcrumb" [attr.aria-label]="text.breadcrumb">
   <ol>
     @for (item of items(); track item.label; let last = $last) {
       <li>

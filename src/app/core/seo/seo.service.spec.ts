@@ -19,6 +19,8 @@ const entry: ContentEntry = {
   featured: false,
   relatedRoutes: [],
   readingTime: 3,
+  wordCount: 520,
+  publishedAt: '2026-08-30',
   source: 'src/content/pt/writing/evidence-before-autonomy.md',
   headings: [],
   html: '<p>x</p>',

@@ -2,7 +2,7 @@
   <p class="eyebrow">Engineering</p>
   <h1>How I Engineer</h1>
   <p class="lead">Princípios e decisões que uso para reduzir ambiguidade em sistemas complexos.</p>
-  <a class="button button--primary" routerLink="/pt/engineering/principles"
+  <a class="button button--primary" [routerLink]="path('engineering/principles')"
     >Engineering Principles</a
   >
 </section>
@@ -12,7 +12,7 @@
       <p class="eyebrow">Architecture Decisions</p>
       <h2>Decisões públicas</h2>
     </div>
-    <a class="text-link" routerLink="/pt/engineering/decisions">Ver todas</a>
+    <a class="text-link" [routerLink]="path('engineering/decisions')">Ver todas</a>
   </div>
   <div class="decision-grid">
     @for (decision of decisions; track decision.route) {

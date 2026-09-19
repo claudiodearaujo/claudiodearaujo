@@ -3,7 +3,6 @@ title: Engineering, intelligence and curiosity
 slug: about
 locale: pt
 type: page
-route: /pt/about
 summary: Minha trajetória entre software, arquitetura, inteligência artificial e liderança técnica.
 tags: [Career, Engineering, Leadership]
 ---

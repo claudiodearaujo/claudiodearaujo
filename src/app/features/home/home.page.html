@@ -7,8 +7,10 @@
       inteligência artificial, sistemas de agentes e liderança técnica.
     </p>
     <div class="action-row">
-      <a class="button button--primary" routerLink="/pt/work">Conheça meu trabalho</a>
-      <a class="button button--secondary" routerLink="/pt/engineering">Como eu penso engenharia</a>
+      <a class="button button--primary" [routerLink]="path('work')">Conheça meu trabalho</a>
+      <a class="button button--secondary" [routerLink]="path('engineering')"
+        >Como eu penso engenharia</a
+      >
     </div>
     <div class="social-row" aria-label="Perfis profissionais">
       <a href="https://github.com/claudiodearaujo" target="_blank" rel="me noreferrer">GitHub</a>
@@ -46,7 +48,7 @@
       <p class="eyebrow">Selected Work</p>
       <h2>Sistemas, produtos e experimentos</h2>
     </div>
-    <a class="text-link" routerLink="/pt/work">Ver todos</a>
+    <a class="text-link" [routerLink]="path('work')">Ver todos</a>
   </div>
 
   <div class="project-grid">
@@ -67,7 +69,7 @@
       <p class="eyebrow">How I Engineer</p>
       <h2>Princípios antes de ferramentas</h2>
     </div>
-    <a class="text-link" routerLink="/pt/engineering">Ver princípios</a>
+    <a class="text-link" [routerLink]="path('engineering')">Ver princípios</a>
   </div>
 
   <div class="principle-grid">
@@ -89,7 +91,9 @@
         Autonomia não começa quando o código funciona. Ela começa quando evidência suficiente
         demonstra que o sistema merece confiança.
       </p>
-      <a class="button button--secondary" routerLink="/pt/work/invest-lucy">Conhecer o case</a>
+      <a class="button button--secondary" [routerLink]="path('work/invest-lucy')"
+        >Conhecer o case</a
+      >
     </div>
 
     <ol class="evidence-flow" aria-label="Fluxo de evidência para autonomia">
@@ -132,7 +136,7 @@
         Liderança técnica é transformar complexidade em direção compreensível — através de
         arquitetura, contexto, padrões, documentação e decisões melhores.
       </p>
-      <a class="text-link" routerLink="/pt/about">Conheça minha trajetória</a>
+      <a class="text-link" [routerLink]="path('about')">Conheça minha trajetória</a>
     </div>
 
     <ul class="leadership-list">
@@ -149,7 +153,7 @@
       <p class="eyebrow">Currently Exploring</p>
       <h2>Perguntas que estão guiando meu trabalho agora</h2>
     </div>
-    <a class="text-link" routerLink="/pt/now">Ver meu foco atual</a>
+    <a class="text-link" [routerLink]="path('now')">Ver meu foco atual</a>
   </div>
 
   <div class="exploration-grid">
@@ -168,7 +172,7 @@
       <p class="eyebrow">Writing</p>
       <h2>Ideias transformadas em conhecimento reutilizável</h2>
     </div>
-    <a class="text-link" routerLink="/pt/writing">Ver todos os textos</a>
+    <a class="text-link" [routerLink]="path('writing')">Ver todos os textos</a>
   </div>
 
   <div class="article-grid">
@@ -203,7 +207,7 @@
     compreensíveis e capazes de evoluir?
   </p>
   <div class="action-row">
-    <a class="button button--primary" routerLink="/pt/work">Explore meu trabalho</a>
-    <a class="button button--secondary" routerLink="/pt/contact">Entre em contato</a>
+    <a class="button button--primary" [routerLink]="path('work')">Explore meu trabalho</a>
+    <a class="button button--secondary" [routerLink]="path('contact')">Entre em contato</a>
   </div>
 </section>

@@ -1,5 +1,7 @@
 import { describe, expect, it } from 'vitest';
 import {
+  escapeXml,
+  wordCount,
   addHeadingAnchorLinks,
   decodeEntities,
   parseFenceInfo,
@@ -244,20 +246,42 @@ describe('readingTimeMinutes', () => {
 });
 
 describe('routeFor', () => {
-  it('derives the route from the content type', () => {
-    expect(routeFor({ type: 'project', slug: 'lucyos' })).toBe('/pt/work/lucyos');
-    expect(routeFor({ type: 'article', slug: 'evidence' })).toBe('/pt/writing/evidence');
-    expect(routeFor({ type: 'lab', slug: 'memory' })).toBe('/pt/labs/memory');
-    expect(routeFor({ type: 'decision', slug: 'mcp-first' })).toBe(
+  it('derives the route from the locale and the content type', () => {
+    expect(routeFor({ locale: 'pt', type: 'project', slug: 'lucyos' })).toBe('/pt/work/lucyos');
+    expect(routeFor({ locale: 'pt', type: 'article', slug: 'evidence' })).toBe(
+      '/pt/writing/evidence',
+    );
+    expect(routeFor({ locale: 'pt', type: 'lab', slug: 'memory' })).toBe('/pt/labs/memory');
+    expect(routeFor({ locale: 'pt', type: 'decision', slug: 'mcp-first' })).toBe(
       '/pt/engineering/decisions/mcp-first',
     );
   });
 
-  it('prefers an explicit route from the front matter', () => {
-    expect(routeFor({ type: 'project', slug: 'lucyos', route: '/pt/custom' })).toBe('/pt/custom');
+  it('puts the same file under its own locale, with no other change', () => {
+    expect(routeFor({ locale: 'en', type: 'article', slug: 'evidence' })).toBe(
+      '/en/writing/evidence',
+    );
+    expect(routeFor({ locale: 'en', type: 'page', slug: 'about' })).toBe('/en/about');
   });
 
-  it('has no derived route for pages, which must declare one', () => {
-    expect(routeFor({ type: 'page', slug: 'about' })).toBeUndefined();
+  it('falls back to the slug for a page that declares no route', () => {
+    expect(routeFor({ locale: 'pt', type: 'page', slug: 'about' })).toBe('/pt/about');
+  });
+
+  it('prefixes an explicit route with the locale, so content never names one', () => {
+    expect(
+      routeFor({
+        locale: 'pt',
+        type: 'page',
+        slug: 'engineering-principles',
+        route: 'engineering/principles',
+      }),
+    ).toBe('/pt/engineering/principles');
+  });
+
+  it('tolerates a leading slash on an explicit route rather than doubling it', () => {
+    expect(routeFor({ locale: 'pt', type: 'page', slug: 'x', route: '/custom' })).toBe(
+      '/pt/custom',
+    );
   });
 });

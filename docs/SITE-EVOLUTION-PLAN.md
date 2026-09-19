@@ -474,6 +474,30 @@ evitar.
 
 **DoD:** Rich Results Test sem erro em uma amostra por tipo; feed validado pelo W3C Feed Validator.
 
+#### Resultado
+
+Entregue: `WebSite` e `Person` num único `@graph` na home; `TechArticle` com
+`datePublished`, `dateModified`, `author` e `wordCount` (contado no build a
+partir do mesmo corpo que já produzia o reading time); `sitemap.xml` com
+`lastmod`; feed RSS 2.0 em `/rss.xml` com os 8 conteúdos datados, descoberto
+por `<link rel="alternate">` e linkado no rodapé para leitores humanos.
+
+Duas decisões que valem registro:
+
+- **Nenhum `lastmod` inventado.** Nenhum conteúdo declara `updatedAt` hoje, e
+  as rotas de índice e de tópico não têm data própria. O `lastmod` sai de
+  `updatedAt ?? publishedAt` e é **omitido** onde não existe — carimbar a data
+  do build diria ao crawler que o site inteiro muda a cada deploy.
+- **O feed carrega só o que é datado** (artigos, labs e decisões). Um projeto
+  é contínuo, não publicado numa data, e uma página institucional não é item
+  que um assinante queira receber de novo.
+
+Validação: XML dos dois arquivos conferido como bem-formado, e 10 asserções
+E2E sobre o JSON-LD servido, a descoberta do feed e a ausência de data
+inventada em página institucional. O Rich Results Test e o W3C Feed Validator
+são serviços externos e não rodam deste ambiente — ficam como verificação
+pós-deploy, junto de `validate:deployment`.
+
 ### E7 — Prontidão para `en`
 
 **Problema:** `/pt` hardcoded.
@@ -488,6 +512,38 @@ evitar.
 **Fora desta trilha:** traduzir os 4.851 linhas de conteúdo. A trilha entrega a **capacidade**; a tradução é decisão editorial separada. Recomendação para a primeira leva em `en`: Home, About e os 3 artigos.
 
 **DoD:** grep por `'/pt` em `src/app` retorna zero ocorrências fora do helper e da configuração de locale padrão.
+
+#### Resultado
+
+**DoD atingido: zero ocorrências em código de produção**, partindo de 67 em
+18 arquivos. O que sobra é `core/i18n/locale.ts` (o helper, onde o literal
+aparece nos exemplos do próprio comentário) e os arquivos `.spec.ts`. As
+specs mantêm URLs literais de propósito: um teste que constrói a expectativa
+com o mesmo helper que está testando não verifica nada.
+
+O que mudou de forma:
+
+- `routeFor` deriva de `meta.locale`, e o front matter das páginas passou a
+  declarar rota **relativa ao locale** (`engineering/principles`), não
+  `/pt/engineering/principles`. As três páginas que seguiam o padrão
+  `/{locale}/{slug}` não declaram rota nenhuma agora;
+- `app.routes.ts` monta as rotas de seção por locale a partir de
+  `publishedLocales`, que o build deriva do conteúdo — publicar um idioma
+  adiciona suas rotas sem editar o arquivo;
+- tópicos passaram a ser **por locale**. Um artigo em português e um em
+  inglês com a mesma tag não são a mesma página de tópico, e contá-los juntos
+  publicaria uma rota listando conteúdo que o leitor não lê;
+- o chrome da UI (navegação, landmarks, controles, afordâncias repetidas)
+  saiu para `core/i18n/ui-strings.ts`. Copy editorial — títulos de página,
+  corpo de case study — continua no conteúdo, que é onde ela é traduzida.
+
+**Nada foi traduzido especulativamente.** `UI_STRINGS` tem só `pt`; a
+interface `UiStrings` é o contrato que um segundo idioma preenche. Pelo mesmo
+critério, `hreflang`/`x-default` só são emitidos quando há 2+ locales
+publicados — com um só, a marcação correta é nenhuma — e o seletor de idioma
+no header fica fora do DOM em vez de renderizar um controle de uma opção.
+Esse seletor é, portanto, **o único trecho desta trilha que nenhum teste
+exercita**, por não haver um segundo idioma para exercitá-lo.
 
 ### E8 — Gates que enxergam a página
 

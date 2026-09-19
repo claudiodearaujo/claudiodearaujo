@@ -4,6 +4,7 @@ import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 import { Title } from '@angular/platform-browser';
 import { NavigationEnd, Router, RouterOutlet } from '@angular/router';
 import { filter } from 'rxjs';
+import { stringsFor } from './core/i18n/ui-strings';
 import { SiteFooter } from './layout/site-footer/site-footer';
 import { SiteHeader } from './layout/site-header/site-header';
 
@@ -18,6 +19,8 @@ export class App {
   private readonly router = inject(Router);
   private readonly title = inject(Title);
   private readonly isBrowser = isPlatformBrowser(inject(PLATFORM_ID));
+
+  protected readonly text = stringsFor();
 
   /** Rendered by the aria-live region in app.html. */
   protected readonly routeAnnouncement = signal('');

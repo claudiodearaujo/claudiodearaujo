@@ -1,6 +1,7 @@
 import { Injectable } from '@angular/core';
 import { contentManifest } from '../../generated/content-manifest.generated';
 import { ContentSummary, ContentType } from './content.models';
+import { DEFAULT_LOCALE, Locale } from '../i18n/locale';
 import { slugifyTag } from './slug.util';
 
 // Entries without a publishedAt (an ongoing project has no single "publish
@@ -57,11 +58,19 @@ export class ContentRepository {
       .map(({ candidate }) => candidate);
   }
 
-  /** Every entry tagged with `tagSlug` (matched via slugifyTag, case- and
-   *  accent-insensitively) — the /pt/topics/:tag destination a tag links to. */
-  byTopic(tagSlug: string): readonly ContentSummary[] {
+  /**
+   * Every entry in `locale` tagged with `tagSlug` (matched via slugifyTag,
+   * case- and accent-insensitively) — what a topic page lists.
+   *
+   * Scoped to one locale because the routes are: a Portuguese and an English
+   * article sharing a tag are two topic pages, and mixing them would list
+   * content the reader cannot read.
+   */
+  byTopic(tagSlug: string, locale: Locale = DEFAULT_LOCALE): readonly ContentSummary[] {
     return this.entries
-      .filter((entry) => entry.tags.some((tag) => slugifyTag(tag) === tagSlug))
+      .filter(
+        (entry) => entry.locale === locale && entry.tags.some((tag) => slugifyTag(tag) === tagSlug),
+      )
       .sort(byDateDescending);
   }
 
@@ -71,13 +80,13 @@ export class ContentRepository {
    * tag used by a single entry gets no page, so linking it would 404.
    * content.repository.spec.ts checks the two stay in agreement.
    */
-  hasTopic(tag: string): boolean {
-    return this.byTopic(slugifyTag(tag)).length >= 2;
+  hasTopic(tag: string, locale: Locale = DEFAULT_LOCALE): boolean {
+    return this.byTopic(slugifyTag(tag), locale).length >= 2;
   }
 
   /** The tag's original spelling, for the topic page's own title. */
-  labelForTopic(tagSlug: string): string | undefined {
-    for (const entry of this.entries) {
+  labelForTopic(tagSlug: string, locale: Locale = DEFAULT_LOCALE): string | undefined {
+    for (const entry of this.entries.filter((candidate) => candidate.locale === locale)) {
       const match = entry.tags.find((tag) => slugifyTag(tag) === tagSlug);
       if (match) return match;
     }

@@ -1,5 +1,6 @@
 import { Component, inject } from '@angular/core';
 import { RouterLink } from '@angular/router';
+import { localizedPath } from '../../core/i18n/locale';
 import { SeoService } from '../../core/seo/seo.service';
 
 @Component({
@@ -11,14 +12,17 @@ import { SeoService } from '../../core/seo/seo.service';
       <h1>Página não encontrada</h1>
       <p class="lead">A página pode ter mudado ou nunca ter existido.</p>
       <div class="action-row">
-        <a class="button button--primary" routerLink="/pt">Ir para a Home</a>
-        <a class="button button--secondary" routerLink="/pt/work">Explorar trabalhos</a>
+        <a class="button button--primary" [routerLink]="homePath">Ir para a Home</a>
+        <a class="button button--secondary" [routerLink]="workPath">Explorar trabalhos</a>
       </div>
     </section>
   `,
 })
 export class NotFoundPage {
   private readonly seo = inject(SeoService);
+
+  protected readonly homePath = localizedPath();
+  protected readonly workPath = localizedPath('work');
 
   constructor() {
     this.seo.setNotFound();

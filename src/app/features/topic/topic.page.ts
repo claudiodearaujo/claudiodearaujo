@@ -1,6 +1,8 @@
 import { Component, inject } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
 import { ContentRepository } from '../../core/content/content.repository';
+import { DEFAULT_LOCALE, Locale, localizedPath } from '../../core/i18n/locale';
+import { stringsFor } from '../../core/i18n/ui-strings';
 import { SeoService } from '../../core/seo/seo.service';
 import { ContentCard } from '../../shared/content-card/content-card';
 
@@ -24,14 +26,16 @@ export class TopicPage {
 
   protected readonly tagSlug = this.route.snapshot.data['tagSlug'] as string;
   protected readonly label = this.route.snapshot.data['tagLabel'] as string;
-  protected readonly entries = this.repository.byTopic(this.tagSlug);
+  private readonly locale = (this.route.snapshot.data['locale'] as Locale) ?? DEFAULT_LOCALE;
+  protected readonly text = stringsFor(this.locale);
+  protected readonly entries = this.repository.byTopic(this.tagSlug, this.locale);
 
   constructor() {
     this.seo.setPage(
       this.label,
-      `Conteúdo marcado com ${this.label}.`,
+      this.text.topicSummary(this.label),
       'website',
-      `/pt/topics/${this.tagSlug}`,
+      localizedPath(`topics/${this.tagSlug}`, this.locale),
     );
   }
 }
