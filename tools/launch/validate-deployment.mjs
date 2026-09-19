@@ -32,8 +32,19 @@ function assert(condition, message) {
   if (!condition) failures.push(message);
 }
 
+// A network failure is a validation failure, not a stack trace: the origin may
+// simply not be deployed yet.
+async function request(url, init) {
+  try {
+    return await fetch(url, init);
+  } catch (error) {
+    console.error(`\nDeployment validation failed:\n- could not reach ${url}: ${error.message}`);
+    process.exit(1);
+  }
+}
+
 async function fetchText(path, init) {
-  const response = await fetch(`${targetOrigin}${path}`, init);
+  const response = await request(`${targetOrigin}${path}`, init);
   const text = await response.text();
   return { response, text };
 }
@@ -67,9 +78,16 @@ assert(
   header(home.response, 'permissions-policy').includes('camera=()'),
   'Permissions-Policy missing camera restriction',
 );
+const csp = header(home.response, 'content-security-policy');
+assert(csp.includes("default-src 'self'"), 'Content-Security-Policy missing');
+const scriptSrc = csp.match(/script-src([^;]*)/)?.[1] ?? '';
 assert(
-  header(home.response, 'content-security-policy').includes("default-src 'self'"),
-  'Content-Security-Policy missing',
+  !scriptSrc.includes("'unsafe-inline'"),
+  "script-src must not allow 'unsafe-inline'; inline scripts are allow-listed by hash",
+);
+assert(
+  (scriptSrc.match(/'sha256-/g) ?? []).length > 0,
+  'script-src must allow-list the inline scripts by hash',
 );
 assert(
   home.text.includes(`rel="canonical" href="${expectedOrigin}/pt"`),
@@ -122,21 +140,28 @@ assert(
   `sitemap contains ${locations.length - published.size} duplicate URL(s)`,
 );
 
-const favicon = await fetch(`${targetOrigin}/favicon.svg`);
+const favicon = await request(`${targetOrigin}/favicon.svg`);
 assert(favicon.status === 200, `favicon expected 200, got ${favicon.status}`);
 assert(
   (favicon.headers.get('content-type') ?? '').includes('image/svg+xml'),
   'favicon content-type must be image/svg+xml',
 );
 
-const missing = await fetch(`${targetOrigin}/launch-readiness-route-that-does-not-exist`, {
+const missing = await fetchText('/launch-readiness-route-that-does-not-exist', {
   redirect: 'manual',
 });
-assert(missing.status === 404, `unknown route expected HTTP 404, got ${missing.status}`);
+assert(
+  missing.response.status === 404,
+  `unknown route expected HTTP 404, got ${missing.response.status}`,
+);
+assert(
+  missing.text.includes('<app-root'),
+  'unknown route must serve the application shell so the 404 page renders',
+);
 
 if (process.env.WWW_ORIGIN) {
   const wwwOrigin = process.env.WWW_ORIGIN.replace(/\/$/, '');
-  const response = await fetch(`${wwwOrigin}/pt`, { redirect: 'manual' });
+  const response = await request(`${wwwOrigin}/pt`, { redirect: 'manual' });
   assert(
     [301, 302, 307, 308].includes(response.status),
     `www redirect expected 3xx, got ${response.status}`,
@@ -155,7 +180,8 @@ if (failures.length) {
 
 console.log('\nDeployment validation passed.');
 console.log('- security headers: ok');
+console.log('- CSP without unsafe-inline scripts: ok');
 console.log('- canonical / og:url: ok');
 console.log(`- robots / sitemap: ${locations.length} URLs matching the content build`);
 console.log('- favicon: ok');
-console.log('- HTTP 404: ok');
+console.log('- HTTP 404 with the app 404 page: ok');

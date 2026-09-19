@@ -113,7 +113,7 @@ A rota Angular de 404 passa a ter:
 - `noindex, nofollow`;
 - canonical removida.
 
-O Render continua responsável por 404 HTTP real para rotas estáticas inexistentes no CDN.
+O build publica `404.html` a partir do shell client-side, então o Render responde HTTP 404 real para rotas inexistentes **e** serve a página de 404 da própria aplicação, com o title, a description e o `noindex` acima. O `postbuild` gera esse arquivo e a validação de deploy confere que a resposta 404 carrega o shell da aplicação.
 
 ## Mobile navigation
 

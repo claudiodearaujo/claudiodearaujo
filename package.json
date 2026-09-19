@@ -9,6 +9,8 @@
     "test": "ng test",
     "content:build": "node tools/content/build-content.mjs",
     "prebuild": "npm run content:build",
+    "postbuild": "node tools/launch/emit-404.mjs && node tools/launch/csp-hashes.mjs",
+    "csp:update": "node tools/launch/csp-hashes.mjs --update",
     "lint": "ng lint",
     "typecheck": "tsc -p tsconfig.app.json --noEmit",
     "test:unit": "ng test --watch=false",
@@ -20,7 +22,7 @@
     "validate:full": "npm run validate && npm run test:e2e",
     "prestart": "npm run content:build",
     "postinstall": "npm run content:build",
-    "test:e2e:live": "playwright test --config playwright.live.config.ts --grep-invert \"not found route\"",
+    "test:e2e:live": "playwright test --config playwright.live.config.ts",
     "validate:deployment": "npm run content:build && node tools/launch/validate-deployment.mjs",
     "validate:launch:live": "npm run validate:deployment && npm run test:e2e:live"
   },
