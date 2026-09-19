@@ -1,52 +1,45 @@
-@if (entry) {
-  <article class="page-shell detail-shell">
-    <nav class="breadcrumb" aria-label="Breadcrumb">
-      <a [routerLink]="parentRoute()">Voltar</a><span>/</span><span>{{ entry.type }}</span>
-    </nav>
-    <header class="detail-header">
-      <div class="detail-meta">
-        <span>{{ entry.type }}</span>
-        @if (entry.status) {
-          <span>{{ entry.status }}</span>
-        }
-      </div>
-      <h1>{{ entry.title }}</h1>
-      <p class="lead">{{ entry.summary }}</p>
-      <div class="tag-row">
-        @for (tag of entry.tags; track tag) {
-          <span class="tag">{{ tag }}</span>
-        }
-      </div>
-    </header>
-    <div class="detail-layout">
-      <div class="prose" [innerHTML]="safeHtml"></div>
-      @if (entry.headings.length) {
-        <aside class="toc" aria-label="Neste conteúdo">
-          <strong>Neste conteúdo</strong>
-          @for (heading of entry.headings; track heading.id) {
-            <a [class.toc-child]="heading.level === 3" [href]="'#' + heading.id">{{
-              heading.text
-            }}</a>
-          }
-        </aside>
+<article class="page-shell detail-shell">
+  <nav class="breadcrumb" aria-label="Breadcrumb">
+    <a [routerLink]="parentRoute()">Voltar</a><span>/</span><span>{{ entry.type }}</span>
+  </nav>
+  <header class="detail-header">
+    <div class="detail-meta">
+      <span>{{ entry.type }}</span>
+      @if (entry.status) {
+        <span>{{ entry.status }}</span>
       }
     </div>
-  </article>
-
-  @if (related.length) {
-    <section class="page-shell related">
-      <p class="eyebrow">Related</p>
-      <h2>Continue explorando</h2>
-      <div class="related-grid">
-        @for (item of related; track item.route) {
-          <app-content-card [entry]="item" />
+    <h1>{{ entry.title }}</h1>
+    <p class="lead">{{ entry.summary }}</p>
+    <div class="tag-row">
+      @for (tag of entry.tags; track tag) {
+        <span class="tag">{{ tag }}</span>
+      }
+    </div>
+  </header>
+  <div class="detail-layout">
+    <div class="prose" [innerHTML]="safeHtml"></div>
+    @if (entry.headings.length) {
+      <aside class="toc" aria-label="Neste conteúdo">
+        <strong>Neste conteúdo</strong>
+        @for (heading of entry.headings; track heading.id) {
+          <a [class.toc-child]="heading.level === 3" [href]="'#' + heading.id">{{
+            heading.text
+          }}</a>
         }
-      </div>
-    </section>
-  }
-} @else {
-  <section class="page-shell">
-    <h1>Conteúdo não encontrado</h1>
-    <a routerLink="/pt">Voltar para a Home</a>
+      </aside>
+    }
+  </div>
+</article>
+
+@if (related.length) {
+  <section class="page-shell related">
+    <p class="eyebrow">Related</p>
+    <h2>Continue explorando</h2>
+    <div class="related-grid">
+      @for (item of related; track item.route) {
+        <app-content-card [entry]="item" />
+      }
+    </div>
   </section>
 }

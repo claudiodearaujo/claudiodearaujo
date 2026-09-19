@@ -4,7 +4,7 @@ import { ContentSummary, ContentType } from './content.models';
 
 @Injectable({ providedIn: 'root' })
 export class ContentRepository {
-  readonly entries = contentManifest as readonly unknown[] as readonly ContentSummary[];
+  readonly entries: readonly ContentSummary[] = contentManifest;
 
   list(type: ContentType): readonly ContentSummary[] {
     return this.entries.filter((entry) => entry.type === type);

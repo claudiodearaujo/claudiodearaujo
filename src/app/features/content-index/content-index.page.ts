@@ -21,9 +21,9 @@ export class ContentIndexPage {
   protected readonly description = this.route.snapshot.data['description'] as string;
   protected readonly type = this.route.snapshot.data['contentType'] as ContentType;
   protected readonly entries = this.repository.list(this.type);
+  private readonly canonical = this.route.snapshot.data['canonical'] as string;
 
   constructor() {
-    const route = this.type === 'article' ? '/pt/writing' : '/pt/labs';
-    this.seo.setPage(this.title, this.description, 'website', route);
+    this.seo.setPage(this.title, this.description, 'website', this.canonical);
   }
 }

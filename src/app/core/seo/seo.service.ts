@@ -1,8 +1,8 @@
 import { DOCUMENT } from '@angular/common';
 import { inject, Injectable } from '@angular/core';
 import { Meta, Title } from '@angular/platform-browser';
-import { isPreview, siteOrigin } from '../../generated/site-config.generated';
 import { ContentEntry } from '../content/content.models';
+import { SITE_CONFIG } from './site-config';
 
 const githubUrl = 'https://github.com/claudiodearaujo';
 const linkedinUrl = 'https://br.linkedin.com/in/claudio-de-araujo';
@@ -12,6 +12,7 @@ export class SeoService {
   private readonly title = inject(Title);
   private readonly meta = inject(Meta);
   private readonly document = inject(DOCUMENT);
+  private readonly config = inject(SITE_CONFIG);
 
   setPage(title: string, description: string, type = 'website', route?: string): void {
     this.clearJsonLd();
@@ -29,7 +30,7 @@ export class SeoService {
     this.meta.updateTag({ name: 'twitter:title', content: fullTitle });
     this.meta.updateTag({ name: 'twitter:description', content: description });
 
-    if (isPreview) {
+    if (this.config.isPreview) {
       this.meta.updateTag({ name: 'robots', content: 'noindex, nofollow' });
     } else {
       this.meta.removeTag("name='robots'");
@@ -48,7 +49,7 @@ export class SeoService {
       '@type': 'Person',
       name: 'Cláudio Araújo',
       jobTitle: 'Software Engineer · AI Engineering · Technical Leadership',
-      url: siteOrigin ? `${siteOrigin}/pt` : undefined,
+      url: this.config.origin ? `${this.config.origin}/pt` : undefined,
       sameAs: [githubUrl, linkedinUrl],
     });
   }
@@ -66,7 +67,7 @@ export class SeoService {
       '@type': entry.type === 'article' ? 'TechArticle' : 'CreativeWork',
       name: entry.title,
       description: entry.summary,
-      url: siteOrigin ? `${siteOrigin}${entry.route}` : undefined,
+      url: this.config.origin ? `${this.config.origin}${entry.route}` : undefined,
       inLanguage: 'pt-BR',
       author: {
         '@type': 'Person',
@@ -90,9 +91,9 @@ export class SeoService {
     this.document.querySelector('link[rel="canonical"]')?.remove();
     this.meta.removeTag("property='og:url'");
 
-    if (!siteOrigin || !route) return;
+    if (!this.config.origin || !route) return;
 
-    const url = `${siteOrigin}${route}`;
+    const url = `${this.config.origin}${route}`;
     const link = this.document.createElement('link');
     link.rel = 'canonical';
     link.href = url;
