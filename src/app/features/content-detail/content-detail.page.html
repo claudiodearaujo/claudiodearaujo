@@ -10,7 +10,11 @@
     <p class="lead">{{ entry.summary }}</p>
     <div class="tag-row">
       @for (tag of entry.tags; track tag) {
-        <a class="tag" [routerLink]="topicRoute(tag)">{{ tag }}</a>
+        @if (hasTopic(tag)) {
+          <a class="tag" [routerLink]="topicRoute(tag)">{{ tag }}</a>
+        } @else {
+          <span class="tag">{{ tag }}</span>
+        }
       }
     </div>
   </header>

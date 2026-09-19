@@ -8,7 +8,7 @@
 //  2. the handful of routes that aren't markdown content (Home, and the
 //     Work/Engineering/Writing/Labs landings) — at public/og/site/<name>.png.
 //     Their title/summary are hand-kept in sync with each page's own
-//     SeoService.setPage()/setHome() call; there are only five of them.
+//     SeoService.setPage()/setHome() call.
 import { mkdir, readFile, writeFile } from 'node:fs/promises';
 import path from 'node:path';
 import matter from 'gray-matter';

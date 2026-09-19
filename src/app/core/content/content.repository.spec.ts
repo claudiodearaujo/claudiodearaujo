@@ -1,6 +1,8 @@
 import { describe, expect, it } from 'vitest';
+import { topicRoutes } from '../../generated/topic-routes.generated';
 import { ContentType } from './content.models';
 import { ContentRepository } from './content.repository';
+import { slugifyTag } from './slug.util';
 
 const types: readonly ContentType[] = ['project', 'article', 'lab', 'decision', 'page'];
 
@@ -96,6 +98,37 @@ describe('ContentRepository', () => {
 
     it('returns nothing for a tag no content declares', () => {
       expect(repository.byTopic('not-a-real-tag')).toEqual([]);
+    });
+  });
+
+  describe('hasTopic', () => {
+    const generatedTopicRoutes = new Set(topicRoutes.map((route) => `/${route.path}`));
+
+    // The build generates one route per tag above a minimum entry count, and
+    // the UI decides independently whether to render that tag as a link. If
+    // the two rules ever drift, tags start linking to 404s.
+    it('agrees with the topic routes the build generated, for every tag in use', () => {
+      for (const entry of repository.entries) {
+        for (const tag of entry.tags) {
+          expect(
+            repository.hasTopic(tag),
+            `tag "${tag}" (${entry.route}) disagrees with the generated routes`,
+          ).toBe(generatedTopicRoutes.has(`/pt/topics/${slugifyTag(tag)}`));
+        }
+      }
+    });
+
+    it('rejects a tag that only one entry uses', () => {
+      const counts = new Map<string, number>();
+      for (const entry of repository.entries) {
+        for (const tag of entry.tags) {
+          const slug = slugifyTag(tag);
+          counts.set(slug, (counts.get(slug) ?? 0) + 1);
+        }
+      }
+      const [lonely] = [...counts.entries()].find(([, count]) => count === 1) ?? [];
+      expect(lonely, 'no single-use tag in the fixture').toBeDefined();
+      expect(repository.hasTopic(lonely!)).toBe(false);
     });
   });
 

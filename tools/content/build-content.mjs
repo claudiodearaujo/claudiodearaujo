@@ -216,13 +216,22 @@ await writeFile(
 // First-seen spelling of a tag (by manifest order, already route-alphabetical)
 // becomes that topic's display label.
 const topicLabelBySlug = new Map();
+const topicCountBySlug = new Map();
 for (const entry of manifest) {
   for (const tag of entry.tags) {
     const slug = slugify(tag);
     if (!topicLabelBySlug.has(slug)) topicLabelBySlug.set(slug, tag);
+    topicCountBySlug.set(slug, (topicCountBySlug.get(slug) ?? 0) + 1);
   }
 }
+// A tag used by a single entry has no topic to collect: the page would list
+// the one item the reader just came from. Those tags still render — as plain
+// text, not links (ContentRepository.hasTopic decides that from this same
+// threshold) — so the site never publishes a thin dead-end page or links to
+// a route that was not generated.
+const TOPIC_MIN_ENTRIES = 2;
 const topics = [...topicLabelBySlug.entries()]
+  .filter(([slug]) => topicCountBySlug.get(slug) >= TOPIC_MIN_ENTRIES)
   .map(([slug, label]) => ({ slug, label }))
   .sort((a, b) => a.slug.localeCompare(b.slug));
 

@@ -39,8 +39,10 @@ p {
     border-color var(--motion-fast) var(--motion-ease);
 }
 
-.tag:hover,
-.tag:focus-visible {
+// Only the linked tags react: a tag with too few entries to have a topic
+// page renders as a <span>, and must not look clickable.
+a.tag:hover,
+a.tag:focus-visible {
   color: var(--color-accent);
   border-color: var(--color-accent);
 }

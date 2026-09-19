@@ -65,6 +65,16 @@ export class ContentRepository {
       .sort(byDateDescending);
   }
 
+  /**
+   * Whether `tag` has a topic page to link to. Mirrors the threshold
+   * tools/content/build-content.mjs applies when generating the routes: a
+   * tag used by a single entry gets no page, so linking it would 404.
+   * content.repository.spec.ts checks the two stay in agreement.
+   */
+  hasTopic(tag: string): boolean {
+    return this.byTopic(slugifyTag(tag)).length >= 2;
+  }
+
   /** The tag's original spelling, for the topic page's own title. */
   labelForTopic(tagSlug: string): string | undefined {
     for (const entry of this.entries) {

@@ -1,4 +1,4 @@
-import { Component, HostListener, inject } from '@angular/core';
+import { Component, inject } from '@angular/core';
 import { DomSanitizer, SafeHtml } from '@angular/platform-browser';
 import { ActivatedRoute, RouterLink } from '@angular/router';
 import { BreadcrumbItem, ContentEntry, ContentType } from '../../core/content/content.models';
@@ -47,29 +47,11 @@ export class ContentDetailPage {
     this.seo.setContent(this.entry, this.breadcrumb);
   }
 
-  protected topicRoute(tag: string): string {
-    return `/pt/topics/${slugifyTag(tag)}`;
+  protected hasTopic(tag: string): boolean {
+    return this.repository.hasTopic(tag);
   }
 
-  // `<base href="/">` (required so the router can resolve absolute app
-  // routes) makes the browser resolve a bare `href="#slug"` against the
-  // site root instead of the current page — clicking a heading anchor or a
-  // table-of-contents link would navigate to "/#slug" instead of scrolling.
-  // Intercepting the click and doing the fragment navigation ourselves
-  // sidesteps that resolution entirely.
-  @HostListener('click', ['$event'])
-  protected onFragmentLinkClick(event: MouseEvent): void {
-    const anchor = (event.target as HTMLElement).closest('a');
-    const href = anchor?.getAttribute('href');
-    if (!href?.startsWith('#')) return;
-
-    const target = document.getElementById(decodeURIComponent(href.slice(1)));
-    if (!target) return;
-
-    event.preventDefault();
-    history.pushState(null, '', `${location.pathname}${location.search}${href}`);
-    target.scrollIntoView();
-    target.setAttribute('tabindex', '-1');
-    target.focus({ preventScroll: true });
+  protected topicRoute(tag: string): string {
+    return `/pt/topics/${slugifyTag(tag)}`;
   }
 }
