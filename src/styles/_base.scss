@@ -7,6 +7,9 @@
 html {
   scroll-behavior: smooth;
   background: var(--color-bg);
+  /* Safari on iOS inflates body text on orientation change without this. */
+  -webkit-text-size-adjust: 100%;
+  text-size-adjust: 100%;
 }
 
 body {

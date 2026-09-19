@@ -55,9 +55,10 @@ a.tag:focus-visible {
 @media (max-width: 900px) {
   .detail-layout {
     // minmax(0, 1fr), not a bare 1fr: without the 0 floor, a grid item's
-    // default min-width: auto lets its content's intrinsic size (here, a
-    // diagram-frame--svg's replaced-element sizing) push the column wider
-    // than the viewport instead of shrinking to fit it.
+    // default min-width: auto lets its content's intrinsic size (a code
+    // block's min-content width, or a diagram-frame--svg's replaced-element
+    // sizing) push the column wider than the viewport instead of shrinking
+    // to fit it.
     grid-template-columns: minmax(0, 1fr);
   }
   app-table-of-contents {

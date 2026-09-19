@@ -61,6 +61,13 @@
 
 .theme-toggle,
 .menu-toggle {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  /* iOS Human Interface Guidelines: 44pt minimum tap target. */
+  min-width: 2.75rem;
+  min-height: 2.75rem;
+  padding: 0;
   border: 0;
   background: transparent;
   color: var(--color-text);

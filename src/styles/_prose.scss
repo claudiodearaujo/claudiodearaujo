@@ -8,6 +8,12 @@
 // but suppressing the encapsulation warning. See docs/SITE-EVOLUTION-PLAN.md
 // D16.
 .prose {
+  // A grid item's automatic minimum size is its min-content width, so a long
+  // code block or an unbreakable word would widen the column past the
+  // viewport instead of scrolling inside its own box.
+  min-width: 0;
+  overflow-wrap: break-word;
+
   a {
     color: var(--color-accent-strong);
     text-underline-offset: 0.18em;
@@ -51,6 +57,9 @@
   }
 
   pre {
+    // Without the cap the block sizes to its longest line and widens the
+    // column; with it, `overflow: auto` actually engages.
+    max-width: 100%;
     overflow: auto;
     padding: var(--space-16);
     border: var(--border-width) solid var(--color-border);

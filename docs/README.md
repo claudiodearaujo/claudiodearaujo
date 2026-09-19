@@ -23,6 +23,7 @@ Este diretório contém a fundação de produto, conteúdo, posicionamento, arqu
 - [Render Static Site Deployment](./technical/DEPLOYMENT-RENDER.md)
 - [Render Live Deployment Validation](./technical/RENDER-LIVE-VALIDATION.md)
 - [Launch Readiness & Professional Polish](./technical/LAUNCH-READINESS.md)
+- [Pendências técnicas em aberto](./technical/OPEN-TECHNICAL-DEBT.md)
 
 ## UX
 
