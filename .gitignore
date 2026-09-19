@@ -51,4 +51,5 @@ Thumbs.db
 /src/app/generated/
 
 # Environment-generated SEO
+/public/robots.txt
 /public/sitemap.xml

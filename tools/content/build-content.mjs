@@ -83,7 +83,7 @@ for (const file of files) {
   const moduleName = `${meta.type}-${meta.slug}.generated`;
   await writeFile(
     path.join(entriesRoot, `${moduleName}.ts`),
-    `// Generated. Do not edit.\nexport const content = ${JSON.stringify({ ...summary, headings, html }, null, 2)} as const;\n`,
+    `// Generated. Do not edit.\nimport { ContentEntry } from '../../core/content/content.models';\nexport const content: ContentEntry = ${JSON.stringify({ ...summary, headings, html }, null, 2)};\n`,
     'utf8',
   );
   routes.push({ path: route.replace(/^\//, ''), moduleName });
@@ -94,7 +94,7 @@ routes.sort((a, b) => a.path.localeCompare(b.path));
 
 await writeFile(
   path.join(generatedRoot, 'content-manifest.generated.ts'),
-  `// Generated. Do not edit.\nexport const contentManifest = ${JSON.stringify(manifest, null, 2)} as const;\n`,
+  `// Generated. Do not edit.\nimport { ContentSummary } from '../core/content/content.models';\nexport const contentManifest: readonly ContentSummary[] = ${JSON.stringify(manifest, null, 2)};\n`,
   'utf8',
 );
 

@@ -20,6 +20,7 @@ export const routes: Routes = [
       eyebrow: 'Writing',
       description: 'Ensaios sobre engenharia, arquitetura e inteligência artificial.',
       contentType: 'article',
+      canonical: '/pt/writing',
     },
     loadComponent: () =>
       import('./features/content-index/content-index.page').then((m) => m.ContentIndexPage),
@@ -31,6 +32,7 @@ export const routes: Routes = [
       eyebrow: 'Research',
       description: 'Experimentos e pesquisas em sistemas inteligentes.',
       contentType: 'lab',
+      canonical: '/pt/labs',
     },
     loadComponent: () =>
       import('./features/content-index/content-index.page').then((m) => m.ContentIndexPage),
