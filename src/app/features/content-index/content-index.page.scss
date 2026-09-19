@@ -1,11 +1,11 @@
 .index-hero {
-  padding-bottom: 2rem;
+  padding-bottom: var(--space-32);
 }
 .content-grid {
   display: grid;
   grid-template-columns: repeat(3, minmax(0, 1fr));
-  gap: 1rem;
-  padding-top: 1rem;
+  gap: var(--space-16);
+  padding-top: var(--space-16);
 }
 @media (max-width: 900px) {
   .content-grid {
