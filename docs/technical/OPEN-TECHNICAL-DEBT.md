@@ -54,3 +54,46 @@ Passam no WCAG 2.5.8 (mínimo de 24×24 para AA), que a suíte axe já verifica.
 
 **Critério de pronto:** decidir entre dar `min-height` a `.text-link` globalmente, fazê-lo
 apenas abaixo de um breakpoint, ou manter como está e registrar a escolha aqui.
+
+## 3. Gates de CI não enxergam a página renderizada
+
+**Status:** em aberto, adiado deliberadamente
+**Desde:** trilha E8 do `SITE-EVOLUTION-PLAN.md`, pulada a pedido
+
+O CI hoje roda `npm run validate` (format, lint, typecheck, testes de tools e unitários,
+build) e a suíte E2E. Isso cobre correção de código e comportamento, mas não cobre
+regressão de **performance, orçamento visual e links**.
+
+A trilha E8 previa sete entregas. Nenhuma foi feita:
+
+1. Lighthouse CI no workflow, com as metas do `PRD.md` §40 como budget que falha o build;
+2. axe em **todas** as rotas públicas, geradas a partir de `public-routes.generated.json`,
+   em vez das 4 rotas que a suíte cobre hoje;
+3. regressão visual com screenshots dos templates canônicos, nos dois temas, em 390px e
+   1440px;
+4. link checker sobre o output do build — interno, e externo com allowlist;
+5. `npm audit --audit-level=high` no CI;
+6. Dependabot ou Renovate para Angular e toolchain;
+7. testes unitários do pipeline de conteúdo: schema inválido, rota duplicada, `related`
+   apontando para rota inexistente, âncoras duplicadas.
+
+**O que já existe, e que reduz o risco de alguns itens.** O item 7 é o mais coberto na
+prática: o build de conteúdo valida o schema com Zod, quebra em rota duplicada e verifica
+cada `related` contra o manifesto — o que falta é fixar esses comportamentos em teste, não
+implementá-los. O item 2 foi executado **manualmente** durante a revisão das fases 1–4:
+axe (WCAG 2.2 AA) nas 33 rotas então publicadas, em tema claro e escuro, sem violações. O
+que não existe é isso rodando sozinho a cada push.
+
+**Impacto se ficar como está:** médio e cumulativo. Os defeitos que motivaram o plano —
+`h1` sem tamanho, fontes não carregadas, índice lateral sumindo no mobile, ausência de
+imagem social — existiram em produção com o CI verde. Eles voltam a ser possíveis pelo
+mesmo motivo de sempre: nenhum gate olha a página renderizada.
+
+**Critério de pronto:** os itens acima no workflow, e a verificação que o plano propõe —
+reverter cada uma das correções de D1, D2, D3 e D4 isoladamente deve produzir uma falha
+vermelha. Um gate que não falha quando o bug volta não é um gate.
+
+**Ordem sugerida, por retorno sobre esforço:** item 2 primeiro (a lista de rotas já é
+gerada, e o custo é escrever um `for`), depois 5 e 7, depois 1, e por último 3 e 4, que são
+os mais caros de manter — uma suíte de regressão visual mal calibrada produz falha falsa
+com frequência suficiente para ser desligada.

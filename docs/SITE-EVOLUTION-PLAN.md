@@ -563,7 +563,24 @@ exercita**, por não haver um segundo idioma para exercitá-lo.
 
 ### E9 — Profundidade editorial
 
-`docs/` guarda 2.889 linhas de conteúdo editorial aprovado que não está publicado.
+~~`docs/` guarda 2.889 linhas de conteúdo editorial aprovado que não está publicado.~~
+
+**Esta premissa estava errada e foi verificada como falsa.** As 15 peças em
+`docs/case-studies`, `docs/writing`, `docs/labs`, `docs/engineering` e
+`docs/content` são os *drafts* do que já está em `src/content` — todas
+publicadas. Comparando linha a linha, cada versão publicada é **maior** que
+seu draft, porque carrega front matter e, em alguns casos, diagramas e índice
+adicionados nas fases E3 e E4:
+
+```text title="Draft versus publicado, em linhas"
+LUCYOS.md                 409  ->  445
+INVEST-LUCY.md            618  ->  641
+PRINCIPLES.md             458  ->  528
+ABOUT.md                  310  ->  319
+```
+
+Não há conteúdo editorial aprovado à espera de publicação. O que falta é
+conteúdo **novo**, e ele depende de material que só o autor tem.
 
 **Entregas sugeridas, sem bloqueio técnico:**
 
@@ -571,6 +588,38 @@ exercita**, por não haver um segundo idioma para exercitá-lo.
 - ADRs 004+ (`PRD.md` §22 lista oito candidatos);
 - cadência de escrita — o `Content Strategy Loop` do PRD §49 só funciona com publicação contínua;
 - fotografia profissional no About (Visual §39), opcional.
+
+#### Resultado
+
+**Entregue: ADR 004 e ADR 005**, sobre decisões tomadas neste próprio
+repositório, com contexto, alternativas e consequências verificáveis no
+código e nas medições registradas acima:
+
+- *Why This Site Intercepts Its Own Fragment Links?* — o `<base href="/">`
+  que o build exige quebrava o skip link, uma falha de WCAG 2.4.1 que a
+  suíte não via porque testava presença, não comportamento;
+- *Why Keep Incremental Hydration After It Missed Its Target?* — a medição
+  da fase E5, incluindo a meta mal formulada e a contaminação por HMR que
+  quase foi publicada como resultado.
+
+**O restante da trilha não foi feito, e não por falta de tempo.**
+
+Os cases de Argos, Enterprise AI e Financial Systems foram *removidos* em E4
+justamente porque não existe material de origem para eles em lugar nenhum do
+repositório. Escrevê-los agora significaria inventar a trajetória
+profissional do autor em um site cujo objetivo declarado é autoridade
+profissional. O mesmo vale para os oito candidatos a ADR do `PRD.md` §22
+(*Why local-first?*, *RAG versus agent memory*, *Why append-only audit
+trails?*): são decisões sobre LucyOS e Invest Lucy, e seu Context, Decision,
+Alternatives e Consequences reais só existem com quem as tomou. Um título de
+ADR não é material de origem.
+
+Cadência de escrita é processo, não entrega. Fotografia depende do autor.
+
+**Pré-requisito para fechar E9:** material de origem — notas, decisões
+registradas, o que foi tentado e descartado — para cada peça. Com isso, a
+publicação em si é barata: o pipeline valida, gera rota, imagem social, feed
+e tópicos sozinho.
 
 ## 6. Sequência
 
