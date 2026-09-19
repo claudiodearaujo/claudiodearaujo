@@ -1,7 +1,7 @@
 import { DOCUMENT } from '@angular/common';
 import { inject, Injectable } from '@angular/core';
 import { Meta, Title } from '@angular/platform-browser';
-import { ContentEntry } from '../content/content.models';
+import { BreadcrumbItem, ContentEntry } from '../content/content.models';
 import { SITE_CONFIG } from './site-config';
 
 const githubUrl = 'https://github.com/claudiodearaujo';
@@ -16,6 +16,7 @@ export class SeoService {
 
   setPage(title: string, description: string, type = 'website', route?: string): void {
     this.clearJsonLd();
+    this.clearBreadcrumbJsonLd();
 
     const fullTitle = title === 'Cláudio Araújo' ? title : `${title} · Cláudio Araújo`;
     this.title.setTitle(fullTitle);
@@ -54,7 +55,7 @@ export class SeoService {
     });
   }
 
-  setContent(entry: ContentEntry): void {
+  setContent(entry: ContentEntry, breadcrumb?: readonly BreadcrumbItem[]): void {
     this.setPage(
       entry.title,
       entry.summary,
@@ -76,6 +77,10 @@ export class SeoService {
       },
       keywords: entry.tags.join(', '),
     });
+
+    if (breadcrumb?.length) {
+      this.replaceBreadcrumbJsonLd(breadcrumb);
+    }
   }
 
   setNotFound(): void {
@@ -111,6 +116,31 @@ export class SeoService {
     script.id = 'page-jsonld';
     script.type = 'application/ld+json';
     script.textContent = JSON.stringify(value);
+    this.document.head.appendChild(script);
+  }
+
+  private clearBreadcrumbJsonLd(): void {
+    this.document.getElementById('breadcrumb-jsonld')?.remove();
+  }
+
+  // Kept as its own script (rather than folded into #page-jsonld) so a page
+  // without a breadcrumb never has to think about the content schema's shape.
+  private replaceBreadcrumbJsonLd(items: readonly BreadcrumbItem[]): void {
+    this.clearBreadcrumbJsonLd();
+    const script = this.document.createElement('script');
+    script.id = 'breadcrumb-jsonld';
+    script.type = 'application/ld+json';
+    script.textContent = JSON.stringify({
+      '@context': 'https://schema.org',
+      '@type': 'BreadcrumbList',
+      itemListElement: items.map((item, index) => ({
+        '@type': 'ListItem',
+        position: index + 1,
+        name: item.label,
+        // The current page (last item) conventionally has no `item` URL.
+        item: item.route && this.config.origin ? `${this.config.origin}${item.route}` : undefined,
+      })),
+    });
     this.document.head.appendChild(script);
   }
 }

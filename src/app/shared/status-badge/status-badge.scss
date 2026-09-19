@@ -1,0 +1,48 @@
+.status-badge {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--space-8);
+}
+
+.status-badge__mark {
+  width: 0.55em;
+  height: 0.55em;
+  flex-shrink: 0;
+}
+
+// Active — a filled circle: something running now.
+.status-badge--active {
+  color: var(--color-success);
+}
+.status-badge--active .status-badge__mark {
+  border-radius: 50%;
+  background: currentColor;
+}
+
+// Accepted / Completed — a filled square: a settled outcome.
+.status-badge--accepted {
+  color: var(--color-accent);
+}
+.status-badge--accepted .status-badge__mark {
+  border-radius: var(--radius-xs);
+  background: currentColor;
+}
+
+// Research / Draft / Experiment — an outlined diamond: open, in progress.
+.status-badge--research {
+  color: var(--color-warning);
+}
+.status-badge--research .status-badge__mark {
+  border: var(--border-width-focus) solid currentColor;
+  border-radius: var(--radius-xs);
+  transform: rotate(45deg);
+}
+
+// Anything else (Archived, ...) — an outlined circle: inactive, historical.
+.status-badge--neutral {
+  color: var(--color-text-muted);
+}
+.status-badge--neutral .status-badge__mark {
+  border: var(--border-width-focus) solid currentColor;
+  border-radius: 50%;
+}

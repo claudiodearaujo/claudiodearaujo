@@ -102,6 +102,30 @@ describe('SeoService', () => {
     expect(JSON.parse(blocks[0].textContent ?? '{}')['@type']).toBe('CreativeWork');
   });
 
+  it('publishes a BreadcrumbList alongside the content schema', () => {
+    seo.setContent(entry, [{ label: 'Writing', route: '/pt/writing' }, { label: entry.title }]);
+
+    const jsonLd = JSON.parse(document.getElementById('breadcrumb-jsonld')?.textContent ?? '{}');
+    expect(jsonLd['@type']).toBe('BreadcrumbList');
+    expect(jsonLd.itemListElement).toEqual([
+      { '@type': 'ListItem', position: 1, name: 'Writing', item: `${origin}/pt/writing` },
+      { '@type': 'ListItem', position: 2, name: entry.title, item: undefined },
+    ]);
+  });
+
+  it('omits the breadcrumb script when no breadcrumb is given', () => {
+    seo.setContent(entry);
+
+    expect(document.getElementById('breadcrumb-jsonld')).toBeNull();
+  });
+
+  it('clears a stale breadcrumb when the next page has none', () => {
+    seo.setContent(entry, [{ label: 'Writing', route: '/pt/writing' }, { label: entry.title }]);
+    seo.setPage('Labs', 'Experimentos', 'website', '/pt/labs');
+
+    expect(document.getElementById('breadcrumb-jsonld')).toBeNull();
+  });
+
   it('marks the not found page as noindex without a canonical', () => {
     seo.setPage('Labs', 'Experimentos', 'website', '/pt/labs');
     seo.setNotFound();

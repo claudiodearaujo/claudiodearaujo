@@ -1,14 +1,7 @@
 <article class="page-shell detail-shell">
-  <nav class="breadcrumb" aria-label="Breadcrumb">
-    <a [routerLink]="parentRoute()">Voltar</a><span>/</span><span>{{ entry.type }}</span>
-  </nav>
+  <app-breadcrumb [items]="breadcrumb" />
   <header class="detail-header">
-    <div class="detail-meta">
-      <span>{{ entry.type }}</span>
-      @if (entry.status) {
-        <span>{{ entry.status }}</span>
-      }
-    </div>
+    <app-metadata-row [type]="entry.type" [status]="entry.status" />
     <h1>{{ entry.title }}</h1>
     <p class="lead">{{ entry.summary }}</p>
     <div class="tag-row">
@@ -20,14 +13,7 @@
   <div class="detail-layout">
     <div class="prose" [innerHTML]="safeHtml"></div>
     @if (entry.headings.length) {
-      <aside class="toc" aria-label="Neste conteúdo">
-        <strong>Neste conteúdo</strong>
-        @for (heading of entry.headings; track heading.id) {
-          <a [class.toc-child]="heading.level === 3" [href]="'#' + heading.id">{{
-            heading.text
-          }}</a>
-        }
-      </aside>
+      <app-table-of-contents [headings]="entry.headings" />
     }
   </div>
 </article>

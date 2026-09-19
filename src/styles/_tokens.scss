@@ -116,7 +116,11 @@
   --dark-surface-raised: #191f2b;
   --dark-text-primary: #f3f6fa;
   --dark-text-secondary: #aab4c3;
-  --dark-text-muted: #748094;
+  // Lightened from the original #748094 (4.13:1 on --dark-surface-raised,
+  // below WCAG AA). This is the color small mono meta labels use everywhere
+  // (MetadataRow, tags, footer) against every dark surface, so it has to
+  // clear 4.5:1 against the lightest one, not just the page background.
+  --dark-text-muted: #7c88a0;
   --dark-border-subtle: #202836;
   --dark-border-strong: #334055;
   --dark-accent-primary: #6ea8fe;

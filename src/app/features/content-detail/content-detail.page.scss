@@ -2,25 +2,10 @@
   // Bespoke curve (min/vw differ from --space-section-inner); kept local.
   padding-top: clamp(3rem, 8vw, 7rem);
 }
-.breadcrumb {
-  display: flex;
-  gap: var(--space-8);
-  color: var(--color-text-muted);
-  font-size: var(--text-small);
-}
-.breadcrumb a {
-  color: var(--color-text-secondary);
-  transition: color var(--motion-fast) var(--motion-ease);
-}
-.breadcrumb a:hover,
-.breadcrumb a:focus-visible {
-  color: var(--color-text);
-}
 .detail-header {
   max-width: 60rem;
   margin: 2.5rem 0 var(--space-64); // 2.5rem: no exact scale step, kept literal
 }
-.detail-meta,
 .tag-row {
   display: flex;
   flex-wrap: wrap;
@@ -41,58 +26,7 @@
   gap: clamp(3rem, 7vw, 7rem);
   align-items: start;
 }
-.toc {
-  position: sticky;
-  top: calc(var(--header-height) + var(--space-32));
-  display: grid;
-  gap: var(--space-12);
-  padding-left: var(--space-16);
-  border-left: var(--border-width) solid var(--color-border);
-}
-.toc a {
-  color: var(--color-text-secondary);
-  text-decoration: none;
-  font-size: var(--text-small);
-  transition: color var(--motion-fast) var(--motion-ease);
-}
-.toc a:hover,
-.toc a:focus-visible {
-  color: var(--color-text);
-}
-.toc-child {
-  padding-left: var(--space-12);
-}
 
-:host ::ng-deep .prose h2 {
-  margin: 3rem 0 1rem;
-  font-size: clamp(1.5rem, 3vw, 2rem);
-  scroll-margin-top: 6rem;
-}
-:host ::ng-deep .prose h3 {
-  margin: 2rem 0 0.8rem;
-  scroll-margin-top: 6rem;
-}
-:host ::ng-deep .prose p,
-:host ::ng-deep .prose li {
-  color: var(--color-text-secondary);
-  line-height: 1.78;
-}
-:host ::ng-deep .prose pre {
-  overflow: auto;
-  padding: 1rem;
-  border: 1px solid var(--color-border);
-  border-radius: var(--radius-md);
-  background: var(--color-bg-alt);
-}
-:host ::ng-deep .prose code {
-  font-family: var(--font-mono);
-}
-:host ::ng-deep .prose blockquote {
-  margin: 2rem 0;
-  padding-left: 1.2rem;
-  border-left: 2px solid var(--color-accent);
-  color: var(--color-text-secondary);
-}
 .related {
   border-top: var(--border-width) solid var(--color-border);
 }
@@ -101,12 +35,17 @@
   grid-template-columns: repeat(3, minmax(0, 1fr));
   gap: var(--space-16);
 }
+
+// Below 900px the TOC (app-table-of-contents) drops out of the two-column
+// grid and flows above the prose instead — it is never display:none (D3):
+// its own <details> lets a mobile reader collapse it, but it starts open and
+// is always in the accessibility tree.
 @media (max-width: 900px) {
   .detail-layout {
     grid-template-columns: 1fr;
   }
-  .toc {
-    display: none;
+  app-table-of-contents {
+    order: -1;
   }
   .related-grid {
     grid-template-columns: 1fr;

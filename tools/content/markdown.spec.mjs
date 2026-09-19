@@ -1,5 +1,14 @@
 import { describe, expect, it } from 'vitest';
-import { decodeEntities, routeFor, slugify, uniqueId, withHeadingAnchors } from './markdown.mjs';
+import {
+  addHeadingAnchorLinks,
+  decodeEntities,
+  routeFor,
+  slugify,
+  uniqueId,
+  withHeadingAnchors,
+  wrapDiagramBlocks,
+  wrapTables,
+} from './markdown.mjs';
 
 describe('decodeEntities', () => {
   it('decodes the named entities marked emits', () => {
@@ -115,6 +124,70 @@ describe('withHeadingAnchors', () => {
 
     expect(headings).toEqual([]);
     expect(html).toBe('<h1>Title</h1><h4>Aside</h4>');
+  });
+});
+
+describe('addHeadingAnchorLinks', () => {
+  it('appends a permalink pointing at the heading id', () => {
+    const html = addHeadingAnchorLinks('<h2 id="overview">Overview</h2>');
+
+    expect(html).toBe(
+      '<h2 id="overview">Overview<a class="heading-anchor" href="#overview" aria-label="Link para a seção Overview">#</a></h2>',
+    );
+  });
+
+  it('leaves headings without an id untouched', () => {
+    expect(addHeadingAnchorLinks('<h2>No id</h2>')).toBe('<h2>No id</h2>');
+  });
+
+  it('strips inner markup and decodes entities for the aria-label', () => {
+    const html = addHeadingAnchorLinks(
+      '<h3 id="x">The <code>Retry</code> &amp; Fallback path</h3>',
+    );
+
+    expect(html).toContain('aria-label="Link para a seção The Retry &amp; Fallback path"');
+  });
+
+  it('escapes a literal quote in the heading text for the attribute', () => {
+    const html = addHeadingAnchorLinks('<h2 id="x">Say &quot;hi&quot;</h2>');
+
+    expect(html).toContain('aria-label="Link para a seção Say &quot;hi&quot;"');
+  });
+});
+
+describe('wrapDiagramBlocks', () => {
+  it('wraps a ```text code block in a labeled figure', () => {
+    const html = wrapDiagramBlocks('<pre><code class="language-text">A -&gt; B</code></pre>');
+
+    expect(html).toBe(
+      '<figure class="diagram-frame"><figcaption class="diagram-frame__label">Diagram</figcaption>' +
+        '<pre><code class="language-text">A -&gt; B</code></pre></figure>',
+    );
+  });
+
+  it('leaves a real code fence untouched', () => {
+    const html = '<pre><code class="language-ts">const x = 1;</code></pre>';
+
+    expect(wrapDiagramBlocks(html)).toBe(html);
+  });
+
+  it('leaves plain paragraphs untouched', () => {
+    expect(wrapDiagramBlocks('<p>No fences here</p>')).toBe('<p>No fences here</p>');
+  });
+});
+
+describe('wrapTables', () => {
+  it('wraps a table in a scrollable, labeled region', () => {
+    const html = wrapTables('<table><tr><td>1</td></tr></table>');
+
+    expect(html).toBe(
+      '<div class="table-scroll" role="region" tabindex="0" aria-label="Tabela com rolagem horizontal">' +
+        '<table><tr><td>1</td></tr></table></div>',
+    );
+  });
+
+  it('leaves content without a table untouched', () => {
+    expect(wrapTables('<p>No table</p>')).toBe('<p>No table</p>');
   });
 });
 

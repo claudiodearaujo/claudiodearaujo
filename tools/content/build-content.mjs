@@ -4,7 +4,13 @@ import matter from 'gray-matter';
 import { marked } from 'marked';
 import sanitizeHtml from 'sanitize-html';
 import { z } from 'zod';
-import { routeFor, withHeadingAnchors } from './markdown.mjs';
+import {
+  addHeadingAnchorLinks,
+  routeFor,
+  withHeadingAnchors,
+  wrapDiagramBlocks,
+  wrapTables,
+} from './markdown.mjs';
 
 const root = process.cwd();
 const contentRoot = path.join(root, 'src', 'content');
@@ -61,12 +67,19 @@ for (const file of files) {
 
   const body = parsed.content.replace(/^\s*#\s+[^\r\n]+(?:\r?\n)+/, '');
   const { html: anchored, headings } = withHeadingAnchors(String(await marked.parse(body)));
-  let html = sanitizeHtml(anchored, {
+  const withPermalinks = addHeadingAnchorLinks(anchored);
+  const withDiagrams = wrapDiagramBlocks(withPermalinks);
+  const withTables = wrapTables(withDiagrams);
+  let html = sanitizeHtml(withTables, {
     allowedTags: [...sanitizeHtml.defaults.allowedTags, 'img'],
     allowedAttributes: {
       ...sanitizeHtml.defaults.allowedAttributes,
       h2: ['id'],
       h3: ['id'],
+      a: [...(sanitizeHtml.defaults.allowedAttributes.a ?? []), 'class', 'aria-label'],
+      div: ['class', 'role', 'tabindex', 'aria-label'],
+      figure: ['class'],
+      figcaption: ['class'],
       code: ['class'],
       img: ['src', 'alt', 'title', 'loading'],
     },

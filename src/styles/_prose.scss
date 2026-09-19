@@ -1,0 +1,142 @@
+// Prose — the rendered body of a content entry, injected via [innerHTML] from
+// build-time sanitized Markdown (see tools/content/build-content.mjs).
+//
+// This lives as a global partial, not scoped `:host ::ng-deep` inside a
+// component, because the HTML it styles was never inside that component's
+// own template to begin with — Angular's emulated encapsulation attribute
+// only reaches nodes present at render time, so ::ng-deep was doing nothing
+// but suppressing the encapsulation warning. See docs/SITE-EVOLUTION-PLAN.md
+// D16.
+.prose {
+  a {
+    color: var(--color-accent-strong);
+    text-underline-offset: 0.18em;
+  }
+
+  ul,
+  ol {
+    padding-left: var(--space-24);
+  }
+
+  hr {
+    margin: var(--space-48) 0;
+    border: 0;
+    border-top: var(--border-width) solid var(--color-border);
+  }
+
+  img {
+    max-width: 100%;
+    height: auto;
+  }
+
+  // Deliberately smaller than the page-level h2 (--text-h2): this heading is
+  // one level into the article's own outline, not a landing-page section
+  // header. Kept as the original bespoke clamp rather than forced onto the
+  // page type scale.
+  h2 {
+    margin: var(--space-48) 0 var(--space-16);
+    font-size: clamp(1.5rem, 3vw, 2rem);
+    scroll-margin-top: var(--space-96);
+  }
+
+  h3 {
+    margin: var(--space-32) 0 0.8rem; // 0.8rem: no exact scale step, kept literal
+    scroll-margin-top: var(--space-96);
+  }
+
+  p,
+  li {
+    color: var(--color-text-secondary);
+    line-height: var(--leading-loose);
+  }
+
+  pre {
+    overflow: auto;
+    padding: var(--space-16);
+    border: var(--border-width) solid var(--color-border);
+    border-radius: var(--radius-md);
+    background: var(--color-bg-alt);
+  }
+
+  code {
+    font-family: var(--font-mono);
+  }
+
+  blockquote {
+    margin: var(--space-32) 0;
+    padding-left: 1.2rem; // no exact scale step, kept literal
+    border-left: var(--border-width-focus) solid var(--color-accent);
+    color: var(--color-text-secondary);
+  }
+
+  // A `display: table` element preserves AT semantics; the horizontal-scroll
+  // affordance lives on the `.table-scroll` wrapper the build adds around it
+  // instead of on the table itself (D6).
+  table {
+    width: 100%;
+    border-collapse: collapse;
+  }
+
+  th,
+  td {
+    padding: var(--space-12);
+    border: var(--border-width) solid var(--color-border);
+    text-align: left;
+  }
+}
+
+// Wraps every <table> the content pipeline emits (tools/content/markdown.mjs
+// wrapTables). role="region" + tabindex="0" + aria-label makes the scroll
+// region itself announced and keyboard-reachable, per WCAG 1.4.10.
+.table-scroll {
+  overflow-x: auto;
+  margin: var(--space-32) 0;
+}
+
+// A visible-on-hover/focus "#" permalink, appended to every h2/h3 by
+// tools/content/markdown.mjs (addHeadingAnchorLinks). Hidden by default so it
+// never competes with the heading text, but reachable by keyboard: focusing
+// it (not just hovering the heading) is what reveals it for a keyboard user.
+.heading-anchor {
+  margin-left: var(--space-8);
+  color: var(--color-text-muted);
+  text-decoration: none;
+  opacity: 0;
+  transition: opacity var(--motion-fast) var(--motion-ease);
+}
+
+.prose h2:hover .heading-anchor,
+.prose h2:focus-within .heading-anchor,
+.prose h3:hover .heading-anchor,
+.prose h3:focus-within .heading-anchor,
+.heading-anchor:focus-visible {
+  opacity: 1;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .heading-anchor {
+    transition: none;
+  }
+}
+
+// Every fenced block in this repo's content is ```text — an ASCII diagram,
+// not source code (D13). tools/content/markdown.mjs (wrapDiagramBlocks) wraps
+// each one in this labeled figure so it reads as an architecture diagram
+// instead of an unstyled code dump. Real code (a future ```language fence)
+// is left as a plain .prose pre and gets its own treatment in E3.
+.diagram-frame {
+  margin: var(--space-32) 0;
+  padding: 0;
+}
+
+.diagram-frame__label {
+  margin: 0 0 var(--space-8);
+  color: var(--color-text-muted);
+  font: 650 var(--text-meta) / 1.4 var(--font-mono);
+  letter-spacing: var(--tracking-wide);
+  text-transform: uppercase;
+}
+
+.diagram-frame pre {
+  margin: 0;
+}

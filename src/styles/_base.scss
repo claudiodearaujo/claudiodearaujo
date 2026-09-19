@@ -192,39 +192,3 @@ a {
     animation-duration: 0.01ms !important;
   }
 }
-
-.prose a {
-  color: var(--color-accent-strong);
-  text-underline-offset: 0.18em;
-}
-.prose ul,
-.prose ol {
-  padding-left: var(--space-24);
-}
-.prose hr {
-  margin: var(--space-48) 0;
-  border: 0;
-  border-top: var(--border-width) solid var(--color-border);
-}
-.prose img {
-  max-width: 100%;
-  height: auto;
-}
-
-// TODO(E2 / D6): `display: block` drops table semantics for parts of the AT
-// tree. Replace with a `display: table` + scrollable-wrapper pattern when the
-// prose components move into their own partial — tracked in
-// docs/SITE-EVOLUTION-PLAN.md D6. Left as-is here since no published content
-// currently contains a table and this trail's scope is the type/token layer.
-.prose table {
-  width: 100%;
-  border-collapse: collapse;
-  overflow-x: auto;
-  display: block;
-}
-.prose th,
-.prose td {
-  padding: var(--space-12);
-  border: var(--border-width) solid var(--color-border);
-  text-align: left;
-}

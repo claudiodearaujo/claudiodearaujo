@@ -1,10 +1,5 @@
 <article class="content-card">
-  <div class="content-card__meta">
-    <span>{{ entry().type }}</span>
-    @if (entry().status) {
-      <span>{{ entry().status }}</span>
-    }
-  </div>
+  <app-metadata-row [type]="entry().type" [status]="entry().status" justify="between" />
   <h2>
     <a [routerLink]="entry().route">{{ entry().title }}</a>
   </h2>

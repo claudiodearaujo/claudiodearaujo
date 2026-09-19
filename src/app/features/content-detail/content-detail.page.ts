@@ -1,14 +1,28 @@
 import { Component, inject } from '@angular/core';
 import { DomSanitizer, SafeHtml } from '@angular/platform-browser';
-import { ActivatedRoute, RouterLink } from '@angular/router';
-import { ContentEntry } from '../../core/content/content.models';
+import { ActivatedRoute } from '@angular/router';
+import { BreadcrumbItem, ContentEntry, ContentType } from '../../core/content/content.models';
 import { ContentRepository } from '../../core/content/content.repository';
 import { SeoService } from '../../core/seo/seo.service';
+import { Breadcrumb } from '../../shared/breadcrumb/breadcrumb';
 import { ContentCard } from '../../shared/content-card/content-card';
+import { MetadataRow } from '../../shared/metadata-row/metadata-row';
+import { TableOfContents } from '../../shared/table-of-contents/table-of-contents';
+
+// The section each content type belongs to, for the breadcrumb's first crumb.
+// "page" (About, Now, Contact, Principles) has no section of its own — those
+// are one level under Home.
+const sections: Record<ContentType, BreadcrumbItem> = {
+  project: { label: 'Work', route: '/pt/work' },
+  article: { label: 'Writing', route: '/pt/writing' },
+  lab: { label: 'Labs', route: '/pt/labs' },
+  decision: { label: 'Engineering', route: '/pt/engineering' },
+  page: { label: 'Início', route: '/pt' },
+};
 
 @Component({
   selector: 'app-content-detail-page',
-  imports: [RouterLink, ContentCard],
+  imports: [ContentCard, TableOfContents, Breadcrumb, MetadataRow],
   templateUrl: './content-detail.page.html',
   styleUrl: './content-detail.page.scss',
 })
@@ -23,19 +37,12 @@ export class ContentDetailPage {
   // HTML is produced from repository-owned Markdown and sanitized by sanitize-html at build time.
   protected readonly safeHtml: SafeHtml = this.sanitizer.bypassSecurityTrustHtml(this.entry.html);
 
-  constructor() {
-    this.seo.setContent(this.entry);
-  }
+  protected readonly breadcrumb: readonly BreadcrumbItem[] = [
+    sections[this.entry.type],
+    { label: this.entry.title },
+  ];
 
-  protected parentRoute(): string {
-    return (
-      {
-        project: '/pt/work',
-        article: '/pt/writing',
-        lab: '/pt/labs',
-        decision: '/pt/engineering',
-        page: '/pt',
-      } as const
-    )[this.entry.type];
+  constructor() {
+    this.seo.setContent(this.entry, this.breadcrumb);
   }
 }

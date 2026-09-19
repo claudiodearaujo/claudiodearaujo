@@ -24,3 +24,9 @@ export interface ContentEntry extends ContentSummary {
   readonly headings: readonly ContentHeading[];
   readonly html: string;
 }
+
+export interface BreadcrumbItem {
+  readonly label: string;
+  /** Omitted for the current page — it renders as plain text, not a link. */
+  readonly route?: string;
+}
