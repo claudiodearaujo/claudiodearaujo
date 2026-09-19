@@ -1,4 +1,5 @@
-import { Component, ElementRef, HostListener, ViewChild, inject, signal } from '@angular/core';
+import { DOCUMENT } from '@angular/common';
+import { Component, ElementRef, inject, signal, viewChild } from '@angular/core';
 import { RouterLink, RouterLinkActive } from '@angular/router';
 import { ThemeService } from '../../core/theme/theme.service';
 
@@ -7,13 +8,15 @@ import { ThemeService } from '../../core/theme/theme.service';
   imports: [RouterLink, RouterLinkActive],
   styleUrl: './site-header.scss',
   templateUrl: './site-header.html',
+  host: { '(document:keydown)': 'handleDocumentKeydown($event)' },
 })
 export class SiteHeader {
   protected readonly theme = inject(ThemeService);
   protected readonly menuOpen = signal(false);
 
-  @ViewChild('menuButton') private menuButton?: ElementRef<HTMLButtonElement>;
-  @ViewChild('mobileNav') private mobileNav?: ElementRef<HTMLElement>;
+  private readonly document = inject(DOCUMENT);
+  private readonly menuButton = viewChild<ElementRef<HTMLButtonElement>>('menuButton');
+  private readonly mobileNav = viewChild<ElementRef<HTMLElement>>('mobileNav');
 
   protected readonly links = [
     ['Work', '/pt/work'],
@@ -35,11 +38,10 @@ export class SiteHeader {
   protected closeMenu(returnFocus = false): void {
     this.menuOpen.set(false);
     if (returnFocus) {
-      queueMicrotask(() => this.menuButton?.nativeElement.focus());
+      queueMicrotask(() => this.menuButton()?.nativeElement.focus());
     }
   }
 
-  @HostListener('document:keydown', ['$event'])
   protected handleDocumentKeydown(event: KeyboardEvent): void {
     if (!this.menuOpen()) return;
 
@@ -56,7 +58,7 @@ export class SiteHeader {
 
     const first = focusable[0];
     const last = focusable[focusable.length - 1];
-    const active = document.activeElement;
+    const active = this.document.activeElement;
 
     if (event.shiftKey && active === first) {
       event.preventDefault();
@@ -72,7 +74,7 @@ export class SiteHeader {
   }
 
   private getMenuFocusableElements(): HTMLElement[] {
-    const element = this.mobileNav?.nativeElement;
+    const element = this.mobileNav()?.nativeElement;
     if (!element) return [];
     return Array.from(element.querySelectorAll<HTMLElement>('a[href], button:not([disabled])'));
   }
