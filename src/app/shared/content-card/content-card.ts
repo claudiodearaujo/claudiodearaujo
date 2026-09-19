@@ -1,6 +1,7 @@
 import { Component, input } from '@angular/core';
 import { RouterLink } from '@angular/router';
 import { ContentSummary } from '../../core/content/content.models';
+import { slugifyTag } from '../../core/content/slug.util';
 import { MetadataRow } from '../metadata-row/metadata-row';
 
 @Component({
@@ -11,4 +12,8 @@ import { MetadataRow } from '../metadata-row/metadata-row';
 })
 export class ContentCard {
   readonly entry = input.required<ContentSummary>();
+
+  protected topicRoute(tag: string): string {
+    return `/pt/topics/${slugifyTag(tag)}`;
+  }
 }

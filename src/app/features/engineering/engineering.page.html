@@ -7,8 +7,13 @@
   >
 </section>
 <section class="page-shell">
-  <p class="eyebrow">Architecture Decisions</p>
-  <h2>Decisões públicas</h2>
+  <div class="section-heading">
+    <div>
+      <p class="eyebrow">Architecture Decisions</p>
+      <h2>Decisões públicas</h2>
+    </div>
+    <a class="text-link" routerLink="/pt/engineering/decisions">Ver todas</a>
+  </div>
   <div class="decision-grid">
     @for (decision of decisions; track decision.route) {
       <app-content-card [entry]="decision" />

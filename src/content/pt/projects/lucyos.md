@@ -6,6 +6,12 @@ type: project
 summary: Plataforma pessoal de inteligência baseada em agentes, memória, ferramentas e MCP.
 status: Active
 tags: [AI, Agents, MCP, Memory]
+category: Agentic AI Platform
+featured: true
+related:
+  - /pt/engineering/decisions/why-mcp-first
+  - /pt/labs/long-term-memory-for-agents
+  - /pt/writing/ai-agents-need-architecture
 ---
 
 # LucyOS

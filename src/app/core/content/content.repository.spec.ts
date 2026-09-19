@@ -27,6 +27,13 @@ describe('ContentRepository', () => {
     }
   });
 
+  it('sorts dated entries newest first', () => {
+    for (const type of ['article', 'lab', 'decision'] as const) {
+      const dates = repository.list(type).map((entry) => entry.publishedAt);
+      expect(dates).toEqual([...dates].sort().reverse());
+    }
+  });
+
   it('keeps publication routes unique', () => {
     const routes = repository.entries.map((entry) => entry.route);
     expect(new Set(routes).size).toBe(routes.length);
@@ -47,8 +54,8 @@ describe('ContentRepository', () => {
     }
   });
 
-  it('only relates entries that share at least one tag', () => {
-    for (const entry of repository.entries) {
+  it('only relates entries that share at least one tag, absent an explicit related list', () => {
+    for (const entry of repository.entries.filter((candidate) => !candidate.relatedRoutes.length)) {
       const tags = new Set(entry.tags.map((tag) => tag.toLowerCase()));
       for (const candidate of repository.related(entry)) {
         expect(
@@ -59,10 +66,66 @@ describe('ContentRepository', () => {
     }
   });
 
+  it('prefers an explicit `related` front-matter list over the tag guess', () => {
+    const entry = repository.entries.find((candidate) => candidate.relatedRoutes.length > 0);
+    expect(entry, 'no fixture entry declares `related`').toBeDefined();
+
+    const related = repository.related(entry!);
+    expect(related.map((candidate) => candidate.route)).toEqual(
+      entry!.relatedRoutes.slice(0, related.length),
+    );
+  });
+
   it('honours the related-content limit', () => {
     const entry = repository.entries[0];
     expect(entry).toBeDefined();
     expect(repository.related(entry!, 1).length).toBeLessThanOrEqual(1);
     expect(repository.related(entry!).length).toBeLessThanOrEqual(3);
+  });
+
+  describe('byTopic', () => {
+    it('finds every entry that declares the given tag, case- and accent-insensitively', () => {
+      const [sample] = repository.entries.filter((entry) => entry.tags.length > 0);
+      expect(sample, 'no fixture entry has any tags').toBeDefined();
+      const tag = sample!.tags[0]!;
+
+      const bySlug = repository.byTopic(tag.toLowerCase().normalize('NFD').replace(/[̀-ͯ]/g, ''));
+      expect(bySlug.some((entry) => entry.route === sample!.route)).toBe(true);
+      expect(bySlug.every((entry) => entry.tags.some((candidate) => candidate === tag))).toBe(true);
+    });
+
+    it('returns nothing for a tag no content declares', () => {
+      expect(repository.byTopic('not-a-real-tag')).toEqual([]);
+    });
+  });
+
+  describe('labelForTopic', () => {
+    it('returns the original spelling for a known tag slug', () => {
+      expect(repository.labelForTopic('mcp')).toBe('MCP');
+    });
+
+    it('returns undefined for a slug nothing declares', () => {
+      expect(repository.labelForTopic('not-a-real-tag')).toBeUndefined();
+    });
+  });
+
+  describe('featured', () => {
+    it('only returns entries marked featured: true', () => {
+      for (const entry of repository.featured()) {
+        expect(entry.featured, `${entry.route} is not featured`).toBe(true);
+      }
+    });
+
+    it('narrows by type when one is given', () => {
+      for (const entry of repository.featured('article')) {
+        expect(entry.type).toBe('article');
+      }
+    });
+
+    it('sorts dated entries newest first', () => {
+      const dated = repository.featured('article').filter((entry) => entry.publishedAt);
+      const dates = dated.map((entry) => entry.publishedAt);
+      expect(dates).toEqual([...dates].sort().reverse());
+    });
   });
 });

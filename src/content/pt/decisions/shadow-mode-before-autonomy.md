@@ -6,6 +6,11 @@ type: decision
 summary: Como construir evidência prospectiva antes de permitir autonomia operacional.
 status: Accepted
 tags: [Autonomy, Evidence, Research]
+category: Governance
+publishedAt: 2026-08-28
+related:
+  - /pt/work/invest-lucy
+  - /pt/writing/evidence-before-autonomy
 ---
 
 # ADR 002 — Why Shadow Mode Before Autonomy?

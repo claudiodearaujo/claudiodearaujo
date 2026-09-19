@@ -1,5 +1,6 @@
 import { Routes } from '@angular/router';
 import { contentRoutes } from './generated/content-routes.generated';
+import { topicRoutes } from './generated/topic-routes.generated';
 
 export const routes: Routes = [
   { path: '', pathMatch: 'full', redirectTo: 'pt' },
@@ -12,6 +13,13 @@ export const routes: Routes = [
     path: 'pt/engineering',
     loadComponent: () =>
       import('./features/engineering/engineering.page').then((m) => m.EngineeringPage),
+  },
+  {
+    path: 'pt/engineering/decisions',
+    loadComponent: () =>
+      import('./features/engineering-decisions/engineering-decisions.page').then(
+        (m) => m.EngineeringDecisionsPage,
+      ),
   },
   {
     path: 'pt/writing',
@@ -40,6 +48,7 @@ export const routes: Routes = [
       import('./features/content-index/content-index.page').then((m) => m.ContentIndexPage),
   },
   ...contentRoutes,
+  ...topicRoutes,
   {
     path: '**',
     loadComponent: () => import('./features/not-found/not-found.page').then((m) => m.NotFoundPage),

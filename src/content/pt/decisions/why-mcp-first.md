@@ -6,6 +6,11 @@ type: decision
 summary: Agentes devem depender de capacidades, não de implementações específicas.
 status: Accepted
 tags: [Architecture, MCP, Agents]
+category: Architecture
+publishedAt: 2026-08-15
+related:
+  - /pt/work/lucyos
+  - /pt/engineering/principles
 ---
 
 # ADR 001 — Why MCP-first?

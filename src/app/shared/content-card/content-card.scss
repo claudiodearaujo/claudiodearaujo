@@ -33,4 +33,14 @@ p {
   border-radius: 999px;
   font-size: var(--text-meta);
   color: var(--color-text-secondary);
+  text-decoration: none;
+  transition:
+    color var(--motion-fast) var(--motion-ease),
+    border-color var(--motion-fast) var(--motion-ease);
+}
+
+.tag:hover,
+.tag:focus-visible {
+  color: var(--color-accent);
+  border-color: var(--color-accent);
 }

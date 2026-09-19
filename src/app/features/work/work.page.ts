@@ -14,23 +14,13 @@ export class WorkPage {
   private readonly seo = inject(SeoService);
 
   protected readonly projects = this.repository.list('project');
-  protected readonly experience = [
-    [
-      'Argos',
-      'Developer Intelligence',
-      'IA aplicada a desenvolvimento, conhecimento e colaboração técnica.',
-    ],
-    [
-      'Enterprise AI',
-      'Knowledge & Retrieval Systems',
-      'RAG, embeddings, busca semântica e integração de conhecimento corporativo.',
-    ],
-    [
-      'Financial Systems',
-      'Enterprise Financial Engineering',
-      'Sistemas críticos, crédito, segurança, observabilidade e integrações em ambiente financeiro.',
-    ],
-  ] as const;
+
+  // Argos, Enterprise AI and Financial Systems were placeholder cards here
+  // with no link and no real source material to write a short case from
+  // (see docs/SITE-EVOLUTION-PLAN.md D12) — UX-WIREFRAMES.md §26 is explicit
+  // that a category without enough content should not appear at all, rather
+  // than show as a "coming soon" filler. Removed until there's real content
+  // to publish for them.
 
   constructor() {
     this.seo.setPage(

@@ -6,6 +6,11 @@ type: project
 summary: Plataforma editorial com IA, colaboração, publicação versionada e geração de áudio.
 status: Active
 tags: [AI, Product, Publishing, Architecture]
+category: AI-Powered Publishing
+featured: true
+related:
+  - /pt/engineering/decisions/human-control-in-architecture
+  - /pt/writing/from-automation-to-autonomy
 ---
 
 # Livrya

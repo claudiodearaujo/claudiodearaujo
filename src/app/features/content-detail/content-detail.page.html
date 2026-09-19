@@ -1,12 +1,16 @@
 <article class="page-shell detail-shell">
   <app-breadcrumb [items]="breadcrumb" />
   <header class="detail-header">
-    <app-metadata-row [type]="entry.type" [status]="entry.status" />
+    <app-metadata-row
+      [type]="entry.type"
+      [status]="entry.status"
+      [readingTime]="entry.readingTime"
+    />
     <h1>{{ entry.title }}</h1>
     <p class="lead">{{ entry.summary }}</p>
     <div class="tag-row">
       @for (tag of entry.tags; track tag) {
-        <span class="tag">{{ tag }}</span>
+        <a class="tag" [routerLink]="topicRoute(tag)">{{ tag }}</a>
       }
     </div>
   </header>

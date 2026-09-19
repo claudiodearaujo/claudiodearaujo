@@ -6,6 +6,12 @@ type: project
 summary: Pesquisa de autonomia financeira orientada por evidência, risco e governança.
 status: Research
 tags: [AI, Autonomy, Finance, Research]
+category: Autonomous Investment Research
+featured: true
+related:
+  - /pt/engineering/decisions/shadow-mode-before-autonomy
+  - /pt/writing/evidence-before-autonomy
+  - /pt/labs/evaluating-agentic-systems
 ---
 
 # Invest Lucy

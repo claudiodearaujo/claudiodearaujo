@@ -6,6 +6,12 @@ type: decision
 summary: Participação humana deve ser um boundary explícito do sistema.
 status: Accepted
 tags: [Governance, Human-in-the-loop, Architecture]
+category: Governance
+publishedAt: 2026-09-10
+related:
+  - /pt/work/lucyos
+  - /pt/work/livrya
+  - /pt/writing/from-automation-to-autonomy
 ---
 
 # ADR 003 — Why Human Control Belongs in the Architecture

@@ -16,5 +16,6 @@ import { StatusBadge } from '../status-badge/status-badge';
 export class MetadataRow {
   readonly type = input.required<string>();
   readonly status = input<string>();
+  readonly readingTime = input<number>();
   readonly justify = input<'start' | 'between'>('start');
 }

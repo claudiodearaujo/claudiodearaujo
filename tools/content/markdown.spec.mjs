@@ -3,6 +3,7 @@ import {
   addHeadingAnchorLinks,
   decodeEntities,
   parseFenceInfo,
+  readingTimeMinutes,
   renderCode,
   routeFor,
   slugify,
@@ -222,6 +223,23 @@ describe('wrapTables', () => {
 
   it('leaves content without a table untouched', () => {
     expect(wrapTables('<p>No table</p>')).toBe('<p>No table</p>');
+  });
+});
+
+describe('readingTimeMinutes', () => {
+  it('rounds up to the nearest whole minute', () => {
+    expect(readingTimeMinutes(Array(199).fill('word').join(' '))).toBe(1);
+    expect(readingTimeMinutes(Array(201).fill('word').join(' '))).toBe(2);
+    expect(readingTimeMinutes(Array(400).fill('word').join(' '))).toBe(2);
+  });
+
+  it('never reports less than one minute, even for a single word', () => {
+    expect(readingTimeMinutes('word')).toBe(1);
+    expect(readingTimeMinutes('')).toBe(1);
+  });
+
+  it('collapses repeated whitespace instead of counting empty words', () => {
+    expect(readingTimeMinutes('word   word\n\nword')).toBe(1);
   });
 });
 

@@ -1,12 +1,17 @@
 <article class="content-card">
-  <app-metadata-row [type]="entry().type" [status]="entry().status" justify="between" />
+  <app-metadata-row
+    [type]="entry().type"
+    [status]="entry().status"
+    [readingTime]="entry().readingTime"
+    justify="between"
+  />
   <h2>
     <a [routerLink]="entry().route">{{ entry().title }}</a>
   </h2>
   <p>{{ entry().summary }}</p>
   <div class="tag-row" aria-label="Tags">
     @for (tag of entry().tags; track tag) {
-      <span class="tag">{{ tag }}</span>
+      <a class="tag" [routerLink]="topicRoute(tag)">{{ tag }}</a>
     }
   </div>
   <a class="text-link" [routerLink]="entry().route">Ler conteúdo</a>

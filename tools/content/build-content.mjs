@@ -6,8 +6,10 @@ import sanitizeHtml from 'sanitize-html';
 import { z } from 'zod';
 import {
   addHeadingAnchorLinks,
+  readingTimeMinutes,
   renderCode,
   routeFor,
+  slugify,
   walk,
   withHeadingAnchors,
   wrapTables,
@@ -26,18 +28,55 @@ const configuredOrigin = isPreview
   : (process.env.SITE_ORIGIN ?? process.env.RENDER_EXTERNAL_URL ?? '');
 const siteOrigin = configuredOrigin.replace(/\/$/, '');
 
-const schema = z.object({
-  title: z.string().min(1),
-  slug: z.string().regex(/^[a-z0-9]+(?:-[a-z0-9]+)*$/),
-  locale: z.enum(['pt', 'en']),
-  type: z.enum(['project', 'article', 'lab', 'decision', 'page']),
-  route: z.string().startsWith('/').optional(),
-  summary: z.string().min(1),
-  status: z.string().optional(),
-  tags: z.array(z.string()).default([]),
-  publishedAt: z.string().optional(),
-  updatedAt: z.string().optional(),
-});
+// Types that are meant to be read once and dated (as opposed to `page`,
+// which is a standing page like About or Contact) must declare when they
+// were published — otherwise index sorting has nothing but the slug to go
+// on, per docs/SITE-EVOLUTION-PLAN.md D8.
+const datedTypes = ['article', 'lab', 'decision'];
+// An unquoted YYYY-MM-DD in YAML is auto-coerced to a JS Date by gray-matter's
+// parser (the classic YAML 1.1 timestamp footgun) — accept that shape too and
+// normalize it back to a plain ISO date string, rather than making every
+// author remember to quote the date.
+const isoDate = z
+  .union([z.string().regex(/^\d{4}-\d{2}-\d{2}$/, 'must be an ISO date, YYYY-MM-DD'), z.date()])
+  .transform((value) => (value instanceof Date ? value.toISOString().slice(0, 10) : value));
+const adrStatuses = ['Proposed', 'Accepted', 'Rejected', 'Superseded', 'Deprecated'];
+
+const schema = z
+  .object({
+    title: z.string().min(1),
+    slug: z.string().regex(/^[a-z0-9]+(?:-[a-z0-9]+)*$/),
+    locale: z.enum(['pt', 'en']),
+    type: z.enum(['project', 'article', 'lab', 'decision', 'page']),
+    route: z.string().startsWith('/').optional(),
+    summary: z.string().min(1),
+    status: z.string().optional(),
+    tags: z.array(z.string()).default([]),
+    category: z.string().optional(),
+    // Promotes this entry into the Home narrative — see ContentRepository.featured().
+    featured: z.boolean().default(false),
+    publishedAt: isoDate.optional(),
+    updatedAt: isoDate.optional(),
+    // Explicit editorial cross-references, checked against the whole
+    // manifest once every file's route is known — see validateRelated below.
+    related: z.array(z.string().startsWith('/')).default([]),
+  })
+  .superRefine((meta, ctx) => {
+    if (datedTypes.includes(meta.type) && !meta.publishedAt) {
+      ctx.addIssue({
+        code: z.ZodIssueCode.custom,
+        path: ['publishedAt'],
+        message: `publishedAt is required for type "${meta.type}"`,
+      });
+    }
+    if (meta.type === 'decision' && meta.status && !adrStatuses.includes(meta.status)) {
+      ctx.addIssue({
+        code: z.ZodIssueCode.custom,
+        path: ['status'],
+        message: `an ADR's status must be one of: ${adrStatuses.join(', ')} (got "${meta.status}")`,
+      });
+    }
+  });
 
 await rm(generatedRoot, { recursive: true, force: true });
 await mkdir(entriesRoot, { recursive: true });
@@ -48,15 +87,43 @@ const manifest = [];
 const routes = [];
 const seenRoutes = new Set();
 
-for (const file of files) {
-  const raw = await readFile(file, 'utf8');
-  const parsed = matter(raw);
-  const meta = schema.parse(parsed.data);
-  const route = routeFor(meta);
-  if (!route) throw new Error(`Content page ${meta.slug} requires a route.`);
+// Pass 1: parse and validate every file's own front matter, and learn every
+// route that will exist — `related` can only be checked once all of them are
+// known, which rules out validating it in the same pass that reads the file.
+// Reading stays parallel (Promise.all); the duplicate-route check below it
+// still runs in file order, since that array resolves in the order given.
+const parsedFiles = await Promise.all(
+  files.map(async (file) => {
+    const raw = await readFile(file, 'utf8');
+    const parsed = matter(raw);
+    const meta = schema.parse(parsed.data);
+    const route = routeFor(meta);
+    if (!route) throw new Error(`Content page ${meta.slug} requires a route.`);
+    return { file, parsed, meta, route };
+  }),
+);
+
+for (const { meta, route } of parsedFiles) {
   if (seenRoutes.has(route)) throw new Error(`Duplicate content route: ${route}`);
   seenRoutes.add(route);
+}
 
+for (const { file, meta, route } of parsedFiles) {
+  for (const relatedRoute of meta.related) {
+    if (relatedRoute === route) {
+      throw new Error(`${meta.slug} lists itself in \`related\`.`);
+    }
+    if (!seenRoutes.has(relatedRoute)) {
+      throw new Error(
+        `${meta.slug} (${path.relative(root, file)}) has a \`related\` entry pointing to ` +
+          `${relatedRoute}, which is not a route any content declares.`,
+      );
+    }
+  }
+}
+
+// Pass 2: render each body now that every reference in it is known-good.
+for (const { file, parsed, meta, route } of parsedFiles) {
   const body = parsed.content.replace(/^\s*#\s+[^\r\n]+(?:\r?\n)+/, '');
   const { html: anchored, headings } = withHeadingAnchors(String(await markdown.parse(body)));
   const withPermalinks = addHeadingAnchorLinks(anchored);
@@ -99,9 +166,12 @@ for (const file of files) {
     parser: { lowerCaseAttributeNames: false },
   });
 
+  const { related, ...restMeta } = meta;
   const summary = {
-    ...meta,
+    ...restMeta,
     route,
+    relatedRoutes: related,
+    readingTime: readingTimeMinutes(parsed.content),
     source: path.relative(root, file).replaceAll('\\', '/'),
   };
   manifest.push(summary);
@@ -140,6 +210,38 @@ await writeFile(
   'utf8',
 );
 
+// One explicit route per tag actually in use — not a `:tag` param route —
+// so every topic page stays prerendered like everything else instead of
+// needing an enumerable-params hook or falling back to client rendering.
+// First-seen spelling of a tag (by manifest order, already route-alphabetical)
+// becomes that topic's display label.
+const topicLabelBySlug = new Map();
+for (const entry of manifest) {
+  for (const tag of entry.tags) {
+    const slug = slugify(tag);
+    if (!topicLabelBySlug.has(slug)) topicLabelBySlug.set(slug, tag);
+  }
+}
+const topics = [...topicLabelBySlug.entries()]
+  .map(([slug, label]) => ({ slug, label }))
+  .sort((a, b) => a.slug.localeCompare(b.slug));
+
+const topicRouteSource = topics
+  .map(
+    ({ slug, label }) => `  {
+    path: 'pt/topics/${slug}',
+    data: { tagSlug: ${JSON.stringify(slug)}, tagLabel: ${JSON.stringify(label)} },
+    loadComponent: () => import('../features/topic/topic.page').then((m) => m.TopicPage),
+  }`,
+  )
+  .join(',\n');
+
+await writeFile(
+  path.join(generatedRoot, 'topic-routes.generated.ts'),
+  `// Generated. Do not edit.\nimport { Routes } from '@angular/router';\nexport const topicRoutes: Routes = [\n${topicRouteSource}\n];\n`,
+  'utf8',
+);
+
 await writeFile(
   path.join(generatedRoot, 'site-config.generated.ts'),
   `// Generated. Do not edit.\nexport const siteOrigin = ${JSON.stringify(siteOrigin)} as const;\nexport const isPreview = ${JSON.stringify(isPreview)} as const;\n`,
@@ -152,9 +254,11 @@ const publicRoutes = Array.from(
     '/pt',
     '/pt/work',
     '/pt/engineering',
+    '/pt/engineering/decisions',
     '/pt/writing',
     '/pt/labs',
     ...manifest.map((entry) => entry.route),
+    ...topics.map(({ slug }) => `/pt/topics/${slug}`),
   ]),
 );
 

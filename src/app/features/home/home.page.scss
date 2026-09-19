@@ -117,6 +117,14 @@
   color: var(--color-text-secondary);
 }
 
+.article-card .article-card__meta {
+  margin-top: var(--space-8);
+  color: var(--color-text-muted);
+  font: 600 var(--text-meta) / 1.4 var(--font-mono);
+  text-transform: uppercase;
+  letter-spacing: var(--tracking-wide);
+}
+
 .principle-card {
   min-height: 9rem;
   padding: var(--card-padding);

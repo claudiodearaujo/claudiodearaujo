@@ -47,6 +47,11 @@ const staticPages = [
     title: 'Labs',
     summary: 'Experimentos e pesquisas em sistemas inteligentes.',
   },
+  {
+    name: 'engineering-decisions',
+    title: 'Architecture Decisions',
+    summary: 'Decisões técnicas públicas, com contexto, alternativas e consequências.',
+  },
 ];
 
 async function buildContentImages() {

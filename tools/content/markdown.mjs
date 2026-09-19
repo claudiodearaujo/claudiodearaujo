@@ -135,6 +135,16 @@ export const wrapTables = (html) =>
       `<div class="table-scroll" role="region" tabindex="0" aria-label="Tabela com rolagem horizontal"><table>${inner}</table></div>`,
   );
 
+// A standard ~200wpm estimate over the raw Markdown body (before rendering),
+// rounded up so a 30-second read still reports "1 min" rather than "0 min".
+// Not stripped of Markdown syntax first: headings, fence markers and link
+// brackets are a small, roughly constant fraction of any real document here
+// and the estimate is a reading-time hint, not a precise metric.
+export const readingTimeMinutes = (text) => {
+  const words = text.trim().split(/\s+/).filter(Boolean).length;
+  return Math.max(1, Math.ceil(words / 200));
+};
+
 export const routeFor = (meta) =>
   meta.route ??
   {

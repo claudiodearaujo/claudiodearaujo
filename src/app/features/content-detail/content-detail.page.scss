@@ -18,6 +18,16 @@
   padding: var(--space-4) 0.45rem;
   border: var(--border-width) solid var(--color-border);
   border-radius: 999px;
+  text-decoration: none;
+  transition:
+    color var(--motion-fast) var(--motion-ease),
+    border-color var(--motion-fast) var(--motion-ease);
+}
+
+.tag:hover,
+.tag:focus-visible {
+  color: var(--color-accent);
+  border-color: var(--color-accent);
 }
 .detail-layout {
   display: grid;

@@ -1,0 +1,7 @@
+<a class="adr-row" [routerLink]="entry().route">
+  <span class="adr-row__id">ADR-{{ id().toString().padStart(3, '0') }}</span>
+  <span class="adr-row__title">{{ entry().title }}</span>
+  @if (entry().status; as status) {
+    <app-status-badge [status]="status" />
+  }
+</a>
