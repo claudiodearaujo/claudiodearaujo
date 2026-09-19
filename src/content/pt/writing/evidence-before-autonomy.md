@@ -5,6 +5,12 @@ locale: pt
 type: article
 summary: Por que sistemas inteligentes deveriam conquistar autoridade através de evidência.
 tags: [AI, Evidence, Autonomy]
+category: AI Engineering
+featured: true
+publishedAt: 2026-09-08
+related:
+  - /pt/work/invest-lucy
+  - /pt/engineering/decisions/shadow-mode-before-autonomy
 ---
 
 # Evidence Before Autonomy

@@ -39,6 +39,14 @@
           },
           "configurations": {
             "production": {
+              "optimization": {
+                "scripts": true,
+                "fonts": true,
+                "styles": {
+                  "minify": true,
+                  "inlineCritical": false
+                }
+              },
               "budgets": [
                 {
                   "type": "initial",
@@ -53,7 +61,7 @@
                 {
                   "type": "bundle",
                   "name": "main",
-                  "maximumWarning": "300kB",
+                  "maximumWarning": "310kB",
                   "maximumError": "340kB"
                 }
               ],

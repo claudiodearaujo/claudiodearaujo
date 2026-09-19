@@ -69,11 +69,11 @@ The HTTP deployment validator checks:
 - `og:url`;
 - robots;
 - sitemap origin;
-- exactly 21 sitemap URLs;
+- a sitemap whose URLs match the content build exactly;
 - favicon;
-- real HTTP 404.
+- real HTTP 404 serving the application's own 404 page.
 
-The live Playwright gate runs the application E2E suite against a remote origin. The Angular-only 404 component test is intentionally excluded because the static CDN owns unknown-route HTTP 404 behavior in production.
+The live Playwright gate runs the full application E2E suite against a remote origin, including the 404 test: publishing `404.html` from the client-side rendering shell lets the static CDN keep answering HTTP 404 while the router resolves the `**` route on the client.
 
 ## Current-origin rehearsal
 

@@ -1,8 +1,30 @@
+import { readFile } from 'node:fs/promises';
+import path from 'node:path';
+
 const targetOrigin = (
   process.env.TARGET_ORIGIN ?? 'https://claudiodearaujo-site.onrender.com'
 ).replace(/\/$/, '');
 const expectedOrigin = (process.env.EXPECTED_ORIGIN ?? targetOrigin).replace(/\/$/, '');
-const expectedSitemapUrls = Number(process.env.EXPECTED_SITEMAP_URLS ?? '21');
+
+// The expected sitemap is derived from the content build rather than hardcoded,
+// so publishing a new entry cannot fail this gate on a stale count.
+const publicRoutesFile = path.join(
+  process.cwd(),
+  'src',
+  'app',
+  'generated',
+  'public-routes.generated.json',
+);
+let expectedRoutes;
+try {
+  expectedRoutes = JSON.parse(await readFile(publicRoutesFile, 'utf8'));
+} catch {
+  console.error(
+    `Could not read ${publicRoutesFile}. Run \`npm run content:build\` before validating a deployment.`,
+  );
+  process.exit(1);
+}
+const expectedSitemapUrls = new Set(expectedRoutes.map((route) => `${expectedOrigin}${route}`));
 
 const failures = [];
 
@@ -10,8 +32,19 @@ function assert(condition, message) {
   if (!condition) failures.push(message);
 }
 
+// A network failure is a validation failure, not a stack trace: the origin may
+// simply not be deployed yet.
+async function request(url, init) {
+  try {
+    return await fetch(url, init);
+  } catch (error) {
+    console.error(`\nDeployment validation failed:\n- could not reach ${url}: ${error.message}`);
+    process.exit(1);
+  }
+}
+
 async function fetchText(path, init) {
-  const response = await fetch(`${targetOrigin}${path}`, init);
+  const response = await request(`${targetOrigin}${path}`, init);
   const text = await response.text();
   return { response, text };
 }
@@ -45,9 +78,16 @@ assert(
   header(home.response, 'permissions-policy').includes('camera=()'),
   'Permissions-Policy missing camera restriction',
 );
+const csp = header(home.response, 'content-security-policy');
+assert(csp.includes("default-src 'self'"), 'Content-Security-Policy missing');
+const scriptSrc = csp.match(/script-src([^;]*)/)?.[1] ?? '';
 assert(
-  header(home.response, 'content-security-policy').includes("default-src 'self'"),
-  'Content-Security-Policy missing',
+  !scriptSrc.includes("'unsafe-inline'"),
+  "script-src must not allow 'unsafe-inline'; inline scripts are allow-listed by hash",
+);
+assert(
+  (scriptSrc.match(/'sha256-/g) ?? []).length > 0,
+  'script-src must allow-list the inline scripts by hash',
 );
 assert(
   home.text.includes(`rel="canonical" href="${expectedOrigin}/pt"`),
@@ -84,30 +124,44 @@ assert(
 const sitemap = await fetchText('/sitemap.xml');
 assert(sitemap.response.status === 200, `sitemap.xml expected 200, got ${sitemap.response.status}`);
 const locations = [...sitemap.text.matchAll(/<loc>(.*?)<\/loc>/g)].map((match) => match[1]);
+const published = new Set(locations);
+const missingFromSitemap = [...expectedSitemapUrls].filter((url) => !published.has(url));
+const unexpectedInSitemap = [...published].filter((url) => !expectedSitemapUrls.has(url));
 assert(
-  locations.length === expectedSitemapUrls,
-  `sitemap expected ${expectedSitemapUrls} URLs, got ${locations.length}`,
+  missingFromSitemap.length === 0,
+  `sitemap is missing ${missingFromSitemap.length} URL(s): ${missingFromSitemap.join(', ')}`,
 );
 assert(
-  locations.every((url) => url.startsWith(`${expectedOrigin}/`)),
-  'sitemap contains URL outside expected origin',
+  unexpectedInSitemap.length === 0,
+  `sitemap has ${unexpectedInSitemap.length} unexpected URL(s): ${unexpectedInSitemap.join(', ')}`,
+);
+assert(
+  locations.length === published.size,
+  `sitemap contains ${locations.length - published.size} duplicate URL(s)`,
 );
 
-const favicon = await fetch(`${targetOrigin}/favicon.svg`);
+const favicon = await request(`${targetOrigin}/favicon.svg`);
 assert(favicon.status === 200, `favicon expected 200, got ${favicon.status}`);
 assert(
   (favicon.headers.get('content-type') ?? '').includes('image/svg+xml'),
   'favicon content-type must be image/svg+xml',
 );
 
-const missing = await fetch(`${targetOrigin}/launch-readiness-route-that-does-not-exist`, {
+const missing = await fetchText('/launch-readiness-route-that-does-not-exist', {
   redirect: 'manual',
 });
-assert(missing.status === 404, `unknown route expected HTTP 404, got ${missing.status}`);
+assert(
+  missing.response.status === 404,
+  `unknown route expected HTTP 404, got ${missing.response.status}`,
+);
+assert(
+  missing.text.includes('<app-root'),
+  'unknown route must serve the application shell so the 404 page renders',
+);
 
 if (process.env.WWW_ORIGIN) {
   const wwwOrigin = process.env.WWW_ORIGIN.replace(/\/$/, '');
-  const response = await fetch(`${wwwOrigin}/pt`, { redirect: 'manual' });
+  const response = await request(`${wwwOrigin}/pt`, { redirect: 'manual' });
   assert(
     [301, 302, 307, 308].includes(response.status),
     `www redirect expected 3xx, got ${response.status}`,
@@ -126,7 +180,8 @@ if (failures.length) {
 
 console.log('\nDeployment validation passed.');
 console.log('- security headers: ok');
+console.log('- CSP without unsafe-inline scripts: ok');
 console.log('- canonical / og:url: ok');
-console.log(`- robots / sitemap: ${locations.length} URLs`);
+console.log(`- robots / sitemap: ${locations.length} URLs matching the content build`);
 console.log('- favicon: ok');
-console.log('- HTTP 404: ok');
+console.log('- HTTP 404 with the app 404 page: ok');

@@ -6,6 +6,11 @@ type: lab
 summary: Como construir memória útil sem transformar contexto acumulado em ruído.
 status: Active Research
 tags: [AI, Agents, Memory]
+category: Memory
+publishedAt: 2026-08-20
+related:
+  - /pt/work/lucyos
+  - /pt/writing/ai-agents-need-architecture
 ---
 
 # Long-Term Memory for Agents

@@ -1,18 +1,22 @@
 <article class="content-card">
-  <div class="content-card__meta">
-    <span>{{ entry().type }}</span>
-    @if (entry().status) {
-      <span class="status-pill" [class]="statusModifier()">{{ entry().status }}</span>
-    }
-  </div>
+  <app-metadata-row
+    [type]="entry().type"
+    [status]="entry().status"
+    [readingTime]="entry().readingTime"
+    justify="between"
+  />
   <h2>
     <a [routerLink]="entry().route">{{ entry().title }}</a>
   </h2>
   <p>{{ entry().summary }}</p>
-  <div class="tag-row" aria-label="Tags">
+  <div class="tag-row" [attr.aria-label]="text.tags">
     @for (tag of entry().tags; track tag) {
-      <span class="tag">{{ tag }}</span>
+      @if (hasTopic(tag)) {
+        <a class="tag" [routerLink]="topicRoute(tag)">{{ tag }}</a>
+      } @else {
+        <span class="tag">{{ tag }}</span>
+      }
     }
   </div>
-  <a class="text-link" [routerLink]="entry().route">Ler conteúdo</a>
+  <a class="text-link" [routerLink]="entry().route">{{ text.readEntry }}</a>
 </article>

@@ -3,7 +3,6 @@ title: Now
 slug: now
 locale: pt
 type: page
-route: /pt/now
 summary: Projetos, pesquisas e temas que concentram minha atenção agora.
 status: Current
 tags: [Now, Research, Building]

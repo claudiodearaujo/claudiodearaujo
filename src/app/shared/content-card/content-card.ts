@@ -1,21 +1,29 @@
-import { Component, computed, input } from '@angular/core';
+import { Component, inject, input } from '@angular/core';
 import { RouterLink } from '@angular/router';
 import { ContentSummary } from '../../core/content/content.models';
+import { ContentRepository } from '../../core/content/content.repository';
+import { localizedPath } from '../../core/i18n/locale';
+import { stringsFor } from '../../core/i18n/ui-strings';
+import { slugifyTag } from '../../core/content/slug.util';
+import { MetadataRow } from '../metadata-row/metadata-row';
 
 @Component({
   selector: 'app-content-card',
-  imports: [RouterLink],
+  imports: [RouterLink, MetadataRow],
   templateUrl: './content-card.html',
   styleUrl: './content-card.scss',
 })
 export class ContentCard {
+  private readonly repository = inject(ContentRepository);
+
+  protected readonly text = stringsFor();
   readonly entry = input.required<ContentSummary>();
 
-  // Statuses come from free-form frontmatter ("Active Research"), so they are slugified
-  // rather than lowercased — a raw space would split into two classes and match the
-  // wrong modifier.
-  protected readonly statusModifier = computed(() => {
-    const status = this.entry().status;
-    return status ? `status-pill--${status.toLowerCase().replace(/[^a-z0-9]+/g, '-')}` : '';
-  });
+  protected hasTopic(tag: string): boolean {
+    return this.repository.hasTopic(tag);
+  }
+
+  protected topicRoute(tag: string): string {
+    return localizedPath(`topics/${slugifyTag(tag)}`, this.entry().locale);
+  }
 }

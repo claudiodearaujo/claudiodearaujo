@@ -1,0 +1,12 @@
+<section class="page-shell index-hero">
+  <p class="eyebrow">Engineering</p>
+  <h1>Architecture Decisions</h1>
+  <p class="lead">
+    Decisões técnicas públicas, com contexto, alternativas e consequências — inspiradas em ADRs.
+  </p>
+</section>
+<section class="page-shell decisions-list" aria-label="Architecture Decisions">
+  @for (decision of decisions; track decision.route) {
+    <app-adr-row [entry]="decision" [id]="idFor(decision)" />
+  }
+</section>

@@ -3,7 +3,6 @@ title: Let's talk
 slug: contact
 locale: pt
 type: page
-route: /pt/contact
 summary: Conversas sobre engenharia, IA, arquitetura, sistemas inteligentes e liderança técnica.
 tags: [Contact, Engineering, AI]
 ---

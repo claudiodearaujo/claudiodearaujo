@@ -51,4 +51,12 @@ Thumbs.db
 /src/app/generated/
 
 # Environment-generated SEO
+/public/robots.txt
 /public/sitemap.xml
+/public/rss.xml
+
+# Self-hosted fonts, reproduced from node_modules by tools/launch/copy-fonts.mjs
+/public/fonts/
+
+# Open Graph images, rendered at build time by tools/og/build.mjs
+/public/og/

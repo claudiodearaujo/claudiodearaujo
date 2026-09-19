@@ -19,7 +19,17 @@ export class ThemeService {
     if (!isPlatformBrowser(this.platformId)) return;
     const next: Theme = this.theme() === 'dark' ? 'light' : 'dark';
     this.document.documentElement.dataset['theme'] = next;
-    localStorage.setItem('theme', next);
+    this.persist(next);
     this.theme.set(next);
+  }
+
+  // Storage throws in private mode and when site data is blocked; the choice is
+  // still applied to the document, it just does not survive a reload.
+  private persist(theme: Theme): void {
+    try {
+      localStorage.setItem('theme', theme);
+    } catch {
+      /* the data-theme attribute already carries the choice for this page */
+    }
   }
 }

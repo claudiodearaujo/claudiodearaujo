@@ -6,6 +6,12 @@ type: decision
 summary: Participação humana deve ser um boundary explícito do sistema.
 status: Accepted
 tags: [Governance, Human-in-the-loop, Architecture]
+category: Governance
+publishedAt: 2026-09-10
+related:
+  - /pt/work/lucyos
+  - /pt/work/livrya
+  - /pt/writing/from-automation-to-autonomy
 ---
 
 # ADR 003 — Why Human Control Belongs in the Architecture
@@ -36,7 +42,7 @@ Human control será concern arquitetural explícito.
 
 Toda capacidade relevante deverá possuir nível de autoridade definido.
 
-```text
+```text title="Authority Levels"
 READ
  ↓
 SUGGEST
@@ -75,7 +81,7 @@ Human control pode incluir approval, rejection, edit before execution, kill swit
 
 ## Human Control Before Execution
 
-```text
+```text title="Human Control Before Execution"
 AI Decision
     ↓
 Prepared Action
@@ -93,7 +99,7 @@ Algumas operações podem ser autorizadas dentro de policies, mantendo audit tra
 
 Exemplo:
 
-```text
+```text title="Policy-Controlled Autonomy"
 Allowed:
 read repository
 create branch
@@ -106,7 +112,7 @@ deploy production
 
 ## Fail-Safe Defaults
 
-```text
+```text title="Fail-Safe Defaults"
 Unknown permission
       ↓
 Do not execute
@@ -118,7 +124,7 @@ Nunca assumir autorização em estado desconhecido.
 
 Kill switch deve existir na camada que possui autoridade real, não apenas na interface.
 
-```text
+```text title="Kill Switch"
 Kill Switch ON
 
 New Actions → blocked
@@ -135,7 +141,7 @@ Controle humano depende de visibilidade. É necessário explicar o que foi feito
 
 Mesmo sem expor raciocínio interno privado do modelo, o sistema pode explicar comportamento operacional:
 
-```text
+```text title="Explainability"
 Input
  ↓
 Agent Decision
@@ -169,7 +175,7 @@ Human review deve ser proporcional ao risco.
 
 ## LucyOS Application
 
-```text
+```text title="LucyOS Application"
 Observe
  ↓
 Suggest
@@ -193,7 +199,7 @@ IA pode sugerir, revisar e gerar artefatos, mas publicação permanece ato edito
 
 ## Progressive Autonomy
 
-```text
+```text title="Progressive Autonomy"
 No Autonomy
    ↓
 Read Autonomy

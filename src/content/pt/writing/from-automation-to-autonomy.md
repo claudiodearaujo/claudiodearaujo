@@ -5,6 +5,12 @@ locale: pt
 type: article
 summary: Automatizar uma tarefa e delegar uma decisão são problemas diferentes.
 tags: [AI, Autonomy, Governance]
+category: Agentic Systems
+featured: true
+publishedAt: 2026-09-01
+related:
+  - /pt/engineering/decisions/human-control-in-architecture
+  - /pt/work/invest-lucy
 ---
 
 # From Automation to Autonomy

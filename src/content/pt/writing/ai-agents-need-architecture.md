@@ -5,6 +5,12 @@ locale: pt
 type: article
 summary: Por que agentes confiáveis exigem muito mais do que bons prompts.
 tags: [AI, Agents, Architecture]
+category: AI Engineering
+featured: true
+publishedAt: 2026-08-25
+related:
+  - /pt/work/lucyos
+  - /pt/engineering/decisions/why-mcp-first
 ---
 
 # AI Agents Need Architecture, Not Just Prompts

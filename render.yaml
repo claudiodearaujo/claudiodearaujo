@@ -12,6 +12,17 @@ services:
     envVars:
       - key: SKIP_INSTALL_DEPS
         value: 'true'
+    # `/` is not a page — it exists only to send the reader to the canonical
+    # `/pt`. Doing that at the edge means a crawler or a link preview gets a
+    # 301 instead of an app shell that redirects once JavaScript runs (D20).
+    # The client-side `redirectTo` in app.routes.ts is deliberately kept as a
+    # fallback: it costs one prerendered file that this rule stops anyone from
+    # reaching, and without it a host that ignored this rule would serve the
+    # 404 page at the site root.
+    routes:
+      - type: redirect
+        source: /
+        destination: /pt
     headers:
       - path: /*
         name: X-Frame-Options
@@ -27,4 +38,4 @@ services:
         value: camera=(), microphone=(), geolocation=(), payment=()
       - path: /*
         name: Content-Security-Policy
-        value: "default-src 'self'; script-src 'self' 'unsafe-inline'; style-src 'self' 'unsafe-inline'; img-src 'self' data:; font-src 'self'; connect-src 'self'; object-src 'none'; base-uri 'self'; frame-ancestors 'none'; form-action 'self'"
+        value: "default-src 'self'; script-src 'self' 'sha256-Q6VozweQfbGqyCllZWLRqY/r2Cg4Y8Aag0g2HJENAoo=' 'sha256-VM2mZqyEQZoLzoTrp5EigFvzQ0+f1wSeBuoOn95WHCg=' 'sha256-jS9F0fZE6iYB/2op+WCudFkCeGoozd3p/gD7ba3TGRc='; style-src 'self' 'unsafe-inline'; img-src 'self' data:; font-src 'self'; connect-src 'self'; object-src 'none'; base-uri 'self'; frame-ancestors 'none'; form-action 'self'"

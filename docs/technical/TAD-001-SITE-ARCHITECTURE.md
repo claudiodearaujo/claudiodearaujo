@@ -751,12 +751,14 @@ Referências:
 
 ## 32. CSP
 
-A política CSP definitiva só será congelada após inspecionar o output real do build e os recursos externos utilizados.
+A política está congelada em `render.yaml` a partir do output real do build. `script-src` não usa `'unsafe-inline'`: cada script inline do HTML publicado (o boot de tema do `index.html` e o bootstrap de hidratação do Angular) entra na política por hash SHA-256. O `postbuild` roda `tools/launch/csp-hashes.mjs`, que recalcula os hashes do `dist` e falha o build quando eles divergem de `tools/launch/csp-script-hashes.json` ou do `render.yaml` — um upgrade do Angular que mude esses scripts quebra o build local, não a produção. Depois de uma mudança intencional, rode `npm run csp:update` e copie os hashes para o `render.yaml`.
+
+O inlining de critical CSS fica desligado em produção porque o Beasties emite `onload="this.media='all'"`, um handler inline que nenhum hash cobre; com a folha de estilos em 3,85 kB a otimização não compensa perder o `script-src` restrito.
 
 Objetivo:
 
 ```text
-script-src restrito
+script-src 'self' + hashes, sem 'unsafe-inline'
 frame-ancestors 'none'
 object-src 'none'
 base-uri 'self'
