@@ -74,6 +74,22 @@
   cursor: pointer;
   transition: color var(--motion-fast) var(--motion-ease);
 }
+// Which glyph shows is decided by the `data-theme` attribute the inline boot
+// script in index.html sets before first paint — never by Angular — so the
+// control looks right immediately and has nothing to reconcile at hydration.
+// Dark is the default when no attribute is set yet.
+.theme-toggle__glyph--light {
+  display: none;
+}
+:host-context(html[data-theme='light']) {
+  .theme-toggle__glyph--dark {
+    display: none;
+  }
+  .theme-toggle__glyph--light {
+    display: inline;
+  }
+}
+
 .menu-toggle,
 .mobile-nav {
   display: none;

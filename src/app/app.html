@@ -3,4 +3,12 @@
 <main id="main-content" tabindex="-1">
   <router-outlet />
 </main>
+<!-- Deliberately not deferred. `hydrate never` here measured at 15 nodes and
+     one component saved, and cost the footer's links their router navigation
+     (an unhydrated <a href> is a full document load) plus a late paint on
+     client-rendered routes. The savings are in the content pages instead. -->
 <app-site-footer />
+<!-- Empty until a client-side navigation lands, so nothing is announced on
+     first load. It has to exist in the DOM from the start: a live region
+     inserted at the same time as its text is not announced. -->
+<p class="visually-hidden" role="status" aria-live="polite">{{ routeAnnouncement() }}</p>

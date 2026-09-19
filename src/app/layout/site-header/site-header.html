@@ -13,13 +13,19 @@
     </nav>
 
     <div class="header-actions">
+      <!-- Both glyphs are always rendered and CSS shows one, so this markup is
+           identical on the server and in the browser whatever the reader's
+           theme is. Rendering the active glyph from a signal made the
+           prerendered HTML disagree with the theme the inline boot script had
+           already applied, until hydration reconciled it (D18). -->
       <button
         class="theme-toggle"
         type="button"
         (click)="theme.toggle()"
-        [attr.aria-label]="theme.theme() === 'dark' ? 'Ativar tema claro' : 'Ativar tema escuro'"
+        aria-label="Alternar tema"
       >
-        {{ theme.theme() === 'dark' ? '☀' : '◐' }}
+        <span class="theme-toggle__glyph theme-toggle__glyph--dark" aria-hidden="true">☀</span>
+        <span class="theme-toggle__glyph theme-toggle__glyph--light" aria-hidden="true">◐</span>
       </button>
       <button
         #menuButton

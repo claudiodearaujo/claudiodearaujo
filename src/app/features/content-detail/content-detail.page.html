@@ -19,9 +19,21 @@
     </div>
   </header>
   <div class="detail-layout">
-    <div class="prose" [innerHTML]="safeHtml"></div>
+    <!-- The body of an article is the largest subtree on the page and the
+         most inert: sanitized HTML with no Angular inside it. `hydrate never`
+         leaves it as the DOM the server sent. Its links still work — the
+         fragment handler that serves them lives on the app root, which is
+         hydrated, and events bubble out of a never-hydrated block normally. -->
+    @defer (hydrate never) {
+      <div class="prose" [innerHTML]="safeHtml"></div>
+    }
     @if (entry.headings.length) {
-      <app-table-of-contents [headings]="entry.headings" />
+      <!-- Its links are plain fragment anchors that work unhydrated; what
+           hydration buys is the scroll-spy highlight, which is only worth
+           anything once the reader has the list on screen. -->
+      @defer (hydrate on viewport) {
+        <app-table-of-contents [headings]="entry.headings" />
+      }
     }
   </div>
 </article>
@@ -30,10 +42,12 @@
   <section class="page-shell related">
     <p class="eyebrow">Related</p>
     <h2>Continue explorando</h2>
-    <div class="related-grid">
-      @for (item of related; track item.route) {
-        <app-content-card [entry]="item" />
-      }
-    </div>
+    @defer (hydrate on viewport) {
+      <div class="related-grid">
+        @for (item of related; track item.route) {
+          <app-content-card [entry]="item" />
+        }
+      </div>
+    }
   </section>
 }

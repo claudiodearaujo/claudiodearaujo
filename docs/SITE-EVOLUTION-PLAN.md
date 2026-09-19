@@ -373,6 +373,93 @@ Diagramas SVG            @defer (hydrate never)
 
 **DoD:** benchmark antes/depois registrado neste documento; nenhum aviso de hydration mismatch no console em nenhuma das 21 rotas (asserção E2E).
 
+#### Resultado medido
+
+**Trabalho de hydration** — a contagem que o próprio Angular reporta, de nós
+e componentes efetivamente hidratados. É a métrica que responde D17 com
+precisão. Medida contra `ng serve` (que renderiza no servidor), com
+`--no-hmr`: em modo HMR o Angular avisa via `NG0751` que carrega as
+dependências de `@defer` avidamente, e as contagens oscilam o bastante para
+invalidar qualquer comparação.
+
+| Rota                                      | Antes (comp/nós) | Depois (comp/nós) | Nós    |
+| ----------------------------------------- | ---------------- | ----------------- | ------ |
+| `/pt/engineering/principles`              | 14 / 442         | 6 / 150           | −66,1% |
+| `/pt/work/invest-lucy`                    | 16 / 458         | 7 / 161           | −64,8% |
+| `/pt/writing/ai-agents-need-architecture` | 13 / 296         | 6 / 150           | −49,3% |
+| `/pt`                                     | 4 / 427          | 4 / 432           | +1,2%  |
+| `/pt/work`                                | 13 / 236         | 13 / 241          | +2,1%  |
+| `/pt/topics/mcp`                          | 10 / 176         | 10 / 181          | +2,8%  |
+| `/pt/engineering/decisions`               | 10 / 116         | 10 / 121          | +4,3%  |
+
+Nas páginas de conteúdo — as únicas com prosa longa, que é o que D17
+descreve — os componentes hidratados caem para menos da metade e os nós
+caem entre 49% e 66%. As demais rotas sobem exatamente 5 nós: é a região
+`aria-live` do anúncio de rota (D19), que não existia antes. `skipped=0` em
+todas as rotas, nos dois temas.
+
+**Tempo e bundle** em `/pt/work/invest-lucy`, no build prerenderizado servido
+estaticamente, Chromium com CPU throttling 4x (sem throttle a máquina de
+desenvolvimento esconde o custo por completo — não há uma única long task).
+Mediana de 7 execuções:
+
+| Métrica            | Antes     | Depois    | Δ      |
+| ------------------ | --------- | --------- | ------ |
+| Layout             | 116,63 ms | 94,67 ms  | −18,8% |
+| Script (4x CPU)    | 173,06 ms | 162,61 ms | −6,0%  |
+| Long tasks         | 411 ms    | 396 ms    | −3,6%  |
+| JS inicial (bruto) | 290,65 kB | 305,34 kB | +5,1%  |
+
+**O resultado mais útil desta fase é a distância entre as duas tabelas.**
+Cortar 65% dos nós hidratados comprou 6% de tempo de script. A meta de
+aceite (−60% no tempo de hydration) foi atingida na contagem de trabalho e
+não no relógio, porque o relógio mede outra coisa: o custo dominante é o
+bootstrap do framework e do router, não a hydration por nó. A evidência
+disso já estava no baseline e passou despercebida na redação do plano —
+antes da mudança, `/pt/work/invest-lucy` (458 nós) e qualquer rota de índice
+custavam praticamente o mesmo, ~170 ms de script e ~410 ms de long task.
+
+A segunda meta (JS inicial abaixo de 200 kB brutos) **não foi atingida e o
+número andou para trás**: a runtime de incremental hydration mais a
+maquinaria de `@defer` custam ~14,7 kB, e não há conteúdo diferível que
+compense isso. Chegar a 200 kB exigiria remover código de framework — abrir
+mão do router, ou emitir as páginas sem Angular no cliente — que é outra
+decisão de arquitetura, não uma fronteira de hydration.
+
+Esse crescimento estourou o orçamento de bundle do `main` em `angular.json`
+(aviso em 300 kB). O aviso foi movido para 310 kB — não para esconder o
+custo, que está medido acima, mas para o orçamento voltar a sinalizar
+crescimento **não intencional**. O limite de erro continua em 340 kB, então
+a margem real de guarda não mudou. Um aviso permanente em todo build treina
+quem o lê a ignorá-lo, que é o modo de falha que orçamento existe para
+evitar.
+
+#### Desvios deliberados do plano
+
+- **O header continua hidratando.** O plano previa
+  `@defer (hydrate on interaction)` nele. Isso quebraria o
+  `routerLinkActive`: numa navegação SPA disparada de qualquer outro ponto
+  da página (um card de conteúdo, por exemplo), o header não teria hidratado
+  e o item de menu ativo ficaria congelado na página anterior. O header é
+  também a única ilha genuinamente interativa do site. Mantido hidratado, com
+  asserção E2E fixando o comportamento do destaque de navegação.
+- **O footer continua hidratando.** Medido: `hydrate never` nele rendia 15
+  nós e um componente, e custava aos seus links a navegação por router (um
+  `<a href>` não hidratado faz carga completa de documento) mais uma pintura
+  atrasada nas rotas renderizadas no cliente. Mau negócio, revertido.
+- **`PrerenderFallback.None` não foi aplicado.** Os tipos do `@angular/ssr`
+  só aceitam `fallback` em rota de prerender que declare `getPrerenderParams`,
+  e esta aplicação não tem mais rota parametrizada — as rotas de conteúdo e
+  de tópico são geradas explicitamente. O item não se aplica a esta
+  configuração; a razão está registrada em `app.routes.server.ts`.
+- **O `redirectTo: 'pt'` do cliente foi mantido** junto com o redirect de
+  borda. O redirect de borda resolve o D20 (o crawler recebe 301 em vez do
+  shell), mas o comportamento do Render não é verificável a partir do
+  ambiente de desenvolvimento; sem a rota cliente, um host que ignorasse a
+  regra serviria a página 404 na raiz do site.
+- **`inlineCritical` não foi reavaliado.** Item 7, sem impacto nos defeitos
+  D17–D20; fica para quando houver medição de CSS crítico que o justifique.
+
 ### E6 — SEO e distribuição
 
 **Problema:** seção 3.4.
