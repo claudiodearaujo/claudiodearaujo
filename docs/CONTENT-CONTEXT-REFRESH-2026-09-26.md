@@ -137,3 +137,19 @@ After adding Therapist Platform and Minhas Marcas: 19 entries.
 The site should show not only what was built, but how the underlying thinking evolved.
 
 > Projects are evidence of a method, not just a list of technologies.
+
+## Editorial round 2
+
+A second pass over imported/recent conversation history promoted two additional public artifacts without expanding the main case-study set.
+
+### Legacy Profit Research — Lab
+
+Added as research rather than a product case. The public angle is scientific reproduction: immutable historical archive, strategy genealogies, data-source divergence, pre-registration, negative evidence and versioned artifacts. It is explicitly separated from operational authority in Invest Lucy.
+
+### A Segunda Era do Angular — Writing
+
+Added as technical writing rather than a project case. The article captures the architectural thesis behind the documentary concept: Angular evolving from implicit coordination toward increasingly explicit primitives across Ivy, Standalone, Signals and Zoneless, with compatibility framed as a decision about who absorbs the cost of change.
+
+### Argos
+
+No new case was added. Its strongest ideas are already represented in About and Engineering Principles through externalized context, memory, plan-before-execute and Context Before Direction. This avoids duplicating the portfolio surface.

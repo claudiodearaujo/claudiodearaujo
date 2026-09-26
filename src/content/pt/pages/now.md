@@ -128,6 +128,10 @@ Como memória externa, registros estruturados e IA podem ampliar capacidade de p
 
 Como transformar visão de produto em hipóteses testáveis antes de transformar hipótese em roadmap, pricing ou narrativa de mercado.
 
+### Scientific Reproduction
+
+Como reconstruir experimentos históricos preservando proveniência, fonte de dados, pré-registro e resultados negativos antes de transformar memória em nova hipótese.
+
 ## Writing
 
 Temas que continuam ativos:
@@ -139,6 +143,7 @@ Temas que continuam ativos:
 - Evaluating Agentic Systems
 - Productization as Architecture
 - Thinking in Patterns, Building in Evidence
+- A Segunda Era do Angular — arquitetura, compatibilidade e evolução de Ivy a Standalone, Signals e Zoneless
 
 ## Learning
 
