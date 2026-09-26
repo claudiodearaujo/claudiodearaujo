@@ -123,7 +123,7 @@ Autonomous Systems
 
 ### Selected Work
 
-LucyOS, Invest Lucy, Livrya e Enterprise AI como destaques principais.
+LucyOS, Invest Lucy, Livrya, Therapist Platform e Minhas Marcas como destaques principais.
 
 ### How I Engineer
 
@@ -432,7 +432,7 @@ Lab → Article
 - Home completa;
 - About completa;
 - Work com seis resumos;
-- Cases completos LucyOS, Invest Lucy e Livrya;
+- Cases completos LucyOS, Invest Lucy, Livrya, Therapist Platform e Minhas Marcas;
 - Engineering Principles;
 - pelo menos três ADRs;
 - Labs index + dois Labs;
@@ -543,7 +543,7 @@ Testimonials, certifications wall, skill progress bars, timeline detalhada de em
 
 ## 39. Ordem de produção
 
-Homepage → About → LucyOS → Invest Lucy → Livrya → Engineering Principles → ADRs → artigos.
+Homepage → About → LucyOS → Invest Lucy → Livrya → Therapist Platform → Minhas Marcas → Engineering Principles → ADRs → artigos.
 
 ## 40. Por que conteúdo antes de design
 
