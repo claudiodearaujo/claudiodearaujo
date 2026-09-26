@@ -13,6 +13,14 @@ Este diretório contém a fundação de produto, conteúdo, posicionamento, arqu
 - [Site Evolution Plan v2](./SITE-EVOLUTION-PLAN.md)
 - [Content Context Refresh — 2026-09-26](./CONTENT-CONTEXT-REFRESH-2026-09-26.md)
 
+## Post-v1 — Growth & Authority
+
+- [Programa Post-v1 — Growth & Authority](./post-v1/PRD-POST-V1-GROWTH-AUTHORITY.md)
+- [GA-01 — v1.0 Release & Closure](./post-v1/PRD-GA-01-V1-RELEASE.md)
+- [GA-02 — Search Indexation & Discoverability](./post-v1/PRD-GA-02-SEARCH-INDEXATION.md)
+- [GA-03 — English Experience /en](./post-v1/PRD-GA-03-ENGLISH-EXPERIENCE.md)
+- [Future Backlog](./post-v1/FUTURE-BACKLOG.md)
+
 ## Arquitetura técnica
 
 - [TAD-001 — Arquitetura Técnica do Site](./technical/TAD-001-SITE-ARCHITECTURE.md)
