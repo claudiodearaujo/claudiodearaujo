@@ -23,7 +23,9 @@ A fundação editorial, a arquitetura técnica v1, a especificação de UX/wiref
 
 - LucyOS — ✅ Concluído — Personal Agentic AI Platform
 - Invest Lucy — ✅ Concluído — Evidence-Driven Autonomous Investment Research
-- Livrya — ✅ Concluído — AI-Powered Publishing Platform
+- Livrya — ✅ Atualizado — Intelligent Publishing Platform
+- Therapist Platform — ✅ Novo case — SaaS Product Engineering
+- Minhas Marcas — ✅ Novo case — Personal Life Intelligence
 
 ## Engineering Principles
 
@@ -52,7 +54,7 @@ A fundação editorial, a arquitetura técnica v1, a especificação de UX/wiref
 Home                    ✅
 About                   ✅
 Work landing            ✅
-3 Case Studies          ✅
+5 Case Studies          ✅
 Engineering Principles  ✅
 3 ADRs                   ✅
 Labs landing             ✅
@@ -67,7 +69,7 @@ Contact                  ✅
 
 ### `/work`
 
-Apresentará LucyOS, Invest Lucy, Livrya, Argos, Enterprise AI e Financial Systems. Os três primeiros já possuem case completo; os demais podem iniciar como cards resumidos.
+Apresenta LucyOS, Invest Lucy, Livrya, Therapist Platform e Minhas Marcas como cases completos. Novos cases só devem entrar quando houver evidência pública suficiente para um deep dive.
 
 ### `/labs`
 

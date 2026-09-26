@@ -3,10 +3,10 @@ title: Livrya
 slug: livrya
 locale: pt
 type: project
-summary: Plataforma editorial com IA, colaboração, publicação versionada e geração de áudio.
+summary: Plataforma editorial inteligente da criação à publicação, conectando texto, voz, leitores e IA como capability transversal.
 status: Active
 tags: [AI, Product, Publishing, Architecture]
-category: AI-Powered Publishing
+category: Intelligent Publishing Platform
 featured: true
 related:
   - /pt/engineering/decisions/human-control-in-architecture
@@ -15,70 +15,131 @@ related:
 
 # Livrya
 
-## AI-Powered Publishing Platform
+## Intelligent Publishing Platform
 
-Livrya é uma plataforma de criação e publicação voltada para o ciclo completo de produção editorial.
+Livrya é uma plataforma editorial inteligente que conecta criação, publicação, leitura e voz dentro de um mesmo produto.
 
-O projeto combina escrita, colaboração, inteligência artificial, geração de áudio, versionamento editorial, publicação imutável e experiência de leitura.
+A visão amadureceu bastante ao longo do projeto.
 
-Mais do que adicionar IA a um editor de texto, o objetivo é construir uma plataforma em que diferentes etapas do processo editorial possam coexistir sem perder consistência.
+No início, diferentes capacidades — Writer, Reader, Social, IA e áudio — corriam o risco de parecer produtos separados.
 
-A pergunta central do projeto é:
+A direção atual é outra:
 
-**como construir um produto editorial inteligente sem comprometer controle, versionamento e confiabilidade?**
+**um único produto editorial, da criação à publicação, em que IA é uma capability transversal e não a identidade do produto.**
 
-## Overview
+## Product Language
 
-Produzir e publicar um livro envolve criação, revisão, colaboração, estruturação, versionamento, publicação, distribuição, leitura, áudio, permissões e inteligência artificial.
+A jornada canônica é simples de explicar:
 
-Quando essas responsabilidades são implementadas sem boundaries claros, o sistema começa a misturar conceitos diferentes.
-
-O conteúdo em edição não é necessariamente o mesmo conteúdo disponível para leitores. Um capítulo em revisão não deveria modificar silenciosamente uma versão já publicada. Geração de áudio incompleta não deveria fazer o livro parecer totalmente processado. Um colaborador não deveria receber permissões apenas porque consegue visualizar um projeto.
-
-Juntos, esses problemas definem a arquitetura do produto.
-
-## Product Vision
-
-```text title="Product Vision"
+```text
 Idea
   ↓
 Create
   ↓
 Write
   ↓
-Collaborate
-  ↓
 Review
-  ↓
-AI Assist
-  ↓
-Narrate
   ↓
 Publish
   ↓
-Read
+Reach Readers
 ```
 
-Cada etapa possui necessidades diferentes. O papel da arquitetura é permitir que compartilhem o mesmo produto sem acoplamento perigoso.
+Áudio, colaboração, inteligência e distribuição entram como capacidades dessa jornada.
 
-## The Problem
+O usuário não deveria precisar entender a arquitetura interna do Livrya para compreender o Livrya.
 
-Um produto editorial inteligente precisa responder:
+## The Architectural Reset
 
-- O que significa uma versão publicada?
-- O autor pode continuar editando depois da publicação?
-- Essas mudanças afetam leitores imediatamente?
-- Como colaboradores recebem permissões?
-- Como IA participa sem assumir controle editorial?
-- Como geração de áudio funciona quando envolve muitas operações assíncronas?
-- Como cancelar processamento já iniciado?
-- Como representar falhas parciais?
-- Quem pode publicar?
-- O que um leitor deve consumir?
+Uma das mudanças mais importantes foi reconhecer que havia duas experiências de produto com necessidades diferentes.
 
-## The Core Separation
+O ecossistema convergiu para:
 
-Uma das decisões mais importantes é separar **working copy** de **published version**.
+```text
+React
+  ├── Product Shell
+  ├── Writer / Studio
+  ├── Reader
+  ├── Home
+  ├── Criar
+  ├── Publicar
+  ├── Biblioteca
+  ├── Descobrir
+  └── Perfil público
+
+Angular
+  ├── Auth / Conta
+  ├── Social / Comunidade
+  ├── Admin
+  └── Superfícies residuais
+```
+
+A decisão não foi “React venceu Angular”.
+
+Foi uma decisão de **ownership de experiência**.
+
+React concentra a jornada editorial principal. Angular permanece onde já possui responsabilidade clara ou onde a migração ainda não gera valor suficiente para justificar mudança.
+
+## One Product, Multiple Surfaces
+
+Essa separação só funciona se o produto continuar coerente.
+
+Por isso Product Shell, Writer e Reader compartilham linguagem de produto, design system, contratos e navegação.
+
+O princípio central é:
+
+> O usuário nunca deve precisar compreender a arquitetura do Livrya para compreender o Livrya.
+
+## Author Experience
+
+A jornada autoral evoluiu para:
+
+```text
+Criar
+  ↓
+Preparar
+  ↓
+Publicar
+  ↓
+Alcançar leitores
+```
+
+O Author Experience v1 passou a usar estado da obra para orientar próxima ação, em vez de tratar o Writer como um conjunto de ferramentas desconectadas.
+
+O Studio organiza trabalho em superfícies como:
+
+- Texto;
+- Estrutura;
+- Revisão;
+- Inteligência;
+- Áudio;
+- Publicação;
+- Desempenho.
+
+A interface precisa responder “o que faz sentido agora?” e não apenas “quais features existem?”.
+
+## Reader Experience
+
+Reader possui responsabilidade diferente do Writer.
+
+Ele precisa priorizar:
+
+- legibilidade;
+- continuidade;
+- progresso;
+- desempenho;
+- navegação;
+- retomada cross-device;
+- conclusão;
+- analytics first-party.
+
+O Reader não consome o estado de edição.
+
+Ele consome publicação.
+
+## Working Copy vs Publication
+
+Uma decisão arquitetural que permaneceu importante é a separação entre trabalho editorial e conteúdo publicado.
 
 ```text
 Author Workspace
@@ -92,117 +153,64 @@ Immutable Published Version
 Reader
 ```
 
-O autor pode continuar trabalhando enquanto o leitor consome versão estável.
+O autor pode continuar editando enquanto leitores consomem uma versão estável.
 
-## Why Published Content Should Be Immutable
+Isso protege histórico, cache, rollback, auditoria e experiência.
 
-Se o Reader consumir conteúdo em edição, qualquer alteração pode modificar instantaneamente uma obra publicada, criando problemas de consistência, histórico, rollback, cache, auditoria e experiência do leitor.
+## AI as a Capability
 
-A publicação gera snapshot editorial próprio. Uma nova publicação gera nova versão.
+Livrya não deve se tornar “um chat que também cria livros”.
 
-## Working Copy
+IA entra onde produz valor editorial:
 
-Representa o estado editorial atual e pode receber edição, revisão, colaboração, IA, reorganização e alterações estruturais.
+- sugestão;
+- revisão;
+- reescrita;
+- estruturação;
+- análise;
+- preparação;
+- apoio à narração;
+- descoberta assistida.
 
-É espaço de trabalho, não publicação.
-
-## Published Version
-
-Uma PublishedBookVersion representa estado editorial fechado com metadados, estrutura, capítulos, conteúdo e artefatos relacionados.
-
-**reading is based on publication, not editing state.**
-
-## Reader Isolation
-
-Writer precisa de edição, autosave, colaboração, histórico e ferramentas de IA. Reader precisa de estabilidade, desempenho, navegação, continuidade e apresentação.
-
-Misturar os dois domínios cria compromissos desnecessários.
-
-## Writer Studio
-
-Ambiente de autoria com estrutura da obra, capítulos, editor, colaboração, IA assistiva, organização, status e publicação.
-
-O objetivo é proporcionar experiência de criação contínua sem esconder a complexidade editorial necessária.
-
-## Collaboration
-
-Papéis conceituais:
-
-```text
-OWNER
-EDITOR
-VIEWER
-```
-
-Capacidades:
-
-```text
-read
-write
-manage
-```
-
-A implementação não deve depender de verificações dispersas como `book.userId === currentUserId`.
-
-## Authorization as a Domain Rule
-
-Permissão precisa ser regra de domínio, com conceitos como `requireBookReadAccess()`, `requireBookWriteAccess()` e `requireBookManageAccess()`.
-
-Isso melhora consistência, reutilização, segurança e evolução.
-
-## Ownership vs Collaboration
-
-Ser proprietário não é o mesmo que ter permissão de edição. OWNER pode possuir capacidades administrativas que EDITOR não possui, mas EDITOR ainda precisa poder escrever quando autorizado.
-
-## AI as an Editorial Assistant
-
-IA deve ampliar capacidades editoriais, não substituir o autor.
-
-Possíveis usos: sugestões, reescrita, estruturação, resumo, revisão, geração auxiliar, análise e preparação de conteúdo.
-
-## AI Audit
-
-Operações de IA devem ser auditáveis por usuário, livro, capítulo, operação, modelo, consumo, timestamp e resultado.
-
-## AI Quotas
-
-Consumo de IA é parte do domínio e pode ser aplicado por usuário, plano, período e tipo de operação.
-
-## AI Infrastructure
+Mas autoria, intenção e decisão permanecem humanas.
 
 ```text
 Editorial Feature
        ↓
-AI Service
+AI Capability
        ↓
 Provider Boundary
        ↓
 Model Provider
 ```
 
-Isso facilita troca de modelos, múltiplos provedores, testes, políticas e controle de custos.
+Isso também impede que um fornecedor de modelo se transforme na arquitetura do produto.
 
-## Narration
+## Text and Voice
 
-Geração de áudio muda o problema de request-response para pipeline:
+Texto e voz pertencem ao mesmo produto, mas não ao mesmo lifecycle.
+
+Uma obra pode estar publicada enquanto sua versão em áudio ainda está sendo processada.
 
 ```text
-Request
+Book
   ↓
-Job
+Chapter
+  ↓
+Narration Job
   ↓
 Queue
   ↓
-Processor
+TTS
   ↓
-Artifacts
+Audio Artifact
   ↓
-Completion
+Validation
+  ↓
+Published Audio
 ```
 
-## Async Processing
-
-Estados explícitos:
+Estados precisam ser explícitos:
 
 ```text
 PENDING
@@ -212,358 +220,135 @@ FAILED
 CANCELLED
 ```
 
-O status final precisa representar o resultado real.
+Finalizar processamento não é sinônimo de sucesso completo.
 
-## Partial Failure
+## Collaboration and Authorization
 
-```text
-Speech 1 → success
-Speech 2 → success
-Speech 3 → failed
-Speech 4 → success
-```
+Colaboração precisa ser modelada como capacidade, não como comparação dispersa de IDs.
 
-**processing finished** não é equivalente a **processing succeeded**.
-
-## Cooperative Cancellation
-
-Cancelar um job não significa apenas removê-lo da fila antes do início. Worker em execução precisa observar cancelamento entre etapas e retries.
-
-## Retry
-
-Serviços externos falham. Retry precisa possuir limites, backoff, classificação de erros, cancellation e observabilidade.
-
-## Narration Pipeline
+Papéis e permissões possuem significados diferentes.
 
 ```text
-Book
-  ↓
-Chapter
-  ↓
-Speech Segmentation
-  ↓
-Narration Job
-  ↓
-Queue
-  ↓
-TTS Provider
-  ↓
-Audio Artifact
-  ↓
-Validation
-  ↓
-Published Audio
+OWNER
+EDITOR
+VIEWER
 ```
 
-## Audio Artifacts
+Capacidades como leitura, escrita e gestão devem existir como regras de domínio.
 
-Áudio é artefato associado a versão, capítulo, fala, configuração e geração, permitindo rastreabilidade e regeneração.
+## Growth Without Losing Product Clarity
 
-## Publication and Audio
+Depois das jornadas Author e Reader, o produto também passou a estruturar loops de crescimento.
 
-Texto e áudio podem possuir ciclos diferentes. Uma obra pode estar publicada enquanto áudio ainda está em processamento.
+A regra permanece a mesma:
 
-**published text != completed audio**
+**crescimento não pode transformar a experiência editorial em um conjunto de hacks desconectados.**
 
-## Commerce
+Descoberta, perfil público, publicação e leitura precisam reforçar o mesmo sistema.
 
-Quando conteúdo possui acesso comercial, um serviço central deve responder se o usuário pode acessar a obra, considerando ownership, purchase, entitlement, plano ou disponibilidade pública.
+## Market Validation
 
-## BookCommerceService
+Outra mudança importante foi parar de tratar Business Model como verdade pronta.
 
-Centralizar regras comerciais preserva boundaries. Reader não precisa compreender compra, pagamento, plano ou entitlement.
+Business Model v1 existe como hipótese.
 
-## Product Architecture
+Market Validation passou a operar com research plan, interview guide, evidence ledger e experiment matrix.
+
+O objetivo é escolher segmentos e propostas com evidência real, não congelar pricing, take rate ou beachhead por intuição.
 
 ```text
-                    Livrya
-                      │
-    ┌─────────────────┼─────────────────┐
-    │                 │                 │
- Writer            Publishing          Reader
-    │                 │                 │
-Collaboration      Versions          Consumption
-    │                 │                 │
- AI              Narration          Commerce
+Hypothesis
+    ↓
+Interview / Experiment
+    ↓
+Evidence
+    ↓
+Decision
 ```
 
-## Architecture Layers
+Isso aproxima product strategy do mesmo princípio que uso em engenharia: **hipóteses precisam sobreviver ao contato com evidência.**
+
+## Finalization Program
+
+Com produto-base, jornadas e arquitetura mais maduros, Livrya entrou em uma etapa explícita de finalização.
+
+As frentes atuais incluem:
+
+### Security & Legacy
+
+Fechar secrets, redirects, legado e telemetria necessária para remover superfícies antigas com segurança.
+
+### Design / UX / Brand
+
+Eliminar linguagem pública inconsistente, PWA/CTA legado, hardcodes e diferenças visuais entre superfícies.
+
+### Investor Readiness
+
+Estruturar data room, technical/innovation memo, narrativa de produto e base do pitch sem transformar hipótese em claim.
+
+### Experiments & Unit Economics
+
+Preparar medição, experimentos e estrutura econômica sem inventar CAC, LTV ou validação de mercado inexistente.
+
+### CI
+
+Aumentar confiança nos gates que sustentam a entrega do produto.
+
+## Security as Product Work
+
+A finalização de segurança mostrou uma distinção importante:
+
+código mergeado não significa risco encerrado.
+
+Alguns itens dependem de rotação de secrets, purge autorizado de histórico, deploy, smoke tests e telemetria operacional.
+
+Por isso o projeto diferencia trabalho implementado de fechamento operacional.
+
+## What Changed Most
+
+A maior evolução do Livrya não foi uma feature.
+
+Foi a clareza.
 
 ```text
-Angular Frontend
-       ↓
-Application API
-       ↓
-Domain Services
-       ↓
-Persistence
-       ↓
-Async Workers
-       ↓
-External Services
+Before
+Writer + Reader + Social + AI + Audio
+
+After
+One editorial product
+with specialized surfaces
+and transversal capabilities
 ```
 
-Concerns transversais: Authentication, Authorization, Audit, AI Quota e Observability.
-
-## Product State
-
-Estados precisam ser explícitos. Livros, jobs, artefatos, permissões e publicações possuem semânticas distintas.
-
-Quando conceitos diferentes compartilham um único booleano, complexidade começa a vazar.
-
-## Immutability Where It Matters
-
-Nem tudo precisa ser imutável. Working copies existem para mudar. Published version, audit events e historical generation records se beneficiam de imutabilidade.
-
-## State Machines
-
-```text
-PENDING
-  ↓
-PROCESSING
-  ├──→ FAILED
-  ├──→ CANCELLED
-  └──→ COMPLETED
-```
-
-Transições precisam possuir regras.
-
-## Failure as Product Behavior
-
-Falha afeta UX. Narração parcial, publicação incompleta e indisponibilidade de IA precisam aparecer como estados reais do produto.
-
-## Frontend Architecture
-
-O frontend precisa representar Writer Studio, library, publication management, collaboration, narration e Reader sem concentrar responsabilidades em componentes gigantes.
-
-## Writer Experience
-
-Operações técnicas como autosave, sincronização, geração, colaboração e processamento devem possuir feedback claro sem dominar a interface.
-
-## Reader Experience
-
-Reader deve priorizar conforto, continuidade, velocidade, legibilidade e navegação.
-
-## Security
-
-Áreas importantes: authentication, authorization, resource ownership, role validation, access checks e secure asset delivery. Permissão no frontend nunca substitui validação de backend.
-
-## Data Integrity
-
-Publicação e processamento assíncrono exigem transactions, idempotency, rollback, retry e recovery.
-
-## Idempotency
-
-Jobs podem ser executados novamente, filas reenviam mensagens e usuários repetem ações. Operações importantes precisam saber se repetição é segura.
-
-## Observability
-
-### API
-
-Erros, latency e authorization failures.
-
-### AI
-
-Requests, model, quota, cost e failures.
-
-### Narration
-
-Jobs, progress, retries, failures e cancellation.
-
-### Publication
-
-Version creation, failures e duration.
-
-## Architecture Reviews
-
-Revisões arquiteturais ajudam a identificar inconsistências que testes isolados nem sempre revelam: permissão compartilhada ignorada em outra camada, job contabilizando falha mas marcando sucesso e cancellation disponível na API mas ignorada pelo worker.
-
-## Why Reviews Matter
-
-Um código pode estar correto dentro de um método e incorreto dentro do sistema. Isso aparece especialmente em autorização, workflows, async processing, retries e state transitions.
-
-## Product Engineering
-
-Livrya representa dimensão diferente de LucyOS e Invest Lucy. Aqui a pergunta não é apenas qual arquitetura investigar, mas como alguém realmente usa isso.
-
-Isso exige combinar produto, UX, domínio, backend, frontend, IA e operação.
-
-## AI Without Losing the Product
-
-A aplicação não deve se tornar “um chat que por acaso cria livros”, mas “uma plataforma editorial que utiliza IA quando cria valor”.
-
-## Domain Before Technology
-
-O problema de publicação não é resolvido escolhendo framework. Primeiro é necessário compreender edição, versão, release e leitura.
-
-## Architecture Principles
-
-- Working Copy Is Not Publication
-- Published Versions Are Immutable
-- Reader Consumes Publication
-- Authorization Is Centralized
-- AI Is Audited
-- Async Work Has Explicit State
-- Partial Failure Is Still Failure
-- Cancellation Must Be Cooperative
+Essa clareza influencia arquitetura, UX, roadmap, marca, métricas e comunicação com investidores.
 
 ## Technical Landscape
 
-Frontend: Angular, TypeScript, reactive state e modern UI components.
-Backend: Node.js/application services, domain services e REST APIs.
-Persistence: relational database e versioned schema.
-AI: generative AI services, auditing e quota.
-Async: queues, workers e retry policies.
-Media: text-to-speech e audio artifacts.
+Backend: Express, TypeScript, Prisma, PostgreSQL, Redis, BullMQ e Socket.IO.
 
-## Key Architectural Decisions
+Product Shell / Writer / Reader: React 19, TypeScript e Tiptap.
 
-Immutable Publication, Centralized Commerce Access, Role-Based Collaboration, AI Audit and Quota, Async Narration Pipeline e Persistent Cancellation.
+Auth / Conta / Social / Admin: Angular 21 e superfícies residuais em migração controlada.
 
-## What Went Wrong
+Quality: Playwright, contratos explícitos e gates de CI.
 
-### Partial narration failure
+Observability: Prometheus, Grafana, Sentry e telemetria first-party onde necessário.
 
-Processor contabilizava falhas individuais, mas ao final marcava job como concluído, criando falso sucesso.
+## Architecture Principles
 
-### Cancellation
+- One Product, Multiple Surfaces
+- AI Is a Capability, Not the Product
+- Working Copy Is Not Publication
+- Reader Consumes Publication
+- Authorization Is a Domain Rule
+- Async Work Has Explicit State
+- Partial Failure Is Still Failure
+- Legacy Removal Needs Evidence
+- Business Model Is a Hypothesis Until Validated
+- Product Language Should Hide Architecture
 
-Remover job da fila funcionava apenas antes do processamento. Workers em execução não observavam estado persistido de cancelamento.
+## What It Demonstrates
 
-### Collaboration
+Livrya combina product strategy, publishing domain, frontend architecture, migration strategy, asynchronous workflows, AI product integration, narration, collaboration, market validation, security hardening e investor readiness.
 
-Política compartilhada permitia edição por EDITOR, mas serviço específico ainda validava somente ownership direto.
-
-Esses casos reforçaram a necessidade de tratar regras como capacidades sistêmicas.
-
-## Hardening
-
-Depois de concluir funcionalidades principais, o projeto entrou em fase explícita de hardening para fortalecer consistência, segurança, cancellation, failure handling, authorization e async workflows.
-
-## Technical Debt as a Product Concern
-
-Dívida técnica pode representar estados incorretos, autorização inconsistente, falhas silenciosas, dados difíceis de recuperar e dependência excessiva. Quando afeta comportamento, vira risco de produto.
-
-## Collaboration as a Platform Capability
-
-A base de autorização abre espaço para comentários, revisão, aprovação, histórico, presença e edição simultânea.
-
-## Publishing as a Boundary
-
-Antes da publicação:
-
-```text
-mutable
-collaborative
-editable
-```
-
-Depois:
-
-```text
-stable
-versioned
-consumable
-```
-
-## Reader as a Consumer of Contracts
-
-Reader consome contratos de publicação, permitindo que Writer evolua sem necessariamente quebrar leitura.
-
-## Narration as a Pipeline, Not a Feature
-
-Um botão “gerar áudio” esconde segmentação, filas, processamento, APIs externas, retries, artifacts, estados, progress e cancellation.
-
-## Eventual Consistency
-
-```text
-requested ≠ ready
-```
-
-A interface precisa representar esse fato claramente.
-
-## UX and System Truth
-
-UX depende de estados de domínio corretos. Modelagem ruim no backend inevitavelmente aparece como experiência confusa.
-
-## Product Boundaries
-
-```text
-Authoring
-   │
-   ├── Writing
-   ├── Collaboration
-   └── AI
-   │
-   ↓
-Publishing
-   │
-   ├── Versioning
-   └── Distribution
-   │
-   ↓
-Consumption
-   │
-   ├── Reader
-   └── Audio
-```
-
-## Why This Project Matters to Me
-
-Livrya é exemplo de uma ideia importante: **produtos aparentemente simples escondem sistemas complexos.**
-
-“Escrever um livro” parece simples, mas transformar isso em plataforma exige modelar autoria, colaboração, publicação, histórico, IA, mídia e acesso.
-
-É exatamente nesse tipo de problema que arquitetura e produto se encontram.
-
-## Lessons Learned
-
-1. Domain boundaries reduce product complexity.
-2. Immutability is powerful when representing history.
-3. Authorization must be systemic.
-4. Async processing requires explicit semantics.
-5. Cancellation is a protocol.
-6. AI needs governance.
-7. UI cannot repair incorrect domain state.
-8. Hardening deserves its own phase.
-
-## What I'm Exploring Next
-
-Real-Time Collaboration, Better Revision History, AI Editorial Workflows, Narration Quality, Publishing Workflows, Reader Experience e Multimodal Publishing.
-
-## How Livrya Fits My Work
-
-```text
-LucyOS
-Agentic Architecture
-
-Invest Lucy
-Autonomy + Evidence + Governance
-
-Livrya
-Product Engineering
-```
-
-Juntos, representam uma parte importante da maneira como penso software hoje.
-
-## Related Engineering Principles
-
-AI is a System, Not a Prompt · Documentation Is Engineering · Failure Is Part of the Architecture · Replaceable Boundaries · Decisions Need Context · Incremental Evolution
-
-## Related Architecture Decisions
-
-Why Published Content Should Be Immutable · Why Reader Should Consume Only Published Versions · Why Authorization Must Be Centralized · Why Async Pipelines Need Cooperative Cancellation · Why Partial Failure Must Not Become Success
-
-## Related Writing
-
-AI Should Support the Product, Not Become the Product · Why Published Content Should Be Immutable · Designing Async Workflows That Can Fail · Cooperative Cancellation in Distributed Jobs · Authorization Is a Domain Problem · Product Engineering Beyond the Feature
-
-## Closing
-
-Livrya não é apenas um editor com recursos de inteligência artificial. É um exercício de arquitetura de produto.
-
-O desafio está em permitir que criação, colaboração, IA, publicação, áudio e leitura evoluam juntas sem perder clareza de domínio.
-
-**bons produtos precisam esconder complexidade do usuário sem esconder complexidade da engenharia.**
-
-**Livrya — AI should strengthen the product, not replace its architecture.**
+Mais do que uma plataforma para escrever livros, ele se tornou um estudo prático de **como reorganizar tecnologia, produto e narrativa até que todos contem a mesma história**.

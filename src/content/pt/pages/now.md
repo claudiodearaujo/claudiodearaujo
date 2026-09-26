@@ -3,7 +3,7 @@ title: Now
 slug: now
 locale: pt
 type: page
-summary: Projetos, pesquisas e temas que concentram minha atenção agora.
+summary: Projetos, pesquisas e perguntas que concentram minha atenção agora.
 status: Current
 tags: [Now, Research, Building]
 ---
@@ -12,26 +12,32 @@ tags: [Now, Research, Building]
 
 ## What I'm working on now
 
-Esta página é um registro vivo do meu momento atual.
+Esta página registra onde minha atenção está concentrada neste momento.
 
-Não pretende listar tudo que estou fazendo. A ideia é mostrar onde minha atenção está concentrada agora: projetos, perguntas, tecnologias e linhas de pesquisa que estão moldando meu trabalho.
+Não é uma lista completa de tarefas. É um mapa das perguntas e sistemas que mais estão influenciando meu trabalho agora.
 
 ## Building
 
 ### LucyOS
 
-Estou evoluindo LucyOS como uma plataforma pessoal de inteligência baseada em agentes, memória, ferramentas, conhecimento e MCP.
+LucyOS continua sendo meu laboratório de longo prazo para inteligência pessoal baseada em agentes.
 
-As principais frentes atuais envolvem memória de longo prazo, context engineering, specialist agents, capability boundaries, observabilidade, governança, human control e integração entre projetos e conhecimento.
+As frentes principais envolvem memória de longo prazo, context engineering, specialist agents, MCP, capability boundaries, observabilidade, governança, aprovação humana e integração entre projetos.
 
-Pergunta central: **como aumentar capacidade sem perder modularidade, compreensão e controle?**
+Pergunta central:
+
+**como aumentar capacidade sem perder modularidade, compreensão e controle?**
 
 ### Invest Lucy
 
-Invest Lucy está em uma fase orientada principalmente por evidência científica.
+Invest Lucy está em Scientific Evidence Accumulation.
+
+PETR4, WIN e WDO estão sendo observados em shadow mode enquanto outcomes amadurecem.
+
+Autonomia permanece desabilitada.
 
 ```text
-Scientific Evidence Accumulation
+Scientific Evidence
         ↓
 Shadow Outcomes
         ↓
@@ -45,89 +51,113 @@ Hypothesis Experiments
         ↓
 Walk-forward
         ↓
-Out-of-Sample
+OOS
         ↓
 Monte Carlo
-        ↓
-Consolidated Evidence
         ↓
 Human Review
 ```
 
-O projeto também funciona como laboratório para autonomia progressiva, sistemas financeiros, observabilidade, auditabilidade, recuperação, governança, agentes especializados e decisão baseada em evidência.
+O projeto continua sendo meu principal laboratório para a relação entre hipótese, risco, evidência e autoridade.
 
 ### Livrya
 
-Livrya continua evoluindo como plataforma editorial assistida por IA.
+Livrya passou por uma reestruturação importante.
 
-Áreas relevantes: Writer Studio, colaboração, publicação versionada, workflows assíncronos, geração de áudio, autorização, hardening operacional e integração responsável de IA ao produto.
+A arquitetura canônica agora concentra Product Shell, Writer/Studio e Reader em React, enquanto Angular permanece responsável por Auth/Conta, Comunidade, Admin e superfícies residuais.
 
-O principal objetivo continua sendo preservar uma arquitetura em que IA fortaleça o produto sem assumir o papel do próprio produto.
+Author Experience, Reader Experience e Growth v1 foram consolidados.
+
+O produto entrou em finalização e validação: segurança/legado, consistência de UX/brand, investor readiness, experimentos/unit economics e CI.
+
+Business Model v1 continua tratado como hipótese. Market Validation está ativo para escolher direção com evidência real.
+
+### Therapist Platform
+
+O antigo software dedicado foi transformado em Therapist Platform.
+
+Despersonalização, generalização de domínio e SaaS Foundation v1–v5 estão concluídas.
+
+O projeto agora está na fase de Production & Commercial Readiness, com foco em security hardening, operação, isolamento, times por tenant, domínio e readiness comercial.
+
+A pergunta aqui é:
+
+**como transformar software específico em um produto reutilizável sem reescrever tudo?**
+
+### Minhas Marcas
+
+Minhas Marcas evoluiu de ideia para uma implementação V2 real.
+
+A base atual combina Angular PWA, Dexie, NestJS, Prisma e Supabase para uma experiência offline-first de Personal Life Intelligence.
+
+Daily Marks, Sync Engine V1, Dreams e Discussions já foram tecnicamente validados.
+
+Attachments estão em hardening operacional.
+
+A pergunta central é:
+
+**como transformar registros pessoais em padrões observáveis sem confundir correlação com causalidade nem sacrificar privacidade?**
 
 ## Researching
 
 ### Agentic AI
 
-Como agentes podem trabalhar com ferramentas e contexto de forma confiável.
+Como agentes podem trabalhar com ferramentas, memória e contexto de forma confiável.
 
 ### Long-Term Memory
 
-Como agentes podem lembrar informações úteis por meses ou anos sem transformar todo o histórico acumulado em ruído. Questões: relevance, decay, consolidation, conflicts, scope, provenance e privacy.
+Como preservar o que continua relevante sem transformar histórico acumulado em ruído.
 
 ### Context Engineering
 
-A pergunta não é apenas quanto contexto podemos fornecer, mas qual contexto realmente deveria estar presente para esta decisão.
+Qual contexto realmente precisa estar presente para uma decisão.
 
-### Agent Evaluation
+### AI Evaluation
 
-Como medir agentes além da qualidade da resposta final, incluindo task success, tool selection, policy compliance, recovery, cost, latency e safe behavior.
+Como medir task success, tool selection, policy compliance, recovery, cost, latency e segurança.
 
-### MCP
+### Progressive Autonomy
 
-MCP me interessa principalmente como boundary arquitetural entre inteligência, integração e implementação.
+Como relacionar capability, evidence e authority.
 
-### Autonomous Systems
+### Personal Intelligence Systems
 
-Estou estudando principalmente a relação entre **Capability + Evidence + Authority**.
+Como memória externa, registros estruturados e IA podem ampliar capacidade de pensar sem substituir julgamento humano.
 
-### AI Governance
+### Product Validation
 
-Governança inclui authorization, policies, audit, approval, kill switches, progressive autonomy e traceability.
-
-### Human-AI Collaboration
-
-Nem toda automação precisa terminar em remoção humana do processo. Em muitos casos, a arquitetura ideal pode ser colaboração.
+Como transformar visão de produto em hipóteses testáveis antes de transformar hipótese em roadmap, pricing ou narrativa de mercado.
 
 ## Writing
 
-Temas atuais:
+Temas que continuam ativos:
 
 - AI Agents Need Architecture, Not Just Prompts
 - From Automation to Autonomy
 - Evidence Before Autonomy
 - Memory in Agentic Systems
 - Evaluating Agentic Systems
-
-## Architecture Decisions
-
-- MCP-first
-- Shadow Mode Before Autonomy
-- Human Control in the Architecture
+- Productization as Architecture
+- Thinking in Patterns, Building in Evidence
 
 ## Learning
 
-Atualmente tenho estudado especialmente AI evaluation, agent runtimes, long-term memory, MCP ecosystems, autonomous workflows, scientific validation, multimodal interfaces e human-computer collaboration, além de aprofundar fundamentos de distributed systems, reliability, observability, architecture e software design.
+Estou aprofundando AI evaluation, agent runtimes, long-term memory, MCP ecosystems, autonomous workflows, scientific validation, multimodal interfaces, product discovery, SaaS architecture, offline-first systems e human-computer collaboration.
+
+Também continuo voltando aos fundamentos: distributed systems, reliability, observability, architecture e software design.
 
 ## Building in Public
 
-Parte do objetivo deste site é tornar meu processo de evolução mais visível. Não quero publicar apenas resultados finais. Também quero registrar decisões, hipóteses, experimentos, erros, mudanças de direção e aprendizados.
+Quero que este site registre não apenas resultados finais.
+
+Também quero registrar mudanças de direção, hipóteses que falharam, decisões arquiteturais, produtos que amadureceram e ideias que precisaram ser abandonadas.
+
+Um portfólio deveria mostrar não apenas **o que foi construído**, mas **como o pensamento mudou durante a construção**.
 
 ## Current Focus
 
-**Estou explorando como aplicar décadas de engenharia de software à construção de sistemas inteligentes capazes de agir sem perder evidência, arquitetura e controle humano.**
+**Estou explorando como décadas de engenharia de software podem ajudar a construir sistemas inteligentes, produtos digitais e ferramentas pessoais que ampliem capacidade sem perder evidência, arquitetura, privacidade e controle humano.**
 
 ## Updated
 
 September 2026
-
-Esta página será atualizada sempre que meu foco mudar de forma relevante.

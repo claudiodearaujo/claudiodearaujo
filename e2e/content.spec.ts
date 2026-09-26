@@ -1,12 +1,14 @@
 import { expect, test } from '@playwright/test';
 
-test('work landing exposes the three full case studies', async ({ page }) => {
+test('work landing exposes the five full case studies', async ({ page }) => {
   await page.goto('/pt/work');
 
   await expect(page.getByRole('heading', { level: 1 })).toHaveText('Selected Work');
   await expect(page.getByRole('link', { name: 'LucyOS' })).toBeVisible();
   await expect(page.getByRole('link', { name: 'Invest Lucy' })).toBeVisible();
   await expect(page.getByRole('link', { name: 'Livrya' })).toBeVisible();
+  await expect(page.getByRole('link', { name: 'Therapist Platform' })).toBeVisible();
+  await expect(page.getByRole('link', { name: 'Minhas Marcas' })).toBeVisible();
 });
 
 test('case study renders long-form content and table of contents', async ({ page }) => {

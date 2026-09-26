@@ -11,6 +11,7 @@ Este diretório contém a fundação de produto, conteúdo, posicionamento, arqu
 ## Evolução
 
 - [Site Evolution Plan v2](./SITE-EVOLUTION-PLAN.md)
+- [Content Context Refresh — 2026-09-26](./CONTENT-CONTEXT-REFRESH-2026-09-26.md)
 
 ## Arquitetura técnica
 
@@ -45,6 +46,8 @@ Este diretório contém a fundação de produto, conteúdo, posicionamento, arqu
 - [LucyOS](./case-studies/LUCYOS.md)
 - [Invest Lucy](./case-studies/INVEST-LUCY.md)
 - [Livrya](./case-studies/LIVRYA.md)
+- Therapist Platform — conteúdo público em `src/content/pt/projects/therapist-platform.md`
+- Minhas Marcas — conteúdo público em `src/content/pt/projects/minhas-marcas.md`
 
 ## Engineering
 

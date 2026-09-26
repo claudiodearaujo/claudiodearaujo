@@ -66,11 +66,17 @@ export class HomePage {
 
   protected readonly exploring = [
     ['Agentic AI', 'Agentes usando contexto, ferramentas e conhecimento de forma confiável.'],
-    ['MCP', 'Boundaries consistentes entre inteligência e capacidades externas.'],
     ['Long-Term Memory', 'Memória útil sem transformar contexto acumulado em ruído.'],
     ['AI Evaluation', 'Evidência objetiva sobre comportamento, qualidade e segurança.'],
-    ['AI Governance', 'Authority, auditabilidade, supervisão e autonomia progressiva.'],
-    ['Human-AI Collaboration', 'Automação que amplia capacidade humana sem remover controle.'],
+    ['Progressive Autonomy', 'Capability, evidence e authority evoluindo com gates explícitos.'],
+    [
+      'Personal Intelligence',
+      'Memória externa e dados estruturados ampliando auto-observação sem substituir julgamento.',
+    ],
+    [
+      'Product Validation',
+      'Hipóteses de produto confrontadas com entrevistas, experimentos e evidência real.',
+    ],
   ] as const;
 
   protected readonly articles = this.repository.featured('article');
