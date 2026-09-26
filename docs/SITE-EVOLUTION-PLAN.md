@@ -3,7 +3,7 @@
 **Status:** Proposta para aprovação
 **Data:** 19/09/2026
 **Owner:** Cláudio Araújo
-**Escopo:** evolução do site v1.0 Launch Candidate para uma plataforma editorial madura
+**Escopo:** evolução iniciada a partir da então baseline v1.0 Launch Candidate para uma plataforma editorial madura
 **Baseline auditada:** `main` — Angular 22, SSG, 15 conteúdos, 21 rotas prerenderizadas
 
 ## 1. Objetivo

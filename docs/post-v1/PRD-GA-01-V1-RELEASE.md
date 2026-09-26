@@ -1,12 +1,12 @@
 # PRD GA-01 — v1.0 Release & Closure
 
-Status: **Planned**  
+Status: **In Progress**
 Priority: **P0**  
 Depends on: current production baseline
 
 ## 1. Problem
 
-O site está tecnicamente e editorialmente pronto para v1, mas ainda é documentado como **v1.0 Launch Candidate** e o pacote declara versão `0.0.0`.
+Na abertura desta trilha, o site estava tecnicamente e editorialmente pronto para v1, mas ainda era documentado como **v1.0 Launch Candidate** e o pacote declarava versão `0.0.0`.
 
 Sem um fechamento formal, não existe um marco imutável que separe MVP, pós-v1 e evoluções futuras.
 

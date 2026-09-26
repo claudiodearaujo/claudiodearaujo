@@ -1,6 +1,6 @@
 # Final Domain Cutover — claudiodearaujo.dev.br
 
-**Status:** ✅ Cutover complete — v1.0 Launch Candidate
+**Status:** ✅ Cutover complete — baseline incorporada ao release v1.0.0
 **Final origin:** `https://claudiodearaujo.dev.br`
 **Production origin:** `https://claudiodearaujo.dev.br`
 **Fallback origin:** `https://claudiodearaujo-site.onrender.com`
@@ -122,7 +122,7 @@ Completed on 18/09/2026:
 12. verify security headers;
 13. verify 17 live application E2E tests;
 14. verify an unknown route returns HTTP 404;
-15. mark the release as v1.0 Launch Candidate.
+15. establish the final-domain launch-candidate baseline later promoted to `v1.0.0`.
 
 ## Rollback
 
@@ -152,5 +152,5 @@ Render domain verification      ✅
 TLS on final domain             ✅
 SITE_ORIGIN final               ✅
 Final-domain gate               ✅
-v1.0 Launch Candidate           ✅
+Final-domain release baseline   ✅
 ```
