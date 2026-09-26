@@ -1,6 +1,6 @@
 import { defineConfig, devices } from '@playwright/test';
 
-const baseURL = process.env.LIVE_BASE_URL ?? 'https://claudiodearaujo-site.onrender.com';
+const baseURL = process.env.LIVE_BASE_URL ?? 'https://claudiodearaujo.dev.br';
 
 export default defineConfig({
   testDir: './e2e',

@@ -42,12 +42,14 @@
   <section class="page-shell related">
     <p class="eyebrow">{{ text.relatedEyebrow }}</p>
     <h2>{{ text.relatedHeading }}</h2>
-    @defer (hydrate on viewport) {
-      <div class="related-grid">
-        @for (item of related; track item.route) {
-          <app-content-card [entry]="item" />
-        }
-      </div>
-    }
+    <!-- Related links are navigation, not decorative content. Keeping them in
+         a viewport-hydrated island created a short production window where
+         event replay could consume the first click before hydration finished.
+         Hydrate them with the page so navigation is immediately reliable. -->
+    <div class="related-grid">
+      @for (item of related; track item.route) {
+        <app-content-card [entry]="item" />
+      }
+    </div>
   </section>
 }
