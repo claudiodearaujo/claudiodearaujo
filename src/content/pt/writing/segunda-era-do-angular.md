@@ -3,7 +3,7 @@ title: A Segunda Era do Angular
 slug: segunda-era-do-angular
 locale: pt
 type: article
-summary: "Uma leitura arquitetural da transformação do Angular: de abstrações implícitas para primitivas cada vez mais explícitas."
+summary: 'Uma leitura arquitetural da transformação do Angular: de abstrações implícitas para primitivas cada vez mais explícitas.'
 tags: [Angular, Architecture, Frontend]
 category: Software Architecture
 publishedAt: 2026-09-26
