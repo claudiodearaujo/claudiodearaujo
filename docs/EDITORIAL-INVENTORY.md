@@ -240,7 +240,7 @@ Fonte: [Content Experience v1](./technical/CONTENT-EXPERIENCE-V1.md).
 
 ## Estado pós-lançamento
 
-A trilha **Launch Readiness & Professional Polish** foi concluída. O site está em **v1.0 Launch Candidate** no domínio final.
+A trilha **Launch Readiness & Professional Polish** foi concluída e a baseline foi promovida ao release público **v1.0.0** no domínio final.
 
 Validações finais concluídas: domínio, DNS/TLS, `SITE_ORIGIN`, canonical, robots, sitemap, security headers, redirect de `www`, HTTP 404 e E2E live.
 
@@ -254,10 +254,10 @@ Fonte: [Render Live Deployment Validation](./technical/RENDER-LIVE-VALIDATION.md
 
 ## Launch Readiness & Professional Polish — ✅
 
-Home narrative completa, links profissionais reais, favicon, SEO social, 404 noindex e navegação mobile por teclado foram implementados na trilha de lançamento. Domínio customizado e validação final pós-domínio permanecem pendentes.
+Home narrative completa, links profissionais reais, favicon, SEO social, 404 noindex, navegação mobile por teclado, domínio customizado e validação final pós-domínio foram concluídos na trilha de lançamento.
 
 Fonte: [Launch Readiness](./technical/LAUNCH-READINESS.md).
 
-## Final Domain — 🟡
+## Final Domain — ✅
 
-Domínio final definido: `claudiodearaujo.dev.br`. Blueprint e validação pós-DNS estão preparados. Pendências externas: DNS no Registro.br, verificação/TLS no Render, `SITE_ORIGIN` final e gate live no domínio definitivo.
+Domínio final ativo: `claudiodearaujo.dev.br`. DNS no Registro.br, verificação/TLS no Render, `SITE_ORIGIN` final, redirect de `www` e gate live no domínio definitivo foram concluídos e validados.

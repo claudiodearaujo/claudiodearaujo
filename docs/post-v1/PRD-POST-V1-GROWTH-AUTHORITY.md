@@ -1,8 +1,8 @@
 # PRD — Post-v1 Growth & Authority
 
-Status: **Planned**  
+Status: **In Progress**
 Owner: Cláudio Araújo  
-Baseline: site pessoal v1 Launch Candidate, September 2026
+Baseline: site pessoal v1 release cycle, September 2026
 
 ## 1. Purpose
 

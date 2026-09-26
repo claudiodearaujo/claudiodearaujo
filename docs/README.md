@@ -85,7 +85,7 @@ Princípio de UX: **Make depth available without making complexity mandatory.**
 
 Assinatura visual: **Deep neutral surfaces + precise typography + structural lines + controlled blue accent + architecture as visual language.**
 
-O site está live em https://claudiodearaujo.dev.br como **v1.0 Launch Candidate**, com Render Static Site, Blueprint, security headers, PR previews, auto-deploy, domínio customizado, HTTPS e SEO final validados.
+O site está live em https://claudiodearaujo.dev.br na baseline pública **v1.0.0**, com Render Static Site, Blueprint, security headers, PR previews, auto-deploy, domínio customizado, HTTPS e SEO final validados.
 
 ## Final domain
 

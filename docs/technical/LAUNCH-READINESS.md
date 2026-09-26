@@ -1,6 +1,6 @@
 # Launch Readiness & Professional Polish
 
-**Status:** ✅ v1.0 Launch Candidate
+**Status:** ✅ Completed — baseline promoted to v1.0.0
 **Data:** 18/09/2026
 **Branch:** `feat/launch-readiness`
 
@@ -154,9 +154,9 @@ Concluído:
 6. redirect de `www` para a raiz validado;
 7. 17/17 E2E live no domínio final.
 
-## Launch Candidate
+## Launch Candidate gate — histórico
 
-A versão poderá ser marcada como **v1.0 Launch Candidate** quando:
+A baseline foi considerada **v1.0 Launch Candidate** quando os seguintes gates foram satisfeitos:
 
 ```text
 validate:full          ✅
