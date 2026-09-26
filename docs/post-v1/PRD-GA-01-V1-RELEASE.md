@@ -1,6 +1,6 @@
 # PRD GA-01 — v1.0 Release & Closure
 
-Status: **In Progress**
+Status: **Completed**
 Priority: **P0**  
 Depends on: current production baseline
 
@@ -111,3 +111,5 @@ Se produção falhar após tag/release, preservar a tag como registro histórico
 ## 12. Definition of Done
 
 GA-01 termina somente quando o release estiver verificável a partir do repositório e da produção. Criar a tag sem validar produção não conclui o PRD.
+
+**Concluído em 26/09/2026.** Evidências: [GA-01 — v1.0 Release Validation Record](./GA-01-V1-RELEASE-VALIDATION.md).

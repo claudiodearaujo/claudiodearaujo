@@ -16,7 +16,8 @@ Este diretório contém a fundação de produto, conteúdo, posicionamento, arqu
 ## Post-v1 — Growth & Authority
 
 - [Programa Post-v1 — Growth & Authority](./post-v1/PRD-POST-V1-GROWTH-AUTHORITY.md)
-- [GA-01 — v1.0 Release & Closure](./post-v1/PRD-GA-01-V1-RELEASE.md)
+- [GA-01 — v1.0 Release & Closure](./post-v1/PRD-GA-01-V1-RELEASE.md) — ✅ concluído
+- [GA-01 — v1.0 Release Validation Record](./post-v1/GA-01-V1-RELEASE-VALIDATION.md)
 - [GA-02 — Search Indexation & Discoverability](./post-v1/PRD-GA-02-SEARCH-INDEXATION.md)
 - [GA-03 — English Experience /en](./post-v1/PRD-GA-03-ENGLISH-EXPERIENCE.md)
 - [Future Backlog](./post-v1/FUTURE-BACKLOG.md)
