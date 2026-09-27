@@ -11,7 +11,7 @@ Encerrar formalmente o ciclo de construção do MVP e iniciar uma fase pós-v1 o
 Este programa possui três entregas independentes, executadas em ordem:
 
 1. **GA-01 — v1.0 Release & Closure** — ✅ Completed
-2. **GA-02 — Search Indexation & Discoverability** — Planned
+2. **GA-02 — Search Indexation & Discoverability** — 🚧 In Progress
 3. **GA-03 — English Experience /en** — Planned
 
 Cada entrega possui PRD próprio e Definition of Done verificável.

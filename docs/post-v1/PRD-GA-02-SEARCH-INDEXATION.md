@@ -1,6 +1,6 @@
 # PRD GA-02 — Search Indexation & Discoverability
 
-Status: **Planned**  
+Status: **In Progress**
 Priority: **P1**  
 Depends on: **GA-01 v1.0 Release**
 
@@ -145,3 +145,5 @@ Não armazenar cookies, credenciais ou tokens de sessão no repositório.
 ## 12. Definition of Done
 
 GA-02 termina quando ownership e sitemap estiverem efetivamente confirmados no provedor e a configuração estiver documentada. Preparar instruções sem concluir a verificação externa não satisfaz o DoD.
+
+Preflight e dependência externa atual: [GA-02 — Search Indexation Validation Record](./GA-02-SEARCH-INDEXATION-VALIDATION.md).
