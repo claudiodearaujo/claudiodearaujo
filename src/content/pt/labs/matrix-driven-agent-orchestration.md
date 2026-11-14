@@ -1,9 +1,9 @@
 ---
-title: "MatrixOps — Orquestração multiagente orientada por matriz e evidências"
+title: 'MatrixOps — Orquestração multiagente orientada por matriz e evidências'
 slug: matrix-driven-agent-orchestration
 locale: pt
 type: lab
-summary: "Pesquisa aplicada sobre como combinar matriz de trabalho, agentes especializados, Git, execução controlada e evidências para coordenar projetos complexos."
+summary: 'Pesquisa aplicada sobre como combinar matriz de trabalho, agentes especializados, Git, execução controlada e evidências para coordenar projetos complexos.'
 status: Active Research
 tags: [AI, Agents, Orchestration, Governance, Git]
 category: Agentic Systems
@@ -87,16 +87,16 @@ Essa separação evita atribuir capacidades que o sistema ainda não demonstrou.
 
 Em vez de uma lista plana de tarefas, cada unidade deve estar ligada a uma entrega que faça diferença para o produto.
 
-| Campo | Função |
-|---|---|
+| Campo                   | Função                                          |
+| ----------------------- | ----------------------------------------------- |
 | Objective / Requirement | Qual resultado do produto está sendo perseguido |
-| Task ID | Identificador estável da unidade de execução |
-| Owner / Executor | Quem responde pela entrega e quem atua |
-| Dependencies | O que precisa estar liberado antes de começar |
-| State | Situação operacional verificável |
-| Permissions | Ações autorizadas e aprovações necessárias |
-| Evidence | Testes, commits, diffs e validações |
-| Next Action | Próximo elo da cadeia, com condição de entrada |
+| Task ID                 | Identificador estável da unidade de execução    |
+| Owner / Executor        | Quem responde pela entrega e quem atua          |
+| Dependencies            | O que precisa estar liberado antes de começar   |
+| State                   | Situação operacional verificável                |
+| Permissions             | Ações autorizadas e aprovações necessárias      |
+| Evidence                | Testes, commits, diffs e validações             |
+| Next Action             | Próximo elo da cadeia, com condição de entrada  |
 
 Estados como `PENDING`, `IN_PROGRESS`, `BLOCKED`, `READY_FOR_REVIEW` e `DONE` só são úteis quando possuem semântica clara.
 
