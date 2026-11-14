@@ -172,15 +172,15 @@ Git oferece uma trilha útil para o código. Não oferece, sozinho, transações
 
 ## Research Plan
 
-<escape>**E1 — Reproducibility.**</escape> Inicializar um projeto fictício sem depender do histórico de conversas do caso original.
+**E1 — Reproducibility.** Inicializar um projeto fictício sem depender do histórico de conversas do caso original.
 
-<escape>**E2 — Concurrency.**</escape> Executar tarefas independentes e concorrentes sobre recursos compartilhados, medindo conflitos e bloqueios desnecessários.
+**E2 — Concurrency.** Executar tarefas independentes e concorrentes sobre recursos compartilhados, medindo conflitos e bloqueios desnecessários.
 
-<escape>**E3 — Recovery.**</escape> Interromper a execução entre efeito e confirmação e testar a retomada sem duplicidade.
+**E3 — Recovery.** Interromper a execução entre efeito e confirmação e testar a retomada sem duplicidade.
 
-<escape>**E4 — Authority.**</escape> Verificar se uma cadeia automática para corretamente diante de ações que exigem aprovação.
+**E4 — Authority.** Verificar se uma cadeia automática para corretamente diante de ações que exigem aprovação.
 
-<escape>**E5 — Outcome measurement.**</escape> Comparar o número de tarefas concluídas com o percentual real de requisitos aceitos.
+**E5 — Outcome measurement.** Comparar o número de tarefas concluídas com o percentual real de requisitos aceitos.
 
 Esses experimentos são parte do plano de validação; não devem ser interpretados como resultados já demonstrados.
 
